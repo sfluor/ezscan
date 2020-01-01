@@ -1,4 +1,4 @@
-const { transpose, inverse, multiply, copy_mat } = require("../matrix");
+const { transpose, inverse, multiply, copy_mat } = require("../distort");
 
 const identity = [
   [1, 0, 0],
