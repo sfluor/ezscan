@@ -1,0 +1,17 @@
+{
+  "name": "ezscan",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:sfluor/ezscan.git",
+  "author": "Sami Tabet <salph.tabet@gmail.com>",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "format": "prettier-eslint --write \"./**/*.js\""
+  },
+  "devDependencies": {
+    "jest": "^24.9.0",
+    "prettier-eslint": "^9.0.1",
+    "prettier-eslint-cli": "^5.0.0"
+  }
+}

@@ -10,9 +10,9 @@ class DynamicCanvas extends HTMLCanvasElement {
 
   constructor() {
     super();
-    this.id = "dynamic-canvas"
+    this.id = "dynamic-canvas";
     this.image = new Image();
-    this.ctx = this.getContext('2d');
+    this.ctx = this.getContext("2d");
     this.hit_corner = null;
 
     this.init();
@@ -25,32 +25,46 @@ class DynamicCanvas extends HTMLCanvasElement {
       // TODO: respect browser size aswell
       // A 3000x1900 canvas won't fit on mobile for instance
       this.resize(this.image.width, this.image.height);
-      this.ctx.drawImage(this.image, 0, 0)
-      this.image.style.display = 'none'
+      this.ctx.drawImage(this.image, 0, 0);
+      this.image.style.display = "none";
       this.drawCorners();
-    }
+    };
 
-    this.addEventListener("mousedown", ev => {
-      const [x, y] = [ev.offsetX, ev.offsetY];
-      const hit = this.getHitCorner(x, y);
-      if (hit !== null) {
-        this.hit_corner = hit;
-      }
-    }, false)
-    this.addEventListener("mouseup", () => {this.hit_corner = null}, false)
+    this.addEventListener(
+      "mousedown",
+      ev => {
+        const [x, y] = [ev.offsetX, ev.offsetY];
+        const hit = this.getHitCorner(x, y);
+        if (hit !== null) {
+          this.hit_corner = hit;
+        }
+      },
+      false
+    );
+    this.addEventListener(
+      "mouseup",
+      () => {
+        this.hit_corner = null;
+      },
+      false
+    );
 
-    this.addEventListener("mousemove", ev => {
-      if (this.hit_corner !== null) {
-        const pos = [ev.offsetX, ev.offsetY];
-        this.corners[this.hit_corner] = pos
-        this.refresh();
-      }
-    }, false)
+    this.addEventListener(
+      "mousemove",
+      ev => {
+        if (this.hit_corner !== null) {
+          const pos = [ev.offsetX, ev.offsetY];
+          this.corners[this.hit_corner] = pos;
+          this.refresh();
+        }
+      },
+      false
+    );
   }
 
   refresh() {
     this.ctx.clearRect(0, 0, this.width, this.height);
-    this.ctx.drawImage(this.image, 0, 0)
+    this.ctx.drawImage(this.image, 0, 0);
     this.drawCorners();
   }
 
@@ -60,13 +74,18 @@ class DynamicCanvas extends HTMLCanvasElement {
   }
 
   drawCornerLines() {
-    const lines = [[0, 1], [1, 2], [2, 3], [3, 0]];
+    const lines = [
+      [0, 1],
+      [1, 2],
+      [2, 3],
+      [3, 0]
+    ];
 
     lines.forEach(([p1, p2]) => {
       const [x1, y1] = this.corners[p1];
       const [x2, y2] = this.corners[p2];
       this.drawLine(x1, y1, x2, y2);
-    })
+    });
   }
 
   drawLine(x1, y1, x2, y2) {
@@ -75,7 +94,7 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.ctx.lineTo(x2, y2);
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([5, 5]);
-    this.ctx.strokeStyle = 'grey';
+    this.ctx.strokeStyle = "grey";
     this.ctx.stroke();
   }
 
@@ -85,7 +104,7 @@ class DynamicCanvas extends HTMLCanvasElement {
 
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([]);
-    this.ctx.strokeStyle = 'grey';
+    this.ctx.strokeStyle = "grey";
     this.ctx.stroke();
   }
 
@@ -102,9 +121,9 @@ class DynamicCanvas extends HTMLCanvasElement {
   resetCorners() {
     this.corners = [
       [RADIUS, RADIUS],
-      [this.width-RADIUS, RADIUS],
-      [this.width-RADIUS, this.height-RADIUS],
-      [RADIUS, this.height-RADIUS]
+      [this.width - RADIUS, RADIUS],
+      [this.width - RADIUS, this.height - RADIUS],
+      [RADIUS, this.height - RADIUS]
     ];
   }
 
@@ -112,25 +131,29 @@ class DynamicCanvas extends HTMLCanvasElement {
   getHitCorner(x, y) {
     const hit = this.corners
       .map((c, idx) => [idx, c])
-      .find(([_, [cx, cy]]) => (cx-x) ** 2 + (cy -y) ** 2 < CLICK_RADIUS**2);
+      .find(
+        ([_, [cx, cy]]) => (cx - x) ** 2 + (cy - y) ** 2 < CLICK_RADIUS ** 2
+      );
 
     if (hit) {
-      return hit[0]
+      return hit[0];
     }
 
-    return null; 
+    return null;
   }
 
   getImage() {
     return {
       data: this.ctx.getImageData(0, 0, this.width, this.height),
-      corners: this.corners,
-    }
+      corners: this.corners
+    };
   }
 }
 
-customElements.define(DynamicCanvas.tagName(), DynamicCanvas, {extends: 'canvas'})
+customElements.define(DynamicCanvas.tagName(), DynamicCanvas, {
+  extends: "canvas"
+});
 
 export function newDynamicCanvas() {
-  return document.createElement('canvas', {is: DynamicCanvas.tagName()})
+  return document.createElement("canvas", { is: DynamicCanvas.tagName() });
 }
