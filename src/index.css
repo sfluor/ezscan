@@ -17,6 +17,8 @@ body {
   flex-direction: column;
   margin: 0;
   font-family: proxima-nova, sans-serif;
+  color: #fffffe;
+  font-weight: 700;
 }
 
 @keyframes rotating {
@@ -48,8 +50,6 @@ body {
 
 .loader-desc {
   margin-top: 3vh;
-  color: #fffffe;
-  font-weight: 700;
   font-size: 1.3em;
 }
 
@@ -89,4 +89,21 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
+}
+
+#camera {
+  display: none;
+}
+
+#camera-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 10vh;
+}
+
+.main-icon {
+  height: 7vh;
 }

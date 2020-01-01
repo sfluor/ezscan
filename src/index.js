@@ -6,19 +6,19 @@ function emptyNode(node) {
   }
 }
 
-function createCameraInput(node) {
-  const cam = document.createElement("input");
-  cam.id = "camera";
-  cam.type = "file";
-  cam.name = "camera";
-  cam.accept = "image/*";
-  cam.class = "img-input";
+function showCameraInput(node) {
+  const camLabel = document.createElement("label");
+  camLabel.htmlFor = "camera";
+  camLabel.id = "camera-label";
 
-  cam.addEventListener("change", () => {
-    const file = cam.files[0];
-    reader.readAsDataURL(file);
-  });
-  node.appendChild(cam);
+  const camIcon = document.createElement("img");
+  camIcon.className = "main-icon";
+  camIcon.src = "icons/camera.svg";
+
+  camLabel.appendChild(camIcon);
+  camLabel.appendChild(document.createTextNode("Capture Image"));
+
+  node.appendChild(camLabel);
 }
 
 function displayLoader() {
@@ -30,17 +30,23 @@ function hideLoader() {
 }
 
 const container = document.getElementById("container");
-createCameraInput(container);
+showCameraInput(container);
 const cropBtn = document.getElementById("crop-btn");
 const backBtn = document.getElementById("back-btn");
+const camera = document.getElementById("camera");
 
 const reader = new FileReader();
 const distortWorker = new Worker("worker_distort.js");
 
+camera.addEventListener("change", () => {
+  const file = cam.files[0];
+  reader.readAsDataURL(file);
+});
+
 backBtn.addEventListener("click", () => {
   emptyNode(container);
   reader.canvas = null;
-  createCameraInput(container);
+  showCameraInput(container);
 });
 
 reader.addEventListener("load", () => {
