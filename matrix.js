@@ -1,4 +1,4 @@
-const transpose = matrix => {
+export function transpose(matrix) {
   for (let i = 0; i < matrix.length; i++) {
     for (let j = i + 1; j < matrix[0].length; j++) {
       const tmp = matrix[i][j];
@@ -8,9 +8,9 @@ const transpose = matrix => {
   }
 
   return matrix;
-};
+}
 
-const copy_mat = mat => {
+export function copy_mat(mat) {
   const height = mat[0].length;
   const width = mat.length;
 
@@ -24,18 +24,18 @@ const copy_mat = mat => {
   }
 
   return result;
-};
+}
 
-const zeros = n => {
+function zeros(n) {
   // todo: perf
   const res = [];
   for (let i = 0; i < n; i++) {
     res.push(0);
   }
   return res;
-};
+}
 
-const multiply_mat_vec = (a, v) => {
+function multiply_mat_vec(a, v) {
   const height = a.length;
   const common = a[0].length;
 
@@ -51,9 +51,9 @@ const multiply_mat_vec = (a, v) => {
   }
 
   return c;
-};
+}
 
-const multiply_mat_mat = (a, b) => {
+function multiply_mat_mat(a, b) {
   const height = a.length;
   const width = b[0].length;
 
@@ -73,9 +73,9 @@ const multiply_mat_mat = (a, b) => {
   }
 
   return c;
-};
+}
 
-const multiply = (a, b) => {
+export function multiply(a, b) {
   const height = a.length;
   const width = b[0].length || 1;
 
@@ -88,9 +88,9 @@ const multiply = (a, b) => {
   }
 
   return multiply_mat_mat(a, b);
-};
+}
 
-const argmax = arr => {
+function argmax(arr) {
   // does not work for empty arrays
   let idx = 0;
   let max = arr[0];
@@ -101,9 +101,9 @@ const argmax = arr => {
     }
   }
   return idx;
-};
+}
 
-const range = (s, e) => {
+function range(s, e) {
   const arr = [];
 
   for (let i = s; i < e; i++) {
@@ -111,9 +111,9 @@ const range = (s, e) => {
   }
 
   return arr;
-};
+}
 
-const inverse = matrix => {
+export function inverse(matrix) {
   const copy = copy_mat(matrix);
 
   const height = copy[0].length;
@@ -140,16 +140,16 @@ const inverse = matrix => {
   }
 
   return result;
-};
+}
 
-const swap_rows = (mat, r1, r2) => {
+function swap_rows(mat, r1, r2) {
   const tmp_row = mat[r1];
   mat[r1] = mat[r2];
   mat[r2] = tmp_row;
   return mat;
-};
+}
 
-const gaussjordanelimination = matrix => {
+function gaussjordanelimination(matrix) {
   const height = matrix.length;
   const width = matrix[0].length;
 
@@ -190,11 +190,4 @@ const gaussjordanelimination = matrix => {
   }
 
   return matrix;
-};
-
-module.exports = {
-  transpose,
-  inverse,
-  multiply,
-  copy_mat
-};
+}

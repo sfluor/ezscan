@@ -11,13 +11,13 @@ const cropBtn = document.getElementById("crop-btn");
 
 cropBtn.addEventListener("click", () => {
   const { data, corners } = canvas.getImage();
-  const dst_corners = [
-    [0, 0],
-    [612, 0],
-    [612, 816],
-    [0, 816]
-  ];
-  distort(data, corners, dst_corners);
+  // TODO: stop hardcoding
+  const width = 612;
+  const height = 816;
+
+  const dst_img = canvas.createImage(width, height);
+  distort(data, dst_img, corners);
+  canvas.putImage(dst_img);
 });
 
 const reader = new FileReader();

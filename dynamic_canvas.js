@@ -94,7 +94,7 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.ctx.lineTo(x2, y2);
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([5, 5]);
-    this.ctx.strokeStyle = "grey";
+    this.ctx.strokeStyle = "white";
     this.ctx.stroke();
   }
 
@@ -104,12 +104,21 @@ class DynamicCanvas extends HTMLCanvasElement {
 
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([]);
-    this.ctx.strokeStyle = "grey";
+    this.ctx.strokeStyle = "white";
     this.ctx.stroke();
   }
 
   draw(srcImage) {
     this.image.src = srcImage;
+  }
+
+  createImage(width, height) {
+    return this.ctx.createImageData(width, height);
+  }
+
+  putImage(img) {
+    console.log("PUT", img);
+    this.ctx.putImageData(img, 0, 0);
   }
 
   resize(width, height) {
