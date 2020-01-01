@@ -156,15 +156,14 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.ctx.restore();
 
     // Account for the footer
-    const vh = 0.92 * window.outerHeight;
-    const vw = window.outerWidth;
+    const vh = 0.92 * window.innerHeight;
+    const vw = window.innerWidth;
 
     // Min ratio
     this.ratio = Math.min(1, vh / height, vw / width);
 
     this.width = this.ratio * width;
     this.height = this.ratio * height;
-    console.log(this.ratio, vw, vh, width, height);
     this.resetCorners();
   }
 
