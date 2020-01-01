@@ -14,6 +14,7 @@ cropBtn.addEventListener("click", () => {
   const dst_img = canvas.createImage(data.width, data.height);
   distort(data, dst_img, corners);
   canvas.putImage(dst_img);
+  // TODO: add loading when cropping
 });
 
 const reader = new FileReader();
