@@ -1,5 +1,9 @@
 # ezscan
 
+### Serve locally
+
+Run `yarn serve`
+
 ### Tests
 
 To run tests you can do `yarn test`

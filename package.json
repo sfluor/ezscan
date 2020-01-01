@@ -7,12 +7,14 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "format": "prettier-eslint --write \"./**/*.js\""
+    "format": "prettier-eslint --write \"./**/*.js\"",
+    "serve": "serve"
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
     "jest": "^24.9.0",
     "prettier-eslint": "^9.0.1",
-    "prettier-eslint-cli": "^5.0.0"
+    "prettier-eslint-cli": "^5.0.0",
+    "serve": "^11.3.0"
   }
 }
