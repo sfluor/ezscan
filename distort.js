@@ -19,8 +19,6 @@ function project_2d(p) {
   return [p[0], p[1]];
 }
 
-// TODO normalize exports
-
 // Bilinear distortion
 // We stack our 4 source points into a matrix, same for destination and we want to
 // find the distortion matrix M such as:
@@ -52,7 +50,7 @@ export function distort(img, dst, src_corners) {
   // Keep only the 2 first rows since we only want to compute x and y
   const M = distort_matrix(src_corners, dst_corners);
 
-  let x, y, idx, i_s, x_s, y_s;
+  let x, y, idx, x_s, y_s;
   let count = 50;
   for (let i = 0; i < dst.data.length; i += 4) {
     idx = i / 4;
@@ -61,12 +59,14 @@ export function distort(img, dst, src_corners) {
 
     [x_s, y_s] = project_2d(multiply(M, augment_2d_point([x, y])));
 
-    // TODO: interpolation
-    i_s = 4 * (Math.round(y_s) * dst.width + Math.round(x_s));
-
     // RGBA channels
     for (let c = 0; c < 4; c++) {
-      dst.data[i + c] = img.data[i_s + c];
+      // TODO: bilinear interpolation
+      dst.data[i + c] = simpleInterpolation(img, x_s, y_s, c);
     }
   }
+}
+
+function simpleInterpolation(img, x, y, c) {
+  return img.data[c + 4 * (Math.round(y) * img.width + Math.round(x))];
 }

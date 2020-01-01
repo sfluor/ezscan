@@ -8,11 +8,10 @@ const cam = document.getElementById("camera");
 const cropBtn = document.getElementById("crop-btn");
 
 cropBtn.addEventListener("click", () => {
-  const { data, corners } = canvas.exportImage();
-  // TODO: stop hardcoding same ratio
-  const { width, height } = data;
+  const { data, corners } = canvas.exportImageData();
 
-  const dst_img = canvas.createImage(width, height);
+  // TODO: stop hardcoding same ratio for destination
+  const dst_img = canvas.createImage(data.width, data.height);
   distort(data, dst_img, corners);
   canvas.putImage(dst_img);
 });

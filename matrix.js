@@ -149,6 +149,12 @@ function swap_rows(mat, r1, r2) {
   return mat;
 }
 
+const epsilon = 1e-12;
+
+function isZero(x) {
+  return Math.abs(x) < epsilon;
+}
+
 function gaussjordanelimination(matrix) {
   const height = matrix.length;
   const width = matrix[0].length;
@@ -160,7 +166,10 @@ function gaussjordanelimination(matrix) {
     swap_rows(matrix, max_row, y);
 
     // check if abs(mat[y][y] = 0) or is too small
-    // if it is matrix is singular
+    // if it is the matrix is singular and can't be inversed
+    if (isZero(matrix[y][y])) {
+      throw "Singular matrix !";
+    }
 
     // eliminate column y
     for (let y2 = y + 1; y2 < height; y2++) {

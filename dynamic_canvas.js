@@ -1,3 +1,5 @@
+import { imageToImageData, imageDataToImage } from "./image.js";
+
 const RADIUS = 10;
 const CLICK_RADIUS = 3 * RADIUS;
 
@@ -23,7 +25,9 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.id = "dynamic-canvas";
     this.image = new Image();
     this.ctx = this.getContext("2d");
+    this.ctx.save();
     this.hit_corner = null;
+    this.ratio = 1;
 
     this.init();
   }
@@ -32,10 +36,8 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.resetCorners();
 
     this.image.onload = () => {
-      // TODO: respect browser size aswell
-      // A 3000x1900 canvas won't fit on mobile for instance
       this.resize(this.image.width, this.image.height);
-      this.ctx.drawImage(this.image, 0, 0);
+      this.drawImage();
       this.image.style.display = "none";
       this.drawCorners();
     };
@@ -50,7 +52,6 @@ class DynamicCanvas extends HTMLCanvasElement {
 
   handleDown = ev => {
     const [x, y] = extractCoords(ev);
-    console.log("DOWN", ev, x, y);
     const hit = this.getHitCorner(x, y);
     if (hit !== null) {
       this.hit_corner = hit;
@@ -64,6 +65,7 @@ class DynamicCanvas extends HTMLCanvasElement {
 
   handleMove = ev => {
     if (this.hit_corner !== null) {
+      // Disable scrolling on mobile if we are currently moving a corner
       ev.preventDefault();
       const pos = extractCoords(ev);
       this.corners[this.hit_corner] = pos;
@@ -73,7 +75,21 @@ class DynamicCanvas extends HTMLCanvasElement {
 
   reset() {
     this.ctx.clearRect(0, 0, this.width, this.height);
-    this.ctx.drawImage(this.image, 0, 0);
+    this.drawImage();
+  }
+
+  drawImage() {
+    this.ctx.drawImage(
+      this.image,
+      0,
+      0, // sx, sy
+      this.image.width,
+      this.image.height, // sWidth, sHeight
+      0,
+      0, // dx, dy
+      this.width,
+      this.height // dWidth, dHeight
+    );
   }
 
   refresh() {
@@ -131,13 +147,22 @@ class DynamicCanvas extends HTMLCanvasElement {
     return this.ctx.createImageData(width, height);
   }
 
-  putImage(img) {
-    this.ctx.putImageData(img, 0, 0);
+  putImage(imgData) {
+    this.draw(imageDataToImage(imgData));
   }
 
   resize(width, height) {
-    this.width = width;
-    this.height = height;
+    this.ctx.restore();
+
+    const wh = window.outerHeight;
+    const ww = window.outerWidth;
+
+    // Min ratio
+    this.ratio = Math.min(1, wh / height, ww / width);
+
+    this.width = this.ratio * width;
+    this.height = this.ratio * height;
+    console.log(this.ratio, ww, wh, width, height);
     this.resetCorners();
   }
 
@@ -165,12 +190,13 @@ class DynamicCanvas extends HTMLCanvasElement {
     return null;
   }
 
-  exportImage() {
+  exportImageData() {
     // Reset to remove the corners / dashed lines from the image
     this.reset();
     return {
-      data: this.ctx.getImageData(0, 0, this.width, this.height),
-      corners: this.corners
+      data: imageToImageData(this.image),
+      // Rescale corners
+      corners: this.corners.map(([x, y]) => [x / this.ratio, y / this.ratio])
     };
   }
 }
