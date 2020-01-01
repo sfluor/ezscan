@@ -64,6 +64,7 @@ class DynamicCanvas extends HTMLCanvasElement {
   };
 
   handleMove = ev => {
+    // TODO: show zoom of currently moving AREA
     if (this.hit_corner !== null) {
       // Disable scrolling on mobile if we are currently moving a corner
       ev.preventDefault();
@@ -154,7 +155,8 @@ class DynamicCanvas extends HTMLCanvasElement {
   resize(width, height) {
     this.ctx.restore();
 
-    const wh = window.outerHeight;
+    // Account for the footer
+    const wh = 0.92 * window.outerHeight;
     const ww = window.outerWidth;
 
     // Min ratio
