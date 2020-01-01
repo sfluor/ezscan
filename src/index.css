@@ -75,9 +75,18 @@ body {
 #footer > a {
   color: #fffffe;
   font-weight: 700;
-  height: 5vh;
-  line-height: 6vh;
+  line-height: 3vh;
   text-align: center;
   padding: 1vh 2vh;
   cursor: pointer;
+}
+
+.menu-icon {
+  height: 3vh;
+}
+
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
