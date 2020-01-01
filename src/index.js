@@ -39,7 +39,7 @@ const reader = new FileReader();
 const distortWorker = new Worker("worker_distort.js");
 
 camera.addEventListener("change", () => {
-  const file = cam.files[0];
+  const file = camera.files[0];
   reader.readAsDataURL(file);
 });
 
