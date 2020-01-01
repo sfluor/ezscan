@@ -7,8 +7,8 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "format": "prettier-eslint --write \"./**/*.js\"",
-    "serve": "serve"
+    "format": "prettier-eslint --write \"src/**/*.js\" \"src/*.html\"",
+    "serve": "serve src/"
   },
   "devDependencies": {
     "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",

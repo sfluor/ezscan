@@ -1,4 +1,4 @@
-import { imageToImageData, imageDataToImage } from "./image.js";
+import {imageToImageData, imageDataToImage} from './image.js';
 
 const RADIUS = 10;
 const CLICK_RADIUS = 3 * RADIUS;
@@ -17,14 +17,14 @@ function extractCoords(ev) {
 // currently the whole image is rerendered whenever we change the corners
 class DynamicCanvas extends HTMLCanvasElement {
   static tagName() {
-    return "dynamic-canvas";
+    return 'dynamic-canvas';
   }
 
   constructor() {
     super();
-    this.id = "dynamic-canvas";
+    this.id = 'dynamic-canvas';
     this.image = new Image();
-    this.ctx = this.getContext("2d");
+    this.ctx = this.getContext('2d');
     this.ctx.save();
     this.hit_corner = null;
     this.ratio = 1;
@@ -38,16 +38,16 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.image.onload = () => {
       this.resize(this.image.width, this.image.height);
       this.drawImage();
-      this.image.style.display = "none";
+      this.image.style.display = 'none';
       this.drawCorners();
     };
 
-    this.addEventListener("mousedown", this.handleDown);
-    this.addEventListener("touchstart", this.handleDown);
-    this.addEventListener("mouseup", this.handleUp);
-    this.addEventListener("touchend", this.handleUp);
-    this.addEventListener("mousemove", this.handleMove);
-    this.addEventListener("touchmove", this.handleMove);
+    this.addEventListener('mousedown', this.handleDown);
+    this.addEventListener('touchstart', this.handleDown);
+    this.addEventListener('mouseup', this.handleUp);
+    this.addEventListener('touchend', this.handleUp);
+    this.addEventListener('mousemove', this.handleMove);
+    this.addEventListener('touchmove', this.handleMove);
   }
 
   handleDown = ev => {
@@ -89,7 +89,7 @@ class DynamicCanvas extends HTMLCanvasElement {
       0,
       0, // dx, dy
       this.width,
-      this.height // dWidth, dHeight
+      this.height, // dWidth, dHeight
     );
   }
 
@@ -100,7 +100,7 @@ class DynamicCanvas extends HTMLCanvasElement {
 
   drawCorners() {
     this.corners.forEach(([x, y], idx) =>
-      this.drawCircle(x, y, idx === this.hit_corner)
+      this.drawCircle(x, y, idx === this.hit_corner),
     );
     this.drawCornerLines();
   }
@@ -110,7 +110,7 @@ class DynamicCanvas extends HTMLCanvasElement {
       [0, 1],
       [1, 2],
       [2, 3],
-      [3, 0]
+      [3, 0],
     ];
 
     lines.forEach(([p1, p2]) => {
@@ -126,7 +126,7 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.ctx.lineTo(x2, y2);
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([5, 5]);
-    this.ctx.strokeStyle = "white";
+    this.ctx.strokeStyle = 'white';
     this.ctx.stroke();
   }
 
@@ -136,7 +136,7 @@ class DynamicCanvas extends HTMLCanvasElement {
 
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([]);
-    this.ctx.strokeStyle = targeted ? "red" : "white";
+    this.ctx.strokeStyle = targeted ? 'red' : 'white';
     this.ctx.stroke();
   }
 
@@ -156,15 +156,15 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.ctx.restore();
 
     // Account for the footer
-    const wh = 0.92 * window.outerHeight;
-    const ww = window.outerWidth;
+    const vh = 0.92 * window.outerHeight;
+    const vw = window.outerWidth;
 
     // Min ratio
-    this.ratio = Math.min(1, wh / height, ww / width);
+    this.ratio = Math.min(1, vh / height, vw / width);
 
     this.width = this.ratio * width;
     this.height = this.ratio * height;
-    console.log(this.ratio, ww, wh, width, height);
+    console.log(this.ratio, vw, vh, width, height);
     this.resetCorners();
   }
 
@@ -173,7 +173,7 @@ class DynamicCanvas extends HTMLCanvasElement {
       [RADIUS, RADIUS],
       [this.width - RADIUS, RADIUS],
       [this.width - RADIUS, this.height - RADIUS],
-      [RADIUS, this.height - RADIUS]
+      [RADIUS, this.height - RADIUS],
     ];
   }
 
@@ -182,7 +182,7 @@ class DynamicCanvas extends HTMLCanvasElement {
     const hit = this.corners
       .map((c, idx) => [idx, c])
       .find(
-        ([_, [cx, cy]]) => (cx - x) ** 2 + (cy - y) ** 2 < CLICK_RADIUS ** 2
+        ([_, [cx, cy]]) => (cx - x) ** 2 + (cy - y) ** 2 < CLICK_RADIUS ** 2,
       );
 
     if (hit) {
@@ -198,15 +198,15 @@ class DynamicCanvas extends HTMLCanvasElement {
     return {
       data: imageToImageData(this.image),
       // Rescale corners
-      corners: this.corners.map(([x, y]) => [x / this.ratio, y / this.ratio])
+      corners: this.corners.map(([x, y]) => [x / this.ratio, y / this.ratio]),
     };
   }
 }
 
 customElements.define(DynamicCanvas.tagName(), DynamicCanvas, {
-  extends: "canvas"
+  extends: 'canvas',
 });
 
 export function newDynamicCanvas() {
-  return document.createElement("canvas", { is: DynamicCanvas.tagName() });
+  return document.createElement('canvas', {is: DynamicCanvas.tagName()});
 }

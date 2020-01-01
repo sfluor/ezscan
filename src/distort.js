@@ -1,4 +1,4 @@
-import { transpose, multiply, inverse } from "./matrix.js";
+import {transpose, multiply, inverse} from './matrix.js';
 
 // Augment a 2d point into a bigger space where it's coordinates will be:
 // x, y, x*y, z=1
@@ -44,7 +44,7 @@ export function distort(img, dst, src_corners) {
     [0, 0],
     [dst.width, 0],
     [dst.width, dst.height],
-    [0, dst.height]
+    [0, dst.height],
   ];
 
   // Keep only the 2 first rows since we only want to compute x and y
@@ -64,6 +64,8 @@ export function distort(img, dst, src_corners) {
     const channels = bilinearInterpolation(img, x_s, y_s);
     channels.forEach((value, nb) => (dst.data[i + nb] = value));
   }
+
+  return dst;
 }
 
 function pixIdx(x, y, width) {
@@ -95,7 +97,7 @@ function bilinearInterpolation(img, x, y) {
       f11 * img.data[q11 + c] +
         f12 * img.data[q12 + c] +
         f21 * img.data[q21 + c] +
-        f22 * img.data[q22 + c]
+        f22 * img.data[q22 + c],
     );
   }
 
