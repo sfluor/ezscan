@@ -1,5 +1,15 @@
 const RADIUS = 10;
-const CLICK_RADIUS = 2 * RADIUS;
+const CLICK_RADIUS = 3 * RADIUS;
+
+function extractCoords(ev) {
+  if (ev instanceof TouchEvent) {
+    const touch = ev.touches[0];
+    const target = ev.target;
+    return [touch.pageX - target.offsetLeft, touch.pageY - target.offsetTop];
+  }
+
+  return [ev.offsetX, ev.offsetY];
+}
 
 // TODO: display the canvas and the image separately for better performances
 // currently the whole image is rerendered whenever we change the corners
@@ -30,46 +40,51 @@ class DynamicCanvas extends HTMLCanvasElement {
       this.drawCorners();
     };
 
-    this.addEventListener(
-      "mousedown",
-      ev => {
-        const [x, y] = [ev.offsetX, ev.offsetY];
-        const hit = this.getHitCorner(x, y);
-        if (hit !== null) {
-          this.hit_corner = hit;
-        }
-      },
-      false
-    );
-    this.addEventListener(
-      "mouseup",
-      () => {
-        this.hit_corner = null;
-      },
-      false
-    );
+    this.addEventListener("mousedown", this.handleDown);
+    this.addEventListener("touchstart", this.handleDown);
+    this.addEventListener("mouseup", this.handleUp);
+    this.addEventListener("touchend", this.handleUp);
+    this.addEventListener("mousemove", this.handleMove);
+    this.addEventListener("touchmove", this.handleMove);
+  }
 
-    this.addEventListener(
-      "mousemove",
-      ev => {
-        if (this.hit_corner !== null) {
-          const pos = [ev.offsetX, ev.offsetY];
-          this.corners[this.hit_corner] = pos;
-          this.refresh();
-        }
-      },
-      false
-    );
+  handleDown = ev => {
+    const [x, y] = extractCoords(ev);
+    console.log("DOWN", ev, x, y);
+    const hit = this.getHitCorner(x, y);
+    if (hit !== null) {
+      this.hit_corner = hit;
+    }
+  };
+
+  handleUp = () => {
+    this.hit_corner = null;
+    this.refresh();
+  };
+
+  handleMove = ev => {
+    if (this.hit_corner !== null) {
+      ev.preventDefault();
+      const pos = extractCoords(ev);
+      this.corners[this.hit_corner] = pos;
+      this.refresh();
+    }
+  };
+
+  reset() {
+    this.ctx.clearRect(0, 0, this.width, this.height);
+    this.ctx.drawImage(this.image, 0, 0);
   }
 
   refresh() {
-    this.ctx.clearRect(0, 0, this.width, this.height);
-    this.ctx.drawImage(this.image, 0, 0);
+    this.reset();
     this.drawCorners();
   }
 
   drawCorners() {
-    this.corners.forEach(([x, y]) => this.drawCircle(x, y));
+    this.corners.forEach(([x, y], idx) =>
+      this.drawCircle(x, y, idx === this.hit_corner)
+    );
     this.drawCornerLines();
   }
 
@@ -98,13 +113,13 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.ctx.stroke();
   }
 
-  drawCircle(x, y) {
+  drawCircle(x, y, targeted) {
     this.ctx.beginPath();
     this.ctx.arc(x, y, RADIUS, 0, 2 * Math.PI, false);
 
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([]);
-    this.ctx.strokeStyle = "white";
+    this.ctx.strokeStyle = targeted ? "red" : "white";
     this.ctx.stroke();
   }
 
@@ -117,7 +132,6 @@ class DynamicCanvas extends HTMLCanvasElement {
   }
 
   putImage(img) {
-    console.log("PUT", img);
     this.ctx.putImageData(img, 0, 0);
   }
 
@@ -151,7 +165,9 @@ class DynamicCanvas extends HTMLCanvasElement {
     return null;
   }
 
-  getImage() {
+  exportImage() {
+    // Reset to remove the corners / dashed lines from the image
+    this.reset();
     return {
       data: this.ctx.getImageData(0, 0, this.width, this.height),
       corners: this.corners
