@@ -7,13 +7,12 @@ function emptyNode(node) {
 }
 
 function createCameraInput(node) {
-  // TODO: allow to use gallery on mobile instead of camera
   const cam = document.createElement("input");
   cam.id = "camera";
   cam.type = "file";
   cam.name = "camera";
   cam.accept = "image/*";
-  cam.capture = "camera";
+  cam.class = "img-input";
 
   cam.addEventListener("change", () => {
     const file = cam.files[0];
