@@ -22,6 +22,9 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.resetCorners();
 
     this.image.onload = () => {
+      // TODO: respect browser size aswell
+      // A 3000x1900 canvas won't fit on mobile for instance
+      this.resize(this.image.width, this.image.height);
       this.ctx.drawImage(this.image, 0, 0)
       this.image.style.display = 'none'
       this.drawCorners();
@@ -31,7 +34,6 @@ class DynamicCanvas extends HTMLCanvasElement {
       const [x, y] = [ev.offsetX, ev.offsetY];
       const hit = this.getHitCorner(x, y);
       if (hit !== null) {
-        console.log("HIT !", hit);
         this.hit_corner = hit;
       }
     }, false)
@@ -80,8 +82,6 @@ class DynamicCanvas extends HTMLCanvasElement {
   drawCircle(x, y) {
     this.ctx.beginPath();
     this.ctx.arc(x, y, RADIUS, 0, 2 * Math.PI, false);
-    this.ctx.fillStyle = 'lightgrey';
-    this.ctx.fill();
 
     this.ctx.lineWidth = 2;
     this.ctx.setLineDash([]);
@@ -119,6 +119,13 @@ class DynamicCanvas extends HTMLCanvasElement {
     }
 
     return null; 
+  }
+
+  getImage() {
+    return {
+      data: this.ctx.getImageData(0, 0, this.width, this.height),
+      corners: this.corners,
+    }
   }
 }
 
