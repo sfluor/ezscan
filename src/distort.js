@@ -212,14 +212,6 @@ function augment_2d_point(p) {
   return [p[0], p[1], p[0] * p[1], 1];
 }
 
-function project_2d(p) {
-  if (p.length !== 4) {
-    throw `Expected point ${point} to be a 4D point`;
-  }
-
-  return [p[0], p[1]];
-}
-
 // Bilinear distortion
 // We stack our 4 source points into a matrix, same for destination and we want to
 // find the distortion matrix M such as:
@@ -249,20 +241,23 @@ function distort(img, dst, src_corners) {
   ];
 
   // Keep only the 2 first rows since we only want to compute x and y
-  const M = distort_matrix(src_corners, dst_corners);
+  const M = distort_matrix(src_corners, dst_corners).slice(0, 2);
 
   let x, y, idx, x_s, y_s;
   let count = 50;
+
+  // Avoid recrating this array every time so we do it only once
+  const channels = [0, 0, 0, 0];
   for (let i = 0; i < dst.data.length; i += 4) {
     idx = i / 4;
     x = idx % dst.width;
     y = Math.floor(idx / dst.width);
 
-    [x_s, y_s] = project_2d(multiply(M, augment_2d_point([x, y])));
+    [x_s, y_s] = multiply(M, augment_2d_point([x, y]));
 
     // RGBA channels
     // const channels = simpleInterpolation(img, x_s, y_s);
-    const channels = bilinearInterpolation(img, x_s, y_s);
+    bilinearInterpolation(img, x_s, y_s, channels);
     channels.forEach((value, nb) => (dst.data[i + nb] = value));
   }
 
@@ -273,43 +268,42 @@ function pixIdx(x, y, width) {
   return 4 * (y * width + x);
 }
 
-function bilinearInterpolation(img, x, y) {
+function bilinearInterpolation(img, x, y, channels) {
   // See: https://en.wikipedia.org/wiki/Bilinear_interpolation
 
-  const [x1, y1] = [Math.floor(x), Math.floor(y)];
-  // Add +1 instead of using ceil to avoid having x1 == x2
-  const [x2, y2] = [x1 + 1, y1 + 1];
+  const x1 = Math.floor(x);
+  const y1 = Math.floor(y);
 
+  // Consider that x2 is just x1 + 1 and y2 = y1 + 1 to avoid using ceil and ending with x1 == x2 or y1 == y2
   const q11 = pixIdx(x1, y1, img.width);
-  const q12 = pixIdx(x1, y2, img.width);
-  const q21 = pixIdx(x2, y1, img.width);
-  const q22 = pixIdx(x2, y2, img.width);
+  const q12 = pixIdx(x1, y1 + 1, img.width);
+  const q21 = pixIdx(x1 + 1, y1, img.width);
+  const q22 = pixIdx(x1 + 1, y1 + 1, img.width);
 
-  const res = [];
+  const dx = x - x1;
+  const dy = y - y1;
 
   // No need to normalize since we always have x2 - x1 == 1 == y2 - y1
-  const f11 = (x2 - x) * (y2 - y);
-  const f12 = (x2 - x) * (y - y1);
-  const f21 = (x - x1) * (y2 - y);
-  const f22 = (x - x1) * (y - y1);
+  const f11 = (1 - dx) * (1 - dy);
+  const f12 = (1 - dx) * dy;
+  const f21 = dx * (1 - dy);
+  const f22 = dx * dy;
 
   for (let c = 0; c < 4; c++) {
-    res.push(
+    channels[c] =
       f11 * img.data[q11 + c] +
-        f12 * img.data[q12 + c] +
-        f21 * img.data[q21 + c] +
-        f22 * img.data[q22 + c]
-    );
+      f12 * img.data[q12 + c] +
+      f21 * img.data[q21 + c] +
+      f22 * img.data[q22 + c];
   }
-
-  return res;
 }
 
-function simpleInterpolation(img, x, y) {
+function simpleInterpolation(img, x, y, channels) {
   const start = pixIdx(Math.round(x), Math.round(y));
-  const end = start + 4;
 
-  return img.data.slice(start, end);
+  for (let c = 0; c < 4; c++) {
+    channels[c] = img.data[start + c];
+  }
 }
 
 // Workaround to make the webworker work correctly
