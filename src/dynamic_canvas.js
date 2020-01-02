@@ -4,7 +4,7 @@ const RADIUS = 10;
 const CLICK_RADIUS = 3 * RADIUS;
 
 function extractCoords(ev) {
-  if (ev instanceof TouchEvent) {
+  if (window.TouchEvent && ev instanceof TouchEvent) {
     const touch = ev.touches[0];
     const target = ev.target;
     return [touch.pageX - target.offsetLeft, touch.pageY - target.offsetTop];
