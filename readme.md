@@ -22,7 +22,7 @@ To format the code you can do `yarn format`
 
 - export to PDF
 - compress images
-- friendlier UI
+- friendlier UI (home page, list of screens, etc.)
 - favicon
 - manifest.json for SPA like on android
 - bundle JSpdf correctly
