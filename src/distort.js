@@ -244,7 +244,6 @@ function distort(img, dst, src_corners) {
   const M = distort_matrix(src_corners, dst_corners).slice(0, 2);
 
   let x, y, idx, x_s, y_s;
-  let count = 50;
 
   // Avoid recrating this array every time so we do it only once
   const channels = [0, 0, 0, 0];
