@@ -13,6 +13,24 @@ function extractCoords(ev) {
   return [ev.offsetX, ev.offsetY];
 }
 
+// Helper to determine the width and height that we should use when distorting the image using the given corners
+// It assumes that the corners are given in the following order:
+// top left, top right, bottom right, bottom left
+// It simply takes the mean difference of X and Y
+// TODO: this can break if corners are reversed (if the user moves the bottom left into top left for instance)
+function rectSizeFromCorners(corners) {
+  const width =
+    (Math.abs(corners[0][0] - corners[1][0]) +
+      Math.abs(corners[2][0] - corners[3][0])) /
+    2;
+  const height =
+    (Math.abs(corners[0][1] - corners[2][1]) +
+      Math.abs(corners[1][1] - corners[3][1])) /
+    2;
+
+  return { width, height };
+}
+
 // TODO: display the canvas and the image separately for better performances
 // currently the whole image is rerendered whenever we change the corners
 class DynamicCanvas extends HTMLCanvasElement {
@@ -144,8 +162,9 @@ class DynamicCanvas extends HTMLCanvasElement {
     this.image.src = srcImage;
   }
 
-  createImage(width, height) {
-    return this.ctx.createImageData(width, height);
+  createImage() {
+    const { width, height } = rectSizeFromCorners(this.corners);
+    return this.ctx.createImageData(width / this.ratio, height / this.ratio);
   }
 
   putImage(imgData) {

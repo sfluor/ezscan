@@ -65,8 +65,7 @@ distortWorker.onmessage = function(e) {
 cropBtn.addEventListener("click", () => {
   const { data, corners } = reader.canvas.exportImageData();
 
-  // TODO: stop hardcoding same ratio for destination
-  const dst_img = reader.canvas.createImage(data.width, data.height);
+  const dst_img = reader.canvas.createImage();
   displayLoader();
   distortWorker.postMessage({
     img: data,
