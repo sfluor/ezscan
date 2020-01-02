@@ -16,3 +16,15 @@ To run tests you can do `yarn test`
 ### Format
 
 To format the code you can do `yarn format`
+
+## Todos
+
+
+- export to PDF
+- compress images
+- friendlier UI
+- favicon
+- manifest.json for SPA like on android
+- bundle JSpdf correctly
+- remove capture='camera' to allow to import gallery images on mobile
+- performances
