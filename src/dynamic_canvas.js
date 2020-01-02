@@ -134,16 +134,17 @@ class DynamicCanvas extends HTMLCanvasElement {
     lines.forEach(([p1, p2]) => {
       const [x1, y1] = this.corners[p1];
       const [x2, y2] = this.corners[p2];
-      this.drawLine(x1, y1, x2, y2);
+      const targeted = p1 === this.hit_corner || p2 === this.hit_corner;
+      this.drawLine(x1, y1, x2, y2, targeted);
     });
   }
 
-  drawLine(x1, y1, x2, y2) {
+  drawLine(x1, y1, x2, y2, targeted) {
     this.ctx.beginPath();
     this.ctx.moveTo(x1, y1);
     this.ctx.lineTo(x2, y2);
-    this.ctx.lineWidth = 2;
-    this.ctx.setLineDash([5, 5]);
+    this.ctx.lineWidth = targeted ? 4 : 2;
+    this.ctx.setLineDash(targeted ? [] : [5, 5]);
     this.ctx.strokeStyle = "white";
     this.ctx.stroke();
   }
