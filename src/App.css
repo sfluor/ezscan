@@ -1,0 +1,125 @@
+/*
+ * TODO(sami): review CSS
+ * Colors
+ * bg #232946
+ * button #eebbc3
+ * paragraph #b8c1ec
+ * headline #fffffe
+ * button text #232946
+ */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  font-family: proxima-nova, sans-serif;
+  color: #fffffe;
+  font-weight: 700;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes fadeSlidein {
+  from {
+    opacity: 0;
+    padding-bottom: 100px;
+  }
+  to {
+    opacity: 1;
+    padding-bottom: 0px;
+  }
+}
+
+#loader {
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 100vw;
+  height: 92vh;
+  background: #232946;
+  opacity: 0.8;
+  display: none;
+}
+
+.loader-icon {
+  width: 15vw;
+  animation: rotating 3s linear infinite;
+}
+
+.loader-desc {
+  margin-top: 3vh;
+  font-size: 1.3em;
+}
+
+#container {
+  flex: 1 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: black;
+}
+
+#footer {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  background-color: #232946;
+  height: 8vh;
+  align-items: center;
+}
+
+#footer > a {
+  color: #fffffe;
+  font-weight: 700;
+  line-height: 3vh;
+  text-align: center;
+  padding: 1vh 2vh;
+  cursor: pointer;
+}
+
+.menu-icon {
+  height: 3vh;
+}
+
+.menu-button {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+#camera {
+  display: none;
+}
+
+#camera-label {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 10vh;
+  animation: fadeSlidein 1s;
+}
+
+.main-icon {
+  height: 7vh;
+}
+
+#dynamic-canvas {
+  animation: fadeSlidein 1s;
+}
