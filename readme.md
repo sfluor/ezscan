@@ -20,6 +20,8 @@ To format the code you can do `yarn format`
 ## Todos
 
 
+- images imported instead of public dir
+- typescript
 - export to PDF
 - compress images
 - friendlier UI (home page, list of screens, etc.)

@@ -102,10 +102,6 @@ body {
   justify-content: center;
 }
 
-#camera {
-  display: none;
-}
-
 #camera-label {
   cursor: pointer;
   display: flex;
@@ -118,8 +114,4 @@ body {
 
 .main-icon {
   height: 7vh;
-}
-
-#dynamic-canvas {
-  animation: fadeSlidein 1s;
 }
