@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Canvas from "./Canvas";
-import { extractCoordinates } from "./lib/eventhelpers";
+import extractCoordinates from "./lib/eventhelpers";
 
 /*
  * Given a rectangle (here it's a square for simplicity)
@@ -30,9 +30,7 @@ import { extractCoordinates } from "./lib/eventhelpers";
  *  and check if it's greater than the point's y coordinate or not.
  *
  */
-const isLowerRight = (width, height, x, y) => {
-  return height - (height / width) * x < y;
-};
+const isLowerRight = (width, height, x, y) => height - (height / width) * x < y;
 
 /*
  * Draw a hatched rectangle on the canvas (using (x,y) as the top left corner).
@@ -51,7 +49,7 @@ const drawHatchedSquare = (context, x, y, size, backgroundColor, lineColor) => {
 
   const chunkSize = size / lineCountPerTriangle;
 
-  for (let i = 0; i < lineCountPerTriangle; i++) {
+  for (let i = 0; i < lineCountPerTriangle; i += 1) {
     // Upper triangle
     context.moveTo(x, y + i * chunkSize);
     context.lineTo(x + i * chunkSize, y);
@@ -66,7 +64,7 @@ const drawHatchedSquare = (context, x, y, size, backgroundColor, lineColor) => {
   context.stroke();
 };
 
-const ZoomableCanvas = ({ draw, onMouseMove, ...rest }) => {
+function ZoomableCanvas({ draw, onMouseMove, ...rest }) {
   const [zoom, setZoom] = useState({
     lowerRight: false,
     mouseX: 0,
@@ -168,6 +166,6 @@ const ZoomableCanvas = ({ draw, onMouseMove, ...rest }) => {
       {...rest}
     />
   );
-};
+}
 
 export default ZoomableCanvas;

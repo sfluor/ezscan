@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ZoomableCanvas from "./ZoomableCanvas";
-import { extractCoordinates } from "./lib/eventhelpers";
+import extractCoordinates from "./lib/eventhelpers";
 import { isQuadrilateralConvex } from "./lib/geometry";
 
 const drawCircle = (ctx, x, y, radius, color, width) => {
@@ -37,11 +37,11 @@ const findPointWithinDistance = (points, rx, ry, maxDistance) => {
     .sort(([_, da], [__, db]) => {
       if (da < db) {
         return -1;
-      } else if (da > db) {
-        return 1;
-      } else {
-        return 0;
       }
+      if (da > db) {
+        return 1;
+      }
+      return 0;
     })
     .find(([_, distance]) => distance < maxDistance ** 2);
 
@@ -51,12 +51,12 @@ const findPointWithinDistance = (points, rx, ry, maxDistance) => {
 const SELECTED_COLOR = "red";
 const UNSELECTED_COLOR = "white";
 
-const InteractiveCanvas = ({
+function InteractiveCanvas({
   widthPercentage,
   heightPercentage,
   image,
   ...rest
-}) => {
+}) {
   const canvasHeight = (heightPercentage * window.innerHeight) / 100;
   const canvasWidth = (widthPercentage * window.innerWidth) / 100;
 
@@ -140,7 +140,6 @@ const InteractiveCanvas = ({
 
   const handleMouseDown = (event) => {
     const { x, y } = extractCoordinates(event);
-    console.log(x, y, corners);
     const foundIndex = findPointWithinDistance(
       corners,
       x,
@@ -152,7 +151,7 @@ const InteractiveCanvas = ({
     }
   };
 
-  const handleMouseUp = (event) => {
+  const handleMouseUp = () => {
     setSelectedCorner(null);
   };
 
@@ -189,6 +188,6 @@ const InteractiveCanvas = ({
       {...rest}
     />
   );
-};
+}
 
 export default InteractiveCanvas;

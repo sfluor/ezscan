@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import InteractiveCanvas from "./InteractiveCanvas";
 
 // Unstyled button component
-const Button = ({ name, action }) => {
+function Button({ name, action }) {
   const lowerName = name.toLowerCase();
 
   return (
     <button
       id={`${lowerName}-btn`}
+      type="button"
       style={{
         display: "flex",
         flexDirection: "column",
@@ -30,15 +31,16 @@ const Button = ({ name, action }) => {
       <span className="menu-label">{name}</span>
     </button>
   );
-};
+}
 
-const CameraInput = () => {
+function CameraInput() {
   const [image, setImage] = useState(null);
   const reader = new FileReader();
-  reader.onload = function (event) {
-    const image = new Image();
-    image.src = reader.result;
-    setImage(image);
+
+  reader.onload = () => {
+    const loadedImage = new Image();
+    loadedImage.src = reader.result;
+    setImage(loadedImage);
   };
 
   return (
@@ -78,6 +80,6 @@ const CameraInput = () => {
       </footer>
     </div>
   );
-};
+}
 
 export default CameraInput;
