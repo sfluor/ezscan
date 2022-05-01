@@ -51,14 +51,16 @@ function CameraInput() {
   };
 
   const onCrop = () => {
-    if (corners && image) {
-      // TODO: use a web worker
-      const newImage = new ImageData(image.width, image.height);
-      download(distortImage(imageToImageData(image), newImage, corners));
-    } else {
-      // TODO: fixme
-      alert('An error occurred');
-    }
+    // TODO: use a web worker
+    const nonNullImage = image as HTMLImageElement;
+    const newImage = new ImageData(nonNullImage.width, nonNullImage.height);
+    download(
+      distortImage(
+        imageToImageData(nonNullImage),
+        newImage,
+        corners as Quadrilateral
+      )
+    );
   };
 
   return (
@@ -106,7 +108,7 @@ function CameraInput() {
         }}
       >
         {/* <Button name="Back" /> */}
-        <Button name="Crop" action={onCrop} />
+        {image && <Button name="Crop" action={onCrop} />}
         {/* <Button name="Next" /> */}
       </footer>
     </div>

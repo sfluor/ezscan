@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import ZoomableCanvas from './ZoomableCanvas';
 import { extractCoordinates } from './lib/eventhelpers';
 import { Quadrilateral, Point, isQuadrilateralConvex } from './lib/geometry';
@@ -115,6 +115,11 @@ function InteractiveCanvas({
     { x: realWidth, y: realHeight },
     { x: 0, y: realHeight },
   ]);
+
+  useEffect(() => {
+    // Init corners only once
+    onCornersChange(corners);
+  }, []);
 
   const [selectedCorner, setSelectedCorner] = useState<number | null>(null);
 
