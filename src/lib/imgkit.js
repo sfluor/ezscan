@@ -1,4 +1,5 @@
 // TODO(sami): typescript
+// TODO(sami): tests
 function transposeMatrix(matrix) {
   for (let i = 0; i < matrix.length; i++) {
     for (let j = i + 1; j < matrix[0].length; j++) {
