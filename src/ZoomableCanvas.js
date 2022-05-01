@@ -130,6 +130,7 @@ function ZoomableCanvas({ draw, onMouseMove, ...rest }) {
       context.strokeStyle = 'white';
       context.lineWidth = zoomBoxSize / 20;
       context.rect(coords.x, coords.y, zoomBoxSize, zoomBoxSize);
+      context.setLineDash([]);
       context.stroke();
     }
   };
