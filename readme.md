@@ -21,6 +21,11 @@ To format the code you can do `yarn format`
 
 
 - images imported instead of public dir
+- do not operate on the canvas image (can loose precision) (just use it as a mean to know where the user wants to distort) but use a bigger canvas when doing the distortion
+- allow to reorder images / have more than one images / delete images
+- allow to rotate images
+- auto detect borders
+- precommit hooks
 - typescript
 - export to PDF
 - compress images
