@@ -1,4 +1,5 @@
-function transpose(matrix) {
+// TODO(sami): typescript
+function transposeMatrix(matrix) {
   for (let i = 0; i < matrix.length; i++) {
     for (let j = i + 1; j < matrix[0].length; j++) {
       const tmp = matrix[i][j];
@@ -10,7 +11,12 @@ function transpose(matrix) {
   return matrix;
 }
 
-function copy_mat(mat) {
+/**
+ * cloneMatrix clones the provided matrix and returns the clone.
+ * It doesn't perform deep cloning and will stop after cloning the rows and the columns.
+ *
+ */
+function cloneMatrix(mat) {
   const height = mat[0].length;
   const width = mat.length;
 
@@ -26,7 +32,10 @@ function copy_mat(mat) {
   return result;
 }
 
-function zeros(n) {
+/**
+ * zeroValuedArray returns a zero valued array of size n
+ */
+function zeroValuedArray(n) {
   // todo: perf
   const res = [];
   for (let i = 0; i < n; i++) {
@@ -35,7 +44,7 @@ function zeros(n) {
   return res;
 }
 
-function multiply_mat_vec(a, v) {
+function matrixMultVector(a, v) {
   const height = a.length;
   const common = a[0].length;
 
@@ -53,7 +62,7 @@ function multiply_mat_vec(a, v) {
   return c;
 }
 
-function multiply_mat_mat(a, b) {
+function matrixMultMatrix(a, b) {
   const height = a.length;
   const width = b[0].length;
 
@@ -63,7 +72,7 @@ function multiply_mat_mat(a, b) {
   const c = [];
 
   for (let i = 0; i < height; i++) {
-    c.push(zeros(width));
+    c.push(zeroValuedArray(width));
     for (let k = 0; k < width; k++) {
       // c_i,k = sum(a_i,j * b_j,k)
       for (let j = 0; j < common; j++) {
@@ -84,12 +93,15 @@ function multiply(a, b) {
   }
 
   if (width === 1) {
-    return multiply_mat_vec(a, b);
+    return matrixMultVector(a, b);
   }
 
-  return multiply_mat_mat(a, b);
+  return matrixMultMatrix(a, b);
 }
 
+/*
+ * argmax returns the index of the maximum in the provided array.
+ */
 function argmax(arr) {
   // does not work for empty arrays
   let idx = 0;
@@ -103,6 +115,9 @@ function argmax(arr) {
   return idx;
 }
 
+/*
+ * range of (s, e) will return the array [s, s+1, ..., e-1]
+ */
 function range(s, e) {
   const arr = [];
 
@@ -113,8 +128,12 @@ function range(s, e) {
   return arr;
 }
 
+/*
+ * inverses a matrix using the gauss jordan elimination algorithm.
+ * See: https://en.wikipedia.org/wiki/Gaussian_elimination
+ */
 function inverse(matrix) {
-  const copy = copy_mat(matrix);
+  const copy = cloneMatrix(matrix);
 
   const height = copy[0].length;
   const width = copy.length;
@@ -125,12 +144,12 @@ function inverse(matrix) {
 
   // concat the identity matrix
   for (let i = 0; i < height; i++) {
-    const row = zeros(height);
+    const row = zeroValuedArray(height);
     row[i] = 1;
     copy[i] = copy[i].concat(row);
   }
 
-  gaussjordanelimination(copy);
+  gaussJordanElimination(copy);
 
   const result = [];
 
@@ -155,14 +174,15 @@ function isZero(x) {
   return Math.abs(x) < epsilon;
 }
 
-function gaussjordanelimination(matrix) {
+// https://en.wikipedia.org/wiki/Gaussian_elimination
+function gaussJordanElimination(matrix) {
   const height = matrix.length;
   const width = matrix[0].length;
 
   for (let y = 0; y < height; y++) {
     // find max pivot
     const max_row =
-      y + argmax(range(y, height).map(i => Math.abs(matrix[i][y])));
+      y + argmax(range(y, height).map((i) => Math.abs(matrix[i][y])));
     swap_rows(matrix, max_row, y);
 
     // check if abs(mat[y][y] = 0) or is too small
@@ -204,7 +224,7 @@ function gaussjordanelimination(matrix) {
 // Augment a 2d point into a bigger space where it's coordinates will be:
 // x, y, x*y, z=1
 // Kind of similar to the homogenous coordinates with a bilinearity introduced
-function augment_2d_point(p) {
+function planToHomogenousCoordinates(p) {
   if (p.length !== 2) {
     throw `Expected point ${point} to be a 2D point`;
   }
@@ -217,13 +237,17 @@ function augment_2d_point(p) {
 // find the distortion matrix M such as:
 // M * DST = SRC
 // Hence M = SRC * DST ^ -1
-function distort_matrix(src_corners, dst_corners) {
+function distortMatrix(src_corners, dst_corners) {
   if (src_corners.length !== 4 || dst_corners.length !== 4) {
     throw `There should be 4 source corners and 4 destination corners`;
   }
 
-  const src_mat = transpose(src_corners.map(p => augment_2d_point(p)));
-  const dst_mat = transpose(dst_corners.map(p => augment_2d_point(p)));
+  const src_mat = transposeMatrix(
+    src_corners.map((p) => planToHomogenousCoordinates(p))
+  );
+  const dst_mat = transposeMatrix(
+    dst_corners.map((p) => planToHomogenousCoordinates(p))
+  );
 
   const inv_dst_mat = inverse(dst_mat);
 
@@ -231,17 +255,17 @@ function distort_matrix(src_corners, dst_corners) {
   return multiply(src_mat, inv_dst_mat);
 }
 
-// Distort the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
-function distort(img, dst, src_corners) {
+// distortImage the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
+function distortImage(img, dst, src_corners) {
   const dst_corners = [
     [0, 0],
     [dst.width, 0],
     [dst.width, dst.height],
-    [0, dst.height]
+    [0, dst.height],
   ];
 
   // Keep only the 2 first rows since we only want to compute x and y
-  const M = distort_matrix(src_corners, dst_corners).slice(0, 2);
+  const M = distortMatrix(src_corners, dst_corners).slice(0, 2);
 
   let x, y, idx, x_s, y_s;
 
@@ -252,7 +276,7 @@ function distort(img, dst, src_corners) {
     x = idx % dst.width;
     y = Math.floor(idx / dst.width);
 
-    [x_s, y_s] = multiply(M, augment_2d_point([x, y]));
+    [x_s, y_s] = multiply(M, planToHomogenousCoordinates([x, y]));
 
     // RGBA channels
     // const channels = simpleInterpolation(img, x_s, y_s);
@@ -263,7 +287,10 @@ function distort(img, dst, src_corners) {
   return dst;
 }
 
-function pixIdx(x, y, width) {
+/*
+ * Returns the pixel index in the provided image (because images are stored as arrays in JS)
+ */
+function pixelIndex(x, y, width) {
   return 4 * (y * width + x);
 }
 
@@ -274,10 +301,10 @@ function bilinearInterpolation(img, x, y, channels) {
   const y1 = Math.floor(y);
 
   // Consider that x2 is just x1 + 1 and y2 = y1 + 1 to avoid using ceil and ending with x1 == x2 or y1 == y2
-  const q11 = pixIdx(x1, y1, img.width);
-  const q12 = pixIdx(x1, y1 + 1, img.width);
-  const q21 = pixIdx(x1 + 1, y1, img.width);
-  const q22 = pixIdx(x1 + 1, y1 + 1, img.width);
+  const q11 = pixelIndex(x1, y1, img.width);
+  const q12 = pixelIndex(x1, y1 + 1, img.width);
+  const q21 = pixelIndex(x1 + 1, y1, img.width);
+  const q22 = pixelIndex(x1 + 1, y1 + 1, img.width);
 
   const dx = x - x1;
   const dy = y - y1;
@@ -298,7 +325,7 @@ function bilinearInterpolation(img, x, y, channels) {
 }
 
 function simpleInterpolation(img, x, y, channels) {
-  const start = pixIdx(Math.round(x), Math.round(y));
+  const start = pixelIndex(Math.round(x), Math.round(y));
 
   for (let c = 0; c < 4; c++) {
     channels[c] = img.data[start + c];
@@ -306,11 +333,4 @@ function simpleInterpolation(img, x, y, channels) {
 }
 
 // Workaround to make the webworker work correctly
-try {
-  module.exports = {
-    transpose,
-    copy_mat,
-    inverse,
-    multiply
-  };
-} catch (err) {}
+export { transposeMatrix, cloneMatrix, inverse, multiply };
