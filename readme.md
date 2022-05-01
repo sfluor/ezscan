@@ -26,7 +26,6 @@ To format the code you can do `yarn lint-fix`
 - allow to rotate images
 - auto detect borders
 - precommit hooks
-- typescript
 - export to PDF
 - compress images
 - friendlier UI (home page, list of screens, etc.)

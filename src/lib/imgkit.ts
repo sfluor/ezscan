@@ -1,7 +1,7 @@
 /* eslint no-param-reassign: "error" */
 // TODO(sami): typescript
 // TODO(sami): tests
-function transposeMatrix(matrix) {
+function transposeMatrix(matrix: any[][]) {
   for (let i = 0; i < matrix.length; i += 1) {
     for (let j = i + 1; j < matrix[0].length; j += 1) {
       const tmp = matrix[i][j];
@@ -18,11 +18,11 @@ function transposeMatrix(matrix) {
  * It doesn't perform deep cloning and will stop after cloning the rows and the columns.
  *
  */
-function cloneMatrix(mat) {
+function cloneMatrix(mat: any[][]): any[][] {
   const width = mat[0].length;
   const height = mat.length;
 
-  const result = [];
+  const result: any[][] = [];
 
   for (let y = 0; y < height; y += 1) {
     result.push([]);
@@ -37,7 +37,7 @@ function cloneMatrix(mat) {
 /**
  * zeroValuedArray returns a zero valued array of size n
  */
-function zeroValuedArray(n) {
+function zeroValuedArray(n: number) {
   // todo: perf
   const res = [];
   for (let i = 0; i < n; i += 1) {
@@ -46,7 +46,7 @@ function zeroValuedArray(n) {
   return res;
 }
 
-function matrixMultVector(a, v) {
+function matrixMultVector(a: number[][], v: number[]): number[] {
   const height = a.length;
   const common = a[0].length;
 
@@ -64,7 +64,7 @@ function matrixMultVector(a, v) {
   return c;
 }
 
-function matrixMultMatrix(a, b) {
+function matrixMultMatrix(a: number[][], b: number[][]): number[][] {
   const height = a.length;
   const width = b[0].length;
 
@@ -86,27 +86,10 @@ function matrixMultMatrix(a, b) {
   return c;
 }
 
-function multiply(a, b) {
-  const height = a.length;
-  const width = b[0].length || 1;
-
-  if (a[0].length !== b.length) {
-    throw new Error(
-      `can't multiply matrix of size (${height}, ${a[0].length}) with size (${b.length}, ${width})`
-    );
-  }
-
-  if (width === 1) {
-    return matrixMultVector(a, b);
-  }
-
-  return matrixMultMatrix(a, b);
-}
-
 /*
  * argmax returns the index of the maximum in the provided array.
  */
-function argmax(arr) {
+function argmax(arr: number[]): number {
   // does not work for empty arrays
   let idx = 0;
   let max = arr[0];
@@ -122,7 +105,7 @@ function argmax(arr) {
 /*
  * range of (s, e) will return the array [s, s+1, ..., e-1]
  */
-function range(s, e) {
+function range(s: number, e: number): number[] {
   const arr = [];
 
   for (let i = s; i < e; i += 1) {
@@ -135,11 +118,16 @@ function range(s, e) {
 /*
  * Returns the pixel index in the provided image (because images are stored as arrays in JS)
  */
-function pixelIndex(x, y, width) {
+function pixelIndex(x: number, y: number, width: number) {
   return 4 * (y * width + x);
 }
 
-function bilinearInterpolation(img, x, y, channels) {
+function bilinearInterpolation(
+  img: ImageData,
+  x: number,
+  y: number,
+  channels: number[]
+) {
   // See: https://en.wikipedia.org/wiki/Bilinear_interpolation
 
   const x1 = Math.floor(x);
@@ -169,21 +157,21 @@ function bilinearInterpolation(img, x, y, channels) {
   }
 }
 
-function swapRows(mat, r1, r2) {
-  const tmp = mat[r1];
-  mat[r1] = mat[r2];
-  mat[r2] = tmp;
+function swapRows(mat: any[][], index1: number, index2: number) {
+  const tmp = mat[index1];
+  mat[index1] = mat[index2];
+  mat[index2] = tmp;
   return mat;
 }
 
 const epsilon = 1e-12;
 
-function isZero(x) {
+function isZero(x: number): boolean {
   return Math.abs(x) < epsilon;
 }
 
 // https://en.wikipedia.org/wiki/Gaussian_elimination
-function gaussJordanElimination(matrix) {
+function gaussJordanElimination(matrix: number[][]) {
   const height = matrix.length;
   const width = matrix[0].length;
 
@@ -233,7 +221,7 @@ function gaussJordanElimination(matrix) {
  * inverses a matrix using the gauss jordan elimination algorithm.
  * See: https://en.wikipedia.org/wiki/Gaussian_elimination
  */
-function inverse(matrix) {
+function inverse(matrix: number[][]) {
   const copy = cloneMatrix(matrix);
 
   const height = copy[0].length;
@@ -265,7 +253,7 @@ function inverse(matrix) {
 // Augment a 2d point into a bigger space where it's coordinates will be:
 // x, y, x*y, z=1
 // Kind of similar to the homogenous coordinates with a bilinearity introduced
-function planToHomogenousCoordinates(p) {
+function planToHomogenousCoordinates(p: number[]) {
   if (p.length !== 2) {
     throw new Error(`Expected point ${p} to be a 2D point`);
   }
@@ -278,7 +266,7 @@ function planToHomogenousCoordinates(p) {
 // find the distortion matrix M such as:
 // M * DST = SRC
 // Hence M = SRC * DST ^ -1
-function distortMatrix(srcCorners, dstCorners) {
+function distortMatrix(srcCorners: number[][], dstCorners: number[][]) {
   if (srcCorners.length !== 4 || dstCorners.length !== 4) {
     throw new Error(
       `There should be 4 source corners and 4 destination corners`
@@ -295,11 +283,11 @@ function distortMatrix(srcCorners, dstCorners) {
   const invDestination = inverse(dest);
 
   // Build the distortion matrix
-  return multiply(source, invDestination);
+  return matrixMultMatrix(source, invDestination);
 }
 
 // distortImage the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
-function distortImage(img, dst, srcCorners) {
+function distortImage(img: ImageData, dst: ImageData, srcCorners: number[][]) {
   const dstCorners = [
     [0, 0],
     [dst.width, 0],
@@ -321,7 +309,7 @@ function distortImage(img, dst, srcCorners) {
     x = idx % dst.width;
     y = Math.floor(idx / dst.width);
 
-    const [xs, ys] = multiply(M, planToHomogenousCoordinates([x, y]));
+    const [xs, ys] = matrixMultVector(M, planToHomogenousCoordinates([x, y]));
 
     // RGBA channels
     // const channels = simpleInterpolation(img, xs, ys);
@@ -343,4 +331,4 @@ function distortImage(img, dst, srcCorners) {
 // }
 
 // Workaround to make the webworker work correctly
-export { transposeMatrix, cloneMatrix, inverse, multiply, distortImage };
+export { transposeMatrix, cloneMatrix, inverse, distortImage };
