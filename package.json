@@ -24,7 +24,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "lint": "eslint 'src/**/*.tsx'",
+    "lint": "eslint . --ext .js --ext .ts --ext .tsx",
+    "typecheck": "yarn run tsc",
     "lint-fix": "yarn run lint -- --fix"
   },
   "eslintConfig": {

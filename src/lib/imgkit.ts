@@ -1,7 +1,7 @@
 /* eslint no-param-reassign: "error" */
 // TODO(sami): typescript
 // TODO(sami): tests
-function transposeMatrix(matrix: any[][]) {
+function transposeMatrix<T>(matrix: T[][]) {
   for (let i = 0; i < matrix.length; i += 1) {
     for (let j = i + 1; j < matrix[0].length; j += 1) {
       const tmp = matrix[i][j];
@@ -18,11 +18,11 @@ function transposeMatrix(matrix: any[][]) {
  * It doesn't perform deep cloning and will stop after cloning the rows and the columns.
  *
  */
-function cloneMatrix(mat: any[][]): any[][] {
+function cloneMatrix<T>(mat: T[][]): T[][] {
   const width = mat[0].length;
   const height = mat.length;
 
-  const result: any[][] = [];
+  const result: T[][] = [];
 
   for (let y = 0; y < height; y += 1) {
     result.push([]);
@@ -157,7 +157,7 @@ function bilinearInterpolation(
   }
 }
 
-function swapRows(mat: any[][], index1: number, index2: number) {
+function swapRows<T>(mat: T[][], index1: number, index2: number): T[][] {
   const tmp = mat[index1];
   mat[index1] = mat[index2];
   mat[index2] = tmp;

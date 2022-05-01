@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import InteractiveCanvas from './InteractiveCanvas';
 
 // Unstyled button component
-function Button({ name }: { name: string }) {
+function Button({ name, action }: { name: string; action: () => void }) {
   const lowerName = name.toLowerCase();
 
   return (
@@ -23,7 +23,7 @@ function Button({ name }: { name: string }) {
         padding: '1vh 2vh',
         textAlign: 'center',
       }}
-      onClick={() => alert(name)}
+      onClick={action}
     >
       <img
         style={{ height: '3vh' }}
@@ -90,9 +90,9 @@ function CameraInput() {
           alignItems: 'center',
         }}
       >
-        <Button name="Back" />
-        <Button name="Crop" />
-        <Button name="Next" />
+        {/* <Button name="Back" /> */}
+        <Button name="Crop" action={() => alert('Cropping')} />
+        {/* <Button name="Next" /> */}
       </footer>
     </div>
   );
