@@ -55,7 +55,6 @@ test.each(segmentsIntersectTests)(
   }
 );
 
-
 test.each(segmentsIntersectTests)(
   "isQuadrilateralConvex(%o) should be %s",
   ([p1, p2, p3, p4], expected) => {

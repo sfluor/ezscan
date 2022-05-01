@@ -10,8 +10,8 @@
  *
  */
 const isQuadrilateralConvex = ([tl, tr, br, bl]) => {
-    return segmentsIntersect([tr, bl], [tl, br]);
-}
+  return segmentsIntersect([tr, bl], [tl, br]);
+};
 
 /*
  * Checks if the two provided segments are intersecting or not.
@@ -21,8 +21,12 @@ const isQuadrilateralConvex = ([tl, tr, br, bl]) => {
  *
  */
 const segmentsIntersect = ([a, b], [c, d]) => {
-    return crossProductZCoordinate(a, [c, d]) * crossProductZCoordinate(b, [c, d]) < 0 && crossProductZCoordinate(c, [a, b]) * crossProductZCoordinate(d, [a, b]) < 0;
-}
+  return (
+    crossProductZCoordinate(a, [c, d]) * crossProductZCoordinate(b, [c, d]) <
+      0 &&
+    crossProductZCoordinate(c, [a, b]) * crossProductZCoordinate(d, [a, b]) < 0
+  );
+};
 
 /*
  * Computes a 2D crossProduct (we return what would be the z coordinate in our case).
@@ -37,11 +41,8 @@ const segmentsIntersect = ([a, b], [c, d]) => {
  *
  * BP = (px-bx, py-by)
  */
-const crossProductZCoordinate = ({x, y}, [a, b]) => {
-    return (b.x - a.x)*(y-b.y) - (b.y-a.y) *(x-b.x);
-}
+const crossProductZCoordinate = ({ x, y }, [a, b]) => {
+  return (b.x - a.x) * (y - b.y) - (b.y - a.y) * (x - b.x);
+};
 
-export {
-    isQuadrilateralConvex,
-    segmentsIntersect,
-}
+export { isQuadrilateralConvex, segmentsIntersect };

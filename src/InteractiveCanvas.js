@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import ZoomableCanvas from "./ZoomableCanvas";
 import { extractCoordinates } from "./lib/eventhelpers";
+import { isQuadrilateralConvex } from "./lib/geometry";
 
 const drawCircle = (ctx, x, y, radius, color, width) => {
   ctx.beginPath();
@@ -160,9 +161,13 @@ const InteractiveCanvas = ({
       // Disable scrolling on mobile if we are currently moving a corner
       event.preventDefault();
       const point = extractCoordinates(event);
-      corners[selectedCorner] = point;
-      setCorners(corners);
-      // TODO: validate that the corners are still valid (not crossing each other / not weird shapes)
+      const newCorners = [...corners];
+      newCorners[selectedCorner] = point;
+
+      // Sanity check that the shape selected by the user makes sense
+      if (isQuadrilateralConvex(newCorners)) {
+        setCorners(newCorners);
+      }
     }
   };
 
