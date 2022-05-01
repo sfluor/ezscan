@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import InteractiveCanvas from './InteractiveCanvas';
+import InteractiveCanvas from './InteractiveCanvas.tsx';
 
 // Unstyled button component
-function Button({ name, action }) {
+function Button({ name }: { name: string }) {
   const lowerName = name.toLowerCase();
 
   return (
@@ -21,7 +21,7 @@ function Button({ name, action }) {
         font: 'inherit',
         background: 'none',
       }}
-      onClick={action}
+      onClick={() => alert(name)}
     >
       <img
         style={{ height: '3vh' }}
@@ -34,13 +34,15 @@ function Button({ name, action }) {
 }
 
 function CameraInput() {
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState<HTMLImageElement | null>(null);
   const reader = new FileReader();
 
   reader.onload = () => {
-    const loadedImage = new Image();
-    loadedImage.src = reader.result;
-    setImage(loadedImage);
+    if (reader.result) {
+      const loadedImage = new Image();
+      loadedImage.src = reader.result as string;
+      setImage(loadedImage);
+    }
   };
 
   return (
@@ -57,9 +59,10 @@ function CameraInput() {
           name="camera"
           id="camera"
           accept="image/*"
-          capture="camera"
           onChange={(event) => {
-            reader.readAsDataURL(event.target.files[0]);
+            if (event.target.files) {
+              reader.readAsDataURL(event.target.files[0]);
+            }
           }}
           style={{
             height: '5vh',
@@ -74,9 +77,9 @@ function CameraInput() {
         )}
       </div>
       <footer id="footer" style={{ height: '10vh' }}>
-        <Button name="Back" action={() => alert('Back')} />
-        <Button name="Crop" action={() => alert('Crop')} />
-        <Button name="Next" action={() => alert('Next')} />
+        <Button name="Back" />
+        <Button name="Crop" />
+        <Button name="Next" />
       </footer>
     </div>
   );

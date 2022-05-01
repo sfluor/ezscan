@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import ZoomableCanvas from './ZoomableCanvas';
-import extractCoordinates from './lib/eventhelpers';
-import { isQuadrilateralConvex } from './lib/geometry';
+import ZoomableCanvas from './ZoomableCanvas.tsx';
+import { extractCoordinates } from './lib/eventhelpers.ts';
+import { Quadrilateral, Point, isQuadrilateralConvex } from './lib/geometry.ts';
 
-const drawCircle = (ctx, x, y, radius, color, width) => {
+const drawCircle = (
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  radius: number,
+  color: string,
+  width: number
+) => {
   ctx.beginPath();
   ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
 
@@ -13,7 +20,13 @@ const drawCircle = (ctx, x, y, radius, color, width) => {
   ctx.stroke();
 };
 
-const drawDashedLine = (ctx, p1, p2, width, color) => {
+const drawDashedLine = (
+  ctx: CanvasRenderingContext2D,
+  p1: Point,
+  p2: Point,
+  width: number,
+  color: string
+) => {
   ctx.beginPath();
   ctx.moveTo(p1.x, p1.y);
   ctx.lineTo(p2.x, p2.y);
@@ -31,7 +44,12 @@ const drawDashedLine = (ctx, p1, p2, width, color) => {
  *
  * It returns the index of the found point if any, otherwise null;
  */
-const findPointWithinDistance = (points, rx, ry, maxDistance) => {
+const findPointWithinDistance = (
+  points: Point[],
+  rx: number,
+  ry: number,
+  maxDistance: number
+): number | null => {
   const hit = points
     .map(({ x, y }, idx) => [idx, (x - rx) ** 2 + (y - ry) ** 2])
     .sort(([_, da], [__, db]) => {
@@ -51,12 +69,23 @@ const findPointWithinDistance = (points, rx, ry, maxDistance) => {
 const SELECTED_COLOR = 'red';
 const UNSELECTED_COLOR = 'white';
 
+interface InteractiveCanvasProps {
+  /** Width percentage of the screen the canvas should take (0 to 100) */
+  widthPercentage: number;
+
+  /** Height percentage of the screen the canvas should take (0 to 100) */
+  heightPercentage: number;
+
+  /** The image to show on the canvas */
+  image: HTMLImageElement;
+}
+
 function InteractiveCanvas({
   widthPercentage,
   heightPercentage,
   image,
   ...rest
-}) {
+}: InteractiveCanvasProps) {
   const canvasHeight = (heightPercentage * window.innerHeight) / 100;
   const canvasWidth = (widthPercentage * window.innerWidth) / 100;
 
@@ -76,16 +105,16 @@ function InteractiveCanvas({
   const realHeight = ratio * image.height;
 
   // order is: topLeft, topRight, bottomRight, bottomLeft
-  const [corners, setCorners] = useState([
+  const [corners, setCorners] = useState<Quadrilateral>([
     { x: 0, y: 0 },
     { x: realWidth, y: 0 },
     { x: realWidth, y: realHeight },
     { x: 0, y: realHeight },
   ]);
 
-  const [selectedCorner, setSelectedCorner] = useState(null);
+  const [selectedCorner, setSelectedCorner] = useState<number | null>(null);
 
-  const drawCorners = (context) => {
+  const drawCorners = (context: CanvasRenderingContext2D) => {
     corners.forEach(({ x, y }, index) => {
       // TODO(proper-colors): use a color with a good contrast on the image
       drawCircle(
@@ -99,7 +128,7 @@ function InteractiveCanvas({
     });
   };
 
-  const drawCornerLines = (context) => {
+  const drawCornerLines = (context: CanvasRenderingContext2D) => {
     const lines = [
       [0, 1],
       [1, 2],
@@ -120,7 +149,11 @@ function InteractiveCanvas({
     });
   };
 
-  const draw = (context, width, height) => {
+  const draw = (
+    context: CanvasRenderingContext2D,
+    width: number,
+    height: number
+  ) => {
     context.clearRect(0, 0, width, height);
     context.drawImage(
       image,
@@ -138,7 +171,7 @@ function InteractiveCanvas({
     drawCornerLines(context);
   };
 
-  const handleMouseDown = (event) => {
+  const handleMouseDown = (event: React.MouseEvent | React.TouchEvent) => {
     const { x, y } = extractCoordinates(event);
     const foundIndex = findPointWithinDistance(
       corners,
@@ -155,12 +188,12 @@ function InteractiveCanvas({
     setSelectedCorner(null);
   };
 
-  const handleMouseMove = (event) => {
+  const handleMouseMove = (event: React.MouseEvent | React.TouchEvent) => {
     if (selectedCorner !== null) {
       // Disable scrolling on mobile if we are currently moving a corner
       event.preventDefault();
       const point = extractCoordinates(event);
-      const newCorners = [...corners];
+      const newCorners: Quadrilateral = [...corners];
       newCorners[selectedCorner] = point;
 
       // Sanity check that the shape selected by the user makes sense
@@ -178,11 +211,10 @@ function InteractiveCanvas({
       onTouchStart={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchEnd={handleMouseUp}
-      onMouseMove={handleMouseMove}
-      onTouchMove={handleMouseMove}
+      onMove={handleMouseMove}
       style={{
-        width: canvasWidth,
-        height: canvasHeight,
+        width: `${canvasWidth}px`,
+        height: `${canvasHeight}px`,
       }}
       draw={draw}
       {...rest}

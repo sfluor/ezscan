@@ -1,3 +1,12 @@
+export interface Point {
+  x: number;
+  y: number;
+}
+
+type Segment = [Point, Point];
+
+export type Quadrilateral = [Point, Point, Point, Point];
+
 /*
  * Computes a 2D crossProduct (we return what would be the z coordinate in our case).
  *
@@ -11,7 +20,7 @@
  *
  * BP = (px-bx, py-by)
  */
-const crossProductZCoordinate = ({ x, y }, [a, b]) =>
+const crossProductZCoordinate = ({ x, y }: Point, [a, b]: Segment) =>
   (b.x - a.x) * (y - b.y) - (b.y - a.y) * (x - b.x);
 
 /*
@@ -21,7 +30,7 @@ const crossProductZCoordinate = ({ x, y }, [a, b]) =>
  * C and D are not on the same sides of A and B.
  *
  */
-const segmentsIntersect = ([a, b], [c, d]) =>
+const segmentsIntersect = ([a, b]: Segment, [c, d]: Segment) =>
   crossProductZCoordinate(a, [c, d]) * crossProductZCoordinate(b, [c, d]) < 0 &&
   crossProductZCoordinate(c, [a, b]) * crossProductZCoordinate(d, [a, b]) < 0;
 
@@ -36,7 +45,7 @@ const segmentsIntersect = ([a, b], [c, d]) =>
  * e.g that the lines [tr, bl] and [tl, br] are intersecting.
  *
  */
-const isQuadrilateralConvex = ([tl, tr, br, bl]) =>
+const isQuadrilateralConvex = ([tl, tr, br, bl]: Quadrilateral) =>
   segmentsIntersect([tr, bl], [tl, br]);
 
 export { isQuadrilateralConvex, segmentsIntersect };

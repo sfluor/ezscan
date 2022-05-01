@@ -1,6 +1,10 @@
-import { isQuadrilateralConvex, segmentsIntersect } from './geometry';
+import {
+  isQuadrilateralConvex,
+  segmentsIntersect,
+  Quadrilateral,
+} from './geometry.ts';
 
-const segmentsIntersectTests = [
+const segmentsIntersectTests: [Quadrilateral, boolean][] = [
   [
     [
       { x: 0, y: 0 },

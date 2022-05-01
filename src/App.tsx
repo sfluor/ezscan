@@ -1,7 +1,8 @@
 import React from 'react';
 
 import './App.css';
-import CameraInput from './CameraInput';
+// TODO: rename camera input
+import CameraInput from './CameraInput.tsx';
 
 function App() {
   return (
