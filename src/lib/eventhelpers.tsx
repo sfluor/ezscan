@@ -1,5 +1,5 @@
 import React from 'react';
-import { Point } from './geometry.ts';
+import { Point } from './geometry';
 
 export type MouseEventListener = (
   event: React.MouseEvent | React.TouchEvent

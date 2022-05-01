@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import ZoomableCanvas from './ZoomableCanvas.tsx';
-import { extractCoordinates } from './lib/eventhelpers.ts';
-import { Quadrilateral, Point, isQuadrilateralConvex } from './lib/geometry.ts';
+import ZoomableCanvas from './ZoomableCanvas';
+import { extractCoordinates } from './lib/eventhelpers';
+import { Quadrilateral, Point, isQuadrilateralConvex } from './lib/geometry';
 
 const drawCircle = (
   ctx: CanvasRenderingContext2D,

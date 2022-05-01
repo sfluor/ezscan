@@ -2,7 +2,7 @@ import {
   isQuadrilateralConvex,
   segmentsIntersect,
   Quadrilateral,
-} from './geometry.ts';
+} from './geometry';
 
 const segmentsIntersectTests: [Quadrilateral, boolean][] = [
   [

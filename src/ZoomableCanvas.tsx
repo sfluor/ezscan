@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import Canvas, { DrawFunction } from './Canvas.tsx';
+import Canvas, { DrawFunction } from './Canvas';
 import {
   extractTargetSize,
   extractCoordinates,
   MouseEventListener,
-} from './lib/eventhelpers.ts';
+} from './lib/eventhelpers';
 
 /*
  * Given a rectangle (here it's a square for simplicity)

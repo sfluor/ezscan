@@ -1,5 +1,5 @@
 import React from 'react';
-import { Point } from './geometry.ts';
+import { Point } from './geometry';
 
 export type MouseEventListener = (
   event: React.MouseEvent | React.TouchEvent
@@ -13,15 +13,9 @@ interface Size {
 const extractTargetSize = (
   event: React.MouseEvent | React.TouchEvent
 ): Size => {
-  const { target } = event;
-  if (target instanceof Element) {
-    const { clientWidth, clientHeight } = target;
+  const { clientWidth, clientHeight } = event.target as Element;
 
-    return { width: clientWidth, height: clientHeight };
-  }
-
-  // TODO: what to do ?
-  return { width: 0, height: 0 };
+  return { width: clientWidth, height: clientHeight };
 };
 
 const extractCoordinates = (

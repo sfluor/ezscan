@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import InteractiveCanvas from './InteractiveCanvas.tsx';
+import InteractiveCanvas from './InteractiveCanvas';
 
 // Unstyled button component
 function Button({ name }: { name: string }) {
