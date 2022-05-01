@@ -22,56 +22,6 @@ body {
   font-weight: 700;
 }
 
-@keyframes rotating {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes fadeSlidein {
-  from {
-    opacity: 0;
-    padding-bottom: 100px;
-  }
-  to {
-    opacity: 1;
-    padding-bottom: 0px;
-  }
-}
-
-#loader {
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: absolute;
-  width: 100vw;
-  height: 92vh;
-  background: #232946;
-  opacity: 0.8;
-  display: none;
-}
-
-.loader-icon {
-  width: 15vw;
-  animation: rotating 3s linear infinite;
-}
-
-.loader-desc {
-  margin-top: 3vh;
-  font-size: 1.3em;
-}
-
-#container {
-  flex: 1 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: black;
-}
-
 #footer {
   flex-shrink: 0;
   display: flex;
@@ -92,16 +42,6 @@ body {
   cursor: pointer;
 }
 
-.menu-icon {
-  height: 3vh;
-}
-
-.menu-button {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
 #camera-label {
   cursor: pointer;
   display: flex;
@@ -109,7 +49,6 @@ body {
   align-items: center;
   justify-content: space-between;
   height: 10vh;
-  animation: fadeSlidein 1s;
 }
 
 .main-icon {

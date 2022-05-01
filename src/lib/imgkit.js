@@ -32,7 +32,6 @@ function cloneMatrix(mat) {
   return result;
 }
 
-
 /**
  * zeroValuedArray returns a zero valued array of size n
  */
@@ -183,7 +182,7 @@ function gaussJordanElimination(matrix) {
   for (let y = 0; y < height; y++) {
     // find max pivot
     const max_row =
-      y + argmax(range(y, height).map(i => Math.abs(matrix[i][y])));
+      y + argmax(range(y, height).map((i) => Math.abs(matrix[i][y])));
     swap_rows(matrix, max_row, y);
 
     // check if abs(mat[y][y] = 0) or is too small
@@ -243,8 +242,12 @@ function distortMatrix(src_corners, dst_corners) {
     throw `There should be 4 source corners and 4 destination corners`;
   }
 
-  const src_mat = transposeMatrix(src_corners.map(p => planToHomogenousCoordinates(p)));
-  const dst_mat = transposeMatrix(dst_corners.map(p => planToHomogenousCoordinates(p)));
+  const src_mat = transposeMatrix(
+    src_corners.map((p) => planToHomogenousCoordinates(p))
+  );
+  const dst_mat = transposeMatrix(
+    dst_corners.map((p) => planToHomogenousCoordinates(p))
+  );
 
   const inv_dst_mat = inverse(dst_mat);
 
@@ -258,7 +261,7 @@ function distortImage(img, dst, src_corners) {
     [0, 0],
     [dst.width, 0],
     [dst.width, dst.height],
-    [0, dst.height]
+    [0, dst.height],
   ];
 
   // Keep only the 2 first rows since we only want to compute x and y
@@ -330,9 +333,4 @@ function simpleInterpolation(img, x, y, channels) {
 }
 
 // Workaround to make the webworker work correctly
-export {
-    transposeMatrix,
-    cloneMatrix,
-    inverse,
-    multiply
-}
+export { transposeMatrix, cloneMatrix, inverse, multiply };
