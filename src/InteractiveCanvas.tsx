@@ -78,12 +78,16 @@ interface InteractiveCanvasProps {
 
   /** The image to show on the canvas */
   image: HTMLImageElement;
+
+  /** Callback on selected corners change */
+  onCornersChange: (corners: Quadrilateral) => void;
 }
 
 function InteractiveCanvas({
   widthPercentage,
   heightPercentage,
   image,
+  onCornersChange,
   ...rest
 }: InteractiveCanvasProps) {
   const canvasHeight = (heightPercentage * window.innerHeight) / 100;
@@ -199,6 +203,7 @@ function InteractiveCanvas({
       // Sanity check that the shape selected by the user makes sense
       if (isQuadrilateralConvex(newCorners)) {
         setCorners(newCorners);
+        onCornersChange(newCorners);
       }
     }
   };

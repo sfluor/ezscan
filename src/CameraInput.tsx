@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import InteractiveCanvas from './InteractiveCanvas';
+import { distortImage, imageToImageData, download } from './lib/imgkit';
+import { Quadrilateral } from './lib/geometry';
 
 // Unstyled button component
 function Button({ name, action }: { name: string; action: () => void }) {
@@ -37,6 +39,7 @@ function Button({ name, action }: { name: string; action: () => void }) {
 
 function CameraInput() {
   const [image, setImage] = useState<HTMLImageElement | null>(null);
+  const [corners, setCorners] = useState<Quadrilateral | null>(null);
   const reader = new FileReader();
 
   reader.onload = () => {
@@ -44,6 +47,17 @@ function CameraInput() {
       const loadedImage = new Image();
       loadedImage.src = reader.result as string;
       setImage(loadedImage);
+    }
+  };
+
+  const onCrop = () => {
+    if (corners && image) {
+      // TODO: use a web worker
+      const newImage = new ImageData(image.width, image.height);
+      download(distortImage(imageToImageData(image), newImage, corners));
+    } else {
+      // TODO: fixme
+      alert('An error occurred');
     }
   };
 
@@ -74,6 +88,7 @@ function CameraInput() {
           <InteractiveCanvas
             widthPercentage={100}
             heightPercentage={85}
+            onCornersChange={setCorners}
             image={image}
           />
         )}
@@ -91,7 +106,7 @@ function CameraInput() {
         }}
       >
         {/* <Button name="Back" /> */}
-        <Button name="Crop" action={() => alert('Cropping')} />
+        <Button name="Crop" action={onCrop} />
         {/* <Button name="Next" /> */}
       </footer>
     </div>

@@ -1,5 +1,35 @@
 /* eslint no-param-reassign: "error" */
-// TODO(sami): typescript
+import { Quadrilateral, Point } from './geometry';
+
+// Global converter used to do conversions from/to Image/ImageData
+const CONVERTER = document.createElement('canvas');
+
+// Convert an Image into an ImageData using a hidden canvas
+function imageToImageData(img: HTMLImageElement): ImageData {
+  CONVERTER.width = img.width;
+  CONVERTER.height = img.height;
+  const ctx = CONVERTER.getContext('2d') as CanvasRenderingContext2D;
+  ctx.drawImage(img, 0, 0);
+  return ctx.getImageData(0, 0, img.width, img.height);
+}
+
+// Convert an ImageData into a data URL image using a hidden canvas
+function imageDataToImage(imgData: ImageData): string {
+  CONVERTER.width = imgData.width;
+  CONVERTER.height = imgData.height;
+  const ctx = CONVERTER.getContext('2d') as CanvasRenderingContext2D;
+  ctx.putImageData(imgData, 0, 0);
+  return CONVERTER.toDataURL();
+}
+
+function download(image: ImageData) {
+  const dataURL = imageDataToImage(image);
+  const link = document.createElement('a');
+  link.href = dataURL;
+  link.setAttribute('download', `scanned_image.jpg`);
+  link.click();
+}
+
 // TODO(sami): tests
 function transposeMatrix<T>(matrix: T[][]) {
   for (let i = 0; i < matrix.length; i += 1) {
@@ -253,12 +283,8 @@ function inverse(matrix: number[][]) {
 // Augment a 2d point into a bigger space where it's coordinates will be:
 // x, y, x*y, z=1
 // Kind of similar to the homogenous coordinates with a bilinearity introduced
-function planToHomogenousCoordinates(p: number[]) {
-  if (p.length !== 2) {
-    throw new Error(`Expected point ${p} to be a 2D point`);
-  }
-
-  return [p[0], p[1], p[0] * p[1], 1];
+function planToHomogenousCoordinates(p: Point) {
+  return [p.x, p.y, p.x * p.y, 1];
 }
 
 // Bilinear distortion
@@ -266,13 +292,7 @@ function planToHomogenousCoordinates(p: number[]) {
 // find the distortion matrix M such as:
 // M * DST = SRC
 // Hence M = SRC * DST ^ -1
-function distortMatrix(srcCorners: number[][], dstCorners: number[][]) {
-  if (srcCorners.length !== 4 || dstCorners.length !== 4) {
-    throw new Error(
-      `There should be 4 source corners and 4 destination corners`
-    );
-  }
-
+function distortMatrix(srcCorners: Quadrilateral, dstCorners: Quadrilateral) {
   const source = transposeMatrix(
     srcCorners.map((p) => planToHomogenousCoordinates(p))
   );
@@ -287,12 +307,16 @@ function distortMatrix(srcCorners: number[][], dstCorners: number[][]) {
 }
 
 // distortImage the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
-function distortImage(img: ImageData, dst: ImageData, srcCorners: number[][]) {
-  const dstCorners = [
-    [0, 0],
-    [dst.width, 0],
-    [dst.width, dst.height],
-    [0, dst.height],
+function distortImage(
+  img: ImageData,
+  dst: ImageData,
+  srcCorners: Quadrilateral
+) {
+  const dstCorners: Quadrilateral = [
+    { x: 0, y: 0 },
+    { x: dst.width, y: 0 },
+    { x: dst.width, y: dst.height },
+    { x: 0, y: dst.height },
   ];
 
   // Keep only the 2 first rows since we only want to compute x and y
@@ -309,7 +333,7 @@ function distortImage(img: ImageData, dst: ImageData, srcCorners: number[][]) {
     x = idx % dst.width;
     y = Math.floor(idx / dst.width);
 
-    const [xs, ys] = matrixMultVector(M, planToHomogenousCoordinates([x, y]));
+    const [xs, ys] = matrixMultVector(M, planToHomogenousCoordinates({ x, y }));
 
     // RGBA channels
     // const channels = simpleInterpolation(img, xs, ys);
@@ -331,4 +355,12 @@ function distortImage(img: ImageData, dst: ImageData, srcCorners: number[][]) {
 // }
 
 // Workaround to make the webworker work correctly
-export { transposeMatrix, cloneMatrix, inverse, distortImage };
+export {
+  transposeMatrix,
+  cloneMatrix,
+  inverse,
+  distortImage,
+  imageToImageData,
+  imageDataToImage,
+  download,
+};
