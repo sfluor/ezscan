@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import ZoomableCanvas from "./ZoomableCanvas";
-import extractCoordinates from "./lib/eventhelpers";
-import { isQuadrilateralConvex } from "./lib/geometry";
+import React, { useState } from 'react';
+import ZoomableCanvas from './ZoomableCanvas';
+import extractCoordinates from './lib/eventhelpers';
+import { isQuadrilateralConvex } from './lib/geometry';
 
 const drawCircle = (ctx, x, y, radius, color, width) => {
   ctx.beginPath();
@@ -48,8 +48,8 @@ const findPointWithinDistance = (points, rx, ry, maxDistance) => {
   return hit ? hit[0] : null;
 };
 
-const SELECTED_COLOR = "red";
-const UNSELECTED_COLOR = "white";
+const SELECTED_COLOR = 'red';
+const UNSELECTED_COLOR = 'white';
 
 function InteractiveCanvas({
   widthPercentage,

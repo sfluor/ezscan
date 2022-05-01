@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import "./App.css";
-import CameraInput from "./CameraInput";
+import './App.css';
+import CameraInput from './CameraInput';
 
 function App() {
   return (

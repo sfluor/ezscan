@@ -1,4 +1,4 @@
-import { isQuadrilateralConvex, segmentsIntersect } from "./geometry";
+import { isQuadrilateralConvex, segmentsIntersect } from './geometry';
 
 const segmentsIntersectTests = [
   [
@@ -49,14 +49,14 @@ const segmentsIntersectTests = [
 ];
 
 test.each(segmentsIntersectTests)(
-  "segmentIntersects(%o) should be %s",
+  'segmentIntersects(%o) should be %s',
   ([p1, p2, p3, p4], expected) => {
     expect(segmentsIntersect([p1, p2], [p3, p4])).toEqual(expected);
   }
 );
 
 test.each(segmentsIntersectTests)(
-  "isQuadrilateralConvex(%o) should be %s",
+  'isQuadrilateralConvex(%o) should be %s',
   ([p1, p2, p3, p4], expected) => {
     expect(isQuadrilateralConvex([p1, p3, p2, p4])).toEqual(expected);
   }

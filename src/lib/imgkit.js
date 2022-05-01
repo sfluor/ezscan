@@ -196,7 +196,7 @@ function gaussJordanElimination(matrix) {
     // check if abs(mat[y][y] = 0) or is too small
     // if it is the matrix is singular and can't be inversed
     if (isZero(matrix[y][y])) {
-      throw new Error("Singular matrix !");
+      throw new Error('Singular matrix !');
     }
 
     // eliminate column y

@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import InteractiveCanvas from "./InteractiveCanvas";
+import React, { useState } from 'react';
+import InteractiveCanvas from './InteractiveCanvas';
 
 // Unstyled button component
 function Button({ name, action }) {
@@ -10,21 +10,21 @@ function Button({ name, action }) {
       id={`${lowerName}-btn`}
       type="button"
       style={{
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        border: "none",
-        color: "inherit",
-        cursor: "pointer",
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        border: 'none',
+        color: 'inherit',
+        cursor: 'pointer',
         padding: 0,
-        outline: "inherit",
-        font: "inherit",
-        background: "none",
+        outline: 'inherit',
+        font: 'inherit',
+        background: 'none',
       }}
       onClick={action}
     >
       <img
-        style={{ height: "3vh" }}
+        style={{ height: '3vh' }}
         src={`${process.env.PUBLIC_URL}/icons/${lowerName}.svg`}
         alt={name}
       />
@@ -48,8 +48,8 @@ function CameraInput() {
       <div
         id="container"
         style={{
-          width: "100vw",
-          height: "90vh",
+          width: '100vw',
+          height: '90vh',
         }}
       >
         <input
@@ -62,7 +62,7 @@ function CameraInput() {
             reader.readAsDataURL(event.target.files[0]);
           }}
           style={{
-            height: "5vh",
+            height: '5vh',
           }}
         />
         {image && (
@@ -73,10 +73,10 @@ function CameraInput() {
           />
         )}
       </div>
-      <footer id="footer" style={{ height: "10vh" }}>
-        <Button name="Back" action={() => alert("Back")} />
-        <Button name="Crop" action={() => alert("Crop")} />
-        <Button name="Next" action={() => alert("Next")} />
+      <footer id="footer" style={{ height: '10vh' }}>
+        <Button name="Back" action={() => alert('Back')} />
+        <Button name="Crop" action={() => alert('Crop')} />
+        <Button name="Next" action={() => alert('Next')} />
       </footer>
     </div>
   );

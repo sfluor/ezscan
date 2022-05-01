@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import Canvas from "./Canvas";
-import extractCoordinates from "./lib/eventhelpers";
+import React, { useState } from 'react';
+import Canvas from './Canvas';
+import extractCoordinates from './lib/eventhelpers';
 
 /*
  * Given a rectangle (here it's a square for simplicity)
@@ -107,8 +107,8 @@ function ZoomableCanvas({ draw, onMouseMove, ...rest }) {
         coords.x,
         coords.y,
         zoomBoxSize,
-        "grey",
-        "white"
+        'grey',
+        'white'
       );
 
       // Re-draw part of the canvas onto itself
@@ -127,7 +127,7 @@ function ZoomableCanvas({ draw, onMouseMove, ...rest }) {
       // Finally draw the border
       context.beginPath();
       // TODO(proper-colors): use a color with a good contrast on the image
-      context.strokeStyle = "white";
+      context.strokeStyle = 'white';
       context.lineWidth = zoomBoxSize / 20;
       context.rect(coords.x, coords.y, zoomBoxSize, zoomBoxSize);
       context.stroke();
