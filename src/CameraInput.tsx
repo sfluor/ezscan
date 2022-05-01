@@ -10,16 +10,18 @@ function Button({ name }: { name: string }) {
       id={`${lowerName}-btn`}
       type="button"
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
+        background: 'none',
         border: 'none',
         color: 'inherit',
         cursor: 'pointer',
-        padding: 0,
-        outline: 'inherit',
+        display: 'flex',
+        flexDirection: 'column',
         font: 'inherit',
-        background: 'none',
+        justifyContent: 'center',
+        lineHeight: '3vh',
+        outline: 'inherit',
+        padding: '1vh 2vh',
+        textAlign: 'center',
       }}
       onClick={() => alert(name)}
     >
@@ -28,7 +30,7 @@ function Button({ name }: { name: string }) {
         src={`${process.env.PUBLIC_URL}/icons/${lowerName}.svg`}
         alt={name}
       />
-      <span className="menu-label">{name}</span>
+      <span>{name}</span>
     </button>
   );
 }
@@ -76,7 +78,18 @@ function CameraInput() {
           />
         )}
       </div>
-      <footer id="footer" style={{ height: '10vh' }}>
+      <footer
+        style={{
+          flexShrink: 0,
+          display: 'flex',
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          width: '100%',
+          backgroundColor: '#232946',
+          height: '10vh',
+          alignItems: 'center',
+        }}
+      >
         <Button name="Back" />
         <Button name="Crop" />
         <Button name="Next" />
