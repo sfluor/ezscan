@@ -94,7 +94,7 @@ function InteractiveCanvas({
   const canvasWidth = (widthPercentage * window.innerWidth) / 100;
 
   const cornerRadius = 10;
-  const clickCornerRadius = 4 * cornerRadius;
+  const clickCornerRadius = 10 * cornerRadius;
 
   // Compute the downscaling/upscaling ratio so that the image fully fits on the canvas.
   // We don't want to distort the image here so we just pick the maximum image dimension to compute the ratio.
