@@ -26,14 +26,23 @@ const drawDashedLine = (ctx, p1, p2, width, color) => {
  * Given a list of points of {x, y} and a point, it will find the first point within the circle of center
  * (rx,ry) and of radius "distance".
  *
- * It returns the index of the found point if any, otherwise null;
+ * If multiple points satisfy this it will return the point that is the closest to (rx,ry)
  *
- * TODO: could be smarter and pick the closest one.
+ * It returns the index of the found point if any, otherwise null;
  */
-const findPointWithinDistance = (points, rx, ry, distance) => {
+const findPointWithinDistance = (points, rx, ry, maxDistance) => {
   const hit = points
-    .map((point, idx) => [idx, point])
-    .find(([_, { x, y }]) => (x - rx) ** 2 + (y - ry) ** 2 < distance ** 2);
+    .map(({ x, y }, idx) => [idx, (x - rx) ** 2 + (y - ry) ** 2])
+    .sort(([_, da], [__, db]) => {
+      if (da < db) {
+        return -1;
+      } else if (da > db) {
+        return 1;
+      } else {
+        return 0;
+      }
+    })
+    .find(([_, distance]) => distance < maxDistance ** 2);
 
   return hit ? hit[0] : null;
 };
