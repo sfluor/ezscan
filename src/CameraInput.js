@@ -63,11 +63,13 @@ const CameraInput = () => {
             height: "5vh",
           }}
         />
-        <InteractiveCanvas
-          widthPercentage={100}
-          heightPercentage={85}
-          image={image}
-        />
+        {image && (
+          <InteractiveCanvas
+            widthPercentage={100}
+            heightPercentage={85}
+            image={image}
+          />
+        )}
       </div>
       <footer id="footer" style={{ height: "10vh" }}>
         <Button name="Back" action={() => alert("Back")} />

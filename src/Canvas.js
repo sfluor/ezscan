@@ -10,9 +10,8 @@ const useCanvas = (draw) => {
 
     let animationFrameId;
     const render = () => {
-      if (draw(context, canvas.width, canvas.height)) {
-        animationFrameId = window.requestAnimationFrame(render);
-      }
+      draw(context, canvas.width, canvas.height);
+      animationFrameId = window.requestAnimationFrame(render);
     };
     render();
 
