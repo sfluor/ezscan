@@ -20,6 +20,7 @@ To format the code you can do `yarn lint-fix`
 ## Todos
 
 
+- fix the favicon
 - use a web worker for distorting
 - images imported instead of public dir
 - do not operate on the canvas image (can loose precision) (just use it as a mean to know where the user wants to distort) but use a bigger canvas when doing the distortion

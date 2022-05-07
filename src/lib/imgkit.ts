@@ -57,8 +57,7 @@ function openImageInNewTab(imageData: ImageData) {
   }
 }
 
-// TODO(sami): tests
-function transposeMatrix<T>(matrix: T[][]) {
+function transposeMatrixInPlace<T>(matrix: T[][]) {
   for (let i = 0; i < matrix.length; i += 1) {
     for (let j = i + 1; j < matrix[0].length; j += 1) {
       const tmp = matrix[i][j];
@@ -413,10 +412,10 @@ function planToHomogenousCoordinates(p: Point) {
 // M * DST = SRC
 // Hence M = SRC * DST ^ -1
 function distortMatrix(srcCorners: Quadrilateral, dstCorners: Quadrilateral) {
-  const source = transposeMatrix(
+  const source = transposeMatrixInPlace(
     srcCorners.map((p) => planToHomogenousCoordinates(p))
   );
-  const dest = transposeMatrix(
+  const dest = transposeMatrixInPlace(
     dstCorners.map((p) => planToHomogenousCoordinates(p))
   );
 
@@ -473,7 +472,7 @@ function distortImage(img: ImageData, srcCorners: Quadrilateral) {
 
 // Workaround to make the webworker work correctly
 export {
-  transposeMatrix,
+  transposeMatrixInPlace,
   cloneMatrix,
   inverse,
   distortImage,

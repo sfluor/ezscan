@@ -4,6 +4,7 @@ import {
   colorToCSS,
   averageColorRaw,
   averageInverseColorRaw,
+  transposeMatrixInPlace,
 } from './imgkit';
 
 const inverseColorsTests: [Color, Color][] = [
@@ -145,3 +146,39 @@ describe('should compute average image color', () => {
     expect(computedInverse).toEqual(inverseColor(expected));
   });
 });
+
+const transposeMatrixTests: [number[][], number[][]][] = [
+  [
+    [
+      [0, 1],
+      [2, 3],
+    ],
+    [
+      [0, 2],
+      [1, 3],
+    ],
+  ],
+  [
+    [
+      [0, 1, 2],
+      [3, 4, 5],
+      [6, 7, 8],
+    ],
+    [
+      [0, 3, 6],
+      [1, 4, 7],
+      [2, 5, 8],
+    ],
+  ],
+];
+
+test.each(transposeMatrixTests)(
+  'transposeMatrix(%o) should be %o and vice-versa',
+  (input, expected) => {
+    const matrix = JSON.parse(JSON.stringify(input));
+    transposeMatrixInPlace(matrix);
+    expect(matrix).toEqual(expected);
+    transposeMatrixInPlace(matrix);
+    expect(matrix).toEqual(input);
+  }
+);
