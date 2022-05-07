@@ -261,7 +261,9 @@ const inverseTests: [number[][], number[][]][] = [
 
 // Normalize the matrix to avoid the test failing because 2.999999 != 3
 const normalizeMatrix = (matrix) =>
-  matrix.map((row) => row.map(Math.round).map((v) => (v === -0 ? 0 : v)));
+  matrix.map((row) =>
+    row.map(Math.round).map((v) => (Object.is(v, -0) ? 0 : v))
+  );
 
 test.each(inverseTests)(
   'inverse(%o) should be %o and vice versa',
