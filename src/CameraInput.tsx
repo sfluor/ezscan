@@ -4,7 +4,7 @@ import {
   ImagePair,
   distortImage,
   imageToImageData,
-  download,
+  openImageInNewTab,
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
 
@@ -66,7 +66,7 @@ function CameraInput() {
       nonNullImage.data.width,
       nonNullImage.data.height
     );
-    download(
+    openImageInNewTab(
       distortImage(nonNullImage.data, newImage, corners as Quadrilateral)
     );
   };

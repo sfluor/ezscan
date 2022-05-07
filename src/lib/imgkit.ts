@@ -44,12 +44,19 @@ function imageDataToImage(imgData: ImageData): string {
   return CONVERTER.toDataURL();
 }
 
-function download(image: ImageData) {
-  const dataURL = imageDataToImage(image);
-  const link = document.createElement('a');
-  link.href = dataURL;
-  link.setAttribute('download', `scanned_image.jpg`);
-  link.click();
+// From: https://stackoverflow.com/a/58625431
+function openImageInNewTab(imageData: ImageData) {
+  const url = imageDataToImage(imageData);
+  const image = new Image();
+  image.src = url;
+  console.log(url);
+  console.log(image.outerHTML);
+  const newWindow = window.open('about:blank');
+  if (newWindow) {
+    setTimeout(() => {
+      newWindow.document.write(image.outerHTML);
+    }, 500);
+  }
 }
 
 // TODO(sami): tests
@@ -477,7 +484,7 @@ export {
   distortImage,
   imageToImageData,
   imageDataToImage,
-  download,
+  openImageInNewTab,
   averageColorRaw,
   averageInverseColorRaw,
   averageInverseColor,
