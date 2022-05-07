@@ -14,18 +14,12 @@ const useCanvas = (draw: DrawFunction) => {
     const canvas = canvasRef.current;
     const context = canvas?.getContext('2d');
 
-    let animationFrameId: number;
     const render = () => {
       if (canvas && context) {
         draw(context, canvas.width, canvas.height);
-        animationFrameId = window.requestAnimationFrame(render);
       }
     };
     render();
-
-    return () => {
-      window.cancelAnimationFrame(animationFrameId);
-    };
   }, [draw]);
 
   return canvasRef;
