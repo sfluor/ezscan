@@ -106,11 +106,9 @@ function matrixMultVector(a: number[][], v: number[]): number[] {
   const height = a.length;
   const common = a[0].length;
 
-  // todo: improve performances on array creation here
-  const c = [];
+  const c = zeroValuedArray(height);
 
   for (let i = 0; i < height; i += 1) {
-    c.push(0);
     // c_i,k = sum(a_i,j * b_j,k)
     for (let j = 0; j < common; j += 1) {
       c[i] += a[i][j] * v[j];
@@ -475,6 +473,7 @@ export {
   transposeMatrixInPlace,
   cloneMatrix,
   inverse,
+  argmax,
   distortImage,
   imageToImageData,
   imageDataToImage,

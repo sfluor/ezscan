@@ -2,9 +2,11 @@ import {
   Color,
   inverseColor,
   colorToCSS,
+  inverse,
   averageColorRaw,
   averageInverseColorRaw,
   transposeMatrixInPlace,
+  argmax,
 } from './imgkit';
 
 const inverseColorsTests: [Color, Color][] = [
@@ -180,5 +182,90 @@ test.each(transposeMatrixTests)(
     expect(matrix).toEqual(expected);
     transposeMatrixInPlace(matrix);
     expect(matrix).toEqual(input);
+  }
+);
+
+const argMaxTests: [number[], number][] = [
+  [[10, 5, 12, 4], 2],
+
+  [[10, 0, 5, 12, 4], 3],
+  [[150, 140, 10, 0, 5, 12, 4], 0],
+  [[-4], 0],
+];
+
+test.each(argMaxTests)('argMax(%o) should be %o', (input, expected) => {
+  expect(argmax(input)).toEqual(expected);
+});
+
+const inverseTests: [number[][], number[][]][] = [
+  [[[1]], [[1]]],
+  [
+    [
+      [1, 0],
+      [0, 1],
+    ],
+    [
+      [1, 0],
+      [0, 1],
+    ],
+  ],
+  [
+    [
+      [1, 0, 0],
+      [0, 0, 1],
+      [0, 1, 0],
+    ],
+    [
+      [1, 0, 0],
+      [0, 0, 1],
+      [0, 1, 0],
+    ],
+  ],
+  [
+    [
+      [1, 0, 0],
+      [0, -1, 0],
+      [0, 0, -1],
+    ],
+    [
+      [1, 0, 0],
+      [0, -1, 0],
+      [0, 0, -1],
+    ],
+  ],
+
+  [
+    [
+      [9, 21, 23, 8, 18, 7, 12, 7],
+      [8, 13, 15, 5, 10, 5, 9, 6],
+      [0, 13, 11, 2, 13, 1, 3, 0],
+      [13, 11, 16, 13, 6, 11, 13, 10],
+      [11, 21, 23, 7, 17, 7, 13, 8],
+      [10, 8, 12, 9, 4, 8, 10, 8],
+      [11, 16, 19, 7, 12, 7, 12, 8],
+      [6, 12, 14, 6, 10, 5, 8, 5],
+    ],
+
+    [
+      [0, 2, -1, 2, 1, -3, -2, 0],
+      [-1, 1, 2, -1, -2, 2, 2, -1],
+      [2, 1, 1, -1, -5, 1, 4, -2],
+      [-2, 4, 0, 2, 0, -3, -2, 2],
+      [0, -1, -3, 2, 6, -3, -6, 2],
+      [4, -7, 0, -3, 0, 5, 3, -4],
+      [-3, -4, 1, -1, 1, 1, 3, 3],
+      [0, 3, -2, 1, 4, -1, -7, 1],
+    ],
+  ],
+];
+
+const normalizeMatrix = (matrix) =>
+  matrix.map((row) => row.map(Math.round).map((v) => (v === -0 ? 0 : v)));
+
+test.each(inverseTests)(
+  'inverse(%o) should be %o and vice versa',
+  (input, expected) => {
+    expect(normalizeMatrix(inverse(input))).toEqual(expected);
+    expect(normalizeMatrix(inverse(expected))).toEqual(input);
   }
 );
