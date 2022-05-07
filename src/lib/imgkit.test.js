@@ -28,7 +28,6 @@ const inverseColorsTests: [Color, Color][] = [
       G: 0,
       B: 0,
     },
-
     {
       R: 255,
       G: 255,
@@ -187,7 +186,6 @@ test.each(transposeMatrixTests)(
 
 const argMaxTests: [number[], number][] = [
   [[10, 5, 12, 4], 2],
-
   [[10, 0, 5, 12, 4], 3],
   [[150, 140, 10, 0, 5, 12, 4], 0],
   [[-4], 0],
@@ -233,7 +231,6 @@ const inverseTests: [number[][], number[][]][] = [
       [0, 0, -1],
     ],
   ],
-
   [
     [
       [9, 21, 23, 8, 18, 7, 12, 7],
@@ -245,7 +242,6 @@ const inverseTests: [number[][], number[][]][] = [
       [11, 16, 19, 7, 12, 7, 12, 8],
       [6, 12, 14, 6, 10, 5, 8, 5],
     ],
-
     [
       [0, 2, -1, 2, 1, -3, -2, 0],
       [-1, 1, 2, -1, -2, 2, 2, -1],
