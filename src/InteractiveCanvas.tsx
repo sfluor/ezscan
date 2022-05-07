@@ -224,7 +224,11 @@ function InteractiveCanvas({
       newCorners[selectedCorner] = point;
 
       // Sanity check that the shape selected by the user makes sense
-      if (isQuadrilateralConvex(newCorners)) {
+      if (
+        isQuadrilateralConvex(newCorners) &&
+        point.x < realWidth &&
+        point.y < realHeight
+      ) {
         setCorners(newCorners);
         onCornersChange(newCorners);
       }
