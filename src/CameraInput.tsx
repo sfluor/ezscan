@@ -47,6 +47,7 @@ function CameraInput() {
   const [corners, setCorners] = useState<Quadrilateral | null>(null);
   const reader = new FileReader();
 
+  // TODO: show loading
   reader.onload = () => {
     if (reader.result) {
       const loadedImage = new Image();

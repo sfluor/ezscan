@@ -250,10 +250,10 @@ function averageColorRaw(
   width: number,
   height: number
 ): Color {
-  const minX = Math.max(0, x);
-  const minY = Math.max(0, y);
-  const maxX = Math.min(imgWidth, x + width);
-  const maxY = Math.min(imgHeight, y + height);
+  const minX = Math.round(Math.max(0, x));
+  const minY = Math.round(Math.max(0, y));
+  const maxX = Math.round(Math.min(imgWidth, x + width));
+  const maxY = Math.round(Math.min(imgHeight, y + height));
 
   const color: Color = {
     R: 0,
