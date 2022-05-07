@@ -49,8 +49,6 @@ function openImageInNewTab(imageData: ImageData) {
   const url = imageDataToImage(imageData);
   const image = new Image();
   image.src = url;
-  console.log(url);
-  console.log(image.outerHTML);
   const newWindow = window.open('about:blank');
   if (newWindow) {
     setTimeout(() => {
