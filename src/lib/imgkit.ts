@@ -427,11 +427,8 @@ function distortMatrix(srcCorners: Quadrilateral, dstCorners: Quadrilateral) {
 }
 
 // distortImage the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
-function distortImage(
-  img: ImageData,
-  dst: ImageData,
-  srcCorners: Quadrilateral
-) {
+function distortImage(img: ImageData, srcCorners: Quadrilateral) {
+  const dst = new ImageData(img.width, img.height);
   const dstCorners: Quadrilateral = [
     { x: 0, y: 0 },
     { x: dst.width, y: 0 },

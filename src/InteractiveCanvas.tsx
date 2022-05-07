@@ -239,6 +239,7 @@ function InteractiveCanvas({
     <ZoomableCanvas
       height={canvasHeight}
       width={canvasWidth}
+      image={image}
       onMouseDown={handleMouseDown}
       onTouchStart={handleMouseDown}
       onMouseUp={handleMouseUp}

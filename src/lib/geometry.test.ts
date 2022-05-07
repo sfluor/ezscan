@@ -1,4 +1,5 @@
 import {
+  isLowerRight,
   isQuadrilateralConvex,
   segmentsIntersect,
   Quadrilateral,
@@ -90,5 +91,29 @@ test.each(midwayPointTests)(
   'midwayPoint(%o, %o) should be %o',
   (p1, p2, expected) => {
     expect(midwayPoint(p1, p2)).toEqual(expected);
+  }
+);
+
+const isLowerRightTests: [
+  {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  },
+  boolean
+][] = [
+  [{ width: 100, height: 100, x: 20, y: 20 }, false],
+
+  [{ width: 100, height: 100, x: 80, y: 80 }, true],
+
+  [{ width: 100, height: 50, x: 4, y: 49 }, true],
+  [{ width: 100, height: 50, x: 0, y: 49 }, false],
+];
+
+test.each(isLowerRightTests)(
+  'isLowerRight(%o) should be %o',
+  ({ width, height, x, y }, expected) => {
+    expect(isLowerRight(width, height, x, y)).toEqual(expected);
   }
 );

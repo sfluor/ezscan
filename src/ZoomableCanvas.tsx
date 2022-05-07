@@ -5,37 +5,13 @@ import {
   extractCoordinates,
   MouseEventListener,
 } from './lib/eventhelpers';
-
-/*
- * Given a rectangle (here it's a square for simplicity)
- * Indicates if the current position (assuming 0 is the top left corner) is in the upper left part or on the lower right part.
- *
- *  (0, 0)           (W, 0)
- *    ________________
- *   |              /|
- *   |            /  |
- *   |          /    |
- *   |        /      |
- *   |      /        |
- *   |    /     x    |
- *   |  /            |
- *   |/______________|
- *
- *   (0, H)          (W, H)
- *
- *  If we draw that properly it's actually the function
- *
- *  f(x) = -H/W * x + H
- *
- *  W being the width and H the height.
- *
- *  To know if a given point is below/above the curve we
- *  just have to compute what would be it's y = f(x) value
- *  and check if it's greater than the point's y coordinate or not.
- *
- */
-const isLowerRight = (width: number, height: number, x: number, y: number) =>
-  height - (height / width) * x < y;
+import {
+  ImagePair,
+  averageInverseColor,
+  inverseColor,
+  colorToCSS,
+} from './lib/imgkit';
+import { isLowerRight } from './lib/geometry';
 
 /*
  * Draw a hatched rectangle on the canvas (using (x,y) as the top left corner).
@@ -80,6 +56,9 @@ interface ZoomableCanvasProps {
   /** The callback to call whenever we want to draw stuff on the canvas */
   draw: DrawFunction;
 
+  /** The image being drawn */
+  image: ImagePair;
+
   /** Optional callback for watching mouse move events */
   onMove: MouseEventListener;
 
@@ -95,7 +74,7 @@ interface ZoomableCanvasProps {
 }
 
 function ZoomableCanvas(props: ZoomableCanvasProps) {
-  const { draw, onMove, ...rest } = props;
+  const { draw, onMove, image, ...rest } = props;
 
   const [zoom, setZoom] = useState({
     lowerRight: false,
@@ -135,16 +114,23 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
       const sx = zoom.mouseX - zoomBoxSize / 2 / zoomRatio;
       const sy = zoom.mouseY - zoomBoxSize / 2 / zoomRatio;
 
+      const contrastColor = averageInverseColor(
+        image.data,
+        coords.x,
+        coords.y,
+        zoomBoxSize,
+        zoomBoxSize
+      );
+
       // Draw the "out-of-bounds" area effect
       context.beginPath();
-      // TODO(proper-colors): use a color with a good contrast on the image
       drawHatchedSquare(
         context,
         coords.x,
         coords.y,
         zoomBoxSize,
-        'grey',
-        'white'
+        colorToCSS(contrastColor),
+        colorToCSS(inverseColor(contrastColor))
       );
 
       // Re-draw part of the canvas onto itself
@@ -162,8 +148,7 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
 
       // Finally draw the border
       context.beginPath();
-      // TODO(proper-colors): use a color with a good contrast on the image
-      context.strokeStyle = 'white';
+      context.strokeStyle = colorToCSS(contrastColor);
       context.lineWidth = zoomBoxSize / 20;
       context.rect(coords.x, coords.y, zoomBoxSize, zoomBoxSize);
       context.setLineDash([]);

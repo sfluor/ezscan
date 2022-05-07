@@ -61,13 +61,8 @@ function CameraInput() {
 
   const onCrop = () => {
     // TODO: use a web worker
-    const nonNullImage = image as ImagePair;
-    const newImage = new ImageData(
-      nonNullImage.data.width,
-      nonNullImage.data.height
-    );
     openImageInNewTab(
-      distortImage(nonNullImage.data, newImage, corners as Quadrilateral)
+      distortImage((image as ImagePair).data, corners as Quadrilateral)
     );
   };
 
