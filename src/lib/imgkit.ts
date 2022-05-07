@@ -1,6 +1,28 @@
 /* eslint no-param-reassign: "error" */
 import { Quadrilateral, Point } from './geometry';
 
+// Exposes R / G / B color interfaces
+// Values are ranging from 0 to 255
+export interface Color {
+  R: number;
+  G: number;
+  B: number;
+}
+
+/*
+ * Converts a color into css string format
+ */
+function colorToCSS(color: Color): string {
+  return `rgb(${color.R}, ${color.G}, ${color.B})`;
+}
+
+// Handy type to hold both an HTMLImageElement and the corresponding ImageData
+// this is to avoid having to reconvert it more than once.
+export interface ImagePair {
+  element: HTMLImageElement;
+  data: ImageData;
+}
+
 // Global converter used to do conversions from/to Image/ImageData
 const CONVERTER = document.createElement('canvas');
 
@@ -200,6 +222,99 @@ function isZero(x: number): boolean {
   return Math.abs(x) < epsilon;
 }
 
+/*
+ * Returns the inverse color as the provided one
+ */
+function inverseColor(color: Color): Color {
+  return {
+    R: 255 - color.R,
+    G: 255 - color.G,
+    B: 255 - color.B,
+  };
+}
+
+/**
+ * Takes an image in raw format and return the average color of the subsection of the image in the rectangle made by
+ * (x, y), (x+width, y+height).
+ *
+ * Note that the coordinates will be clipped to the image size if overfitting.
+ *
+ * Returns the color computed
+ */
+function averageColorRaw(
+  img: Uint8ClampedArray,
+  imgWidth: number,
+  imgHeight: number,
+  x: number,
+  y: number,
+  width: number,
+  height: number
+): Color {
+  const minX = Math.max(0, x);
+  const minY = Math.max(0, y);
+  const maxX = Math.min(imgWidth, x + width);
+  const maxY = Math.min(imgHeight, y + height);
+
+  const color: Color = {
+    R: 0,
+    G: 0,
+    B: 0,
+  };
+
+  let count = 0;
+
+  for (let ix = minX; ix < maxX; ix += 1) {
+    for (let iy = minY; iy < maxY; iy += 1) {
+      const index = pixelIndex(ix, iy, imgWidth);
+
+      color.R += img[index];
+      color.G += img[index + 1];
+      color.B += img[index + 2];
+      count += 1;
+    }
+  }
+
+  return {
+    R: Math.round(color.R / count),
+    G: Math.round(color.G / count),
+    B: Math.round(color.B / count),
+  };
+}
+
+/**
+ * Takes an image in raw formar and return the average inverse color of the subsection of the image in the rectangle made by
+ * (x, y), (x+width, y+height).
+ */
+function averageInverseColorRaw(
+  img: Uint8ClampedArray,
+  imgWidth: number,
+  imgHeight: number,
+  x: number,
+  y: number,
+  width: number,
+  height: number
+): Color {
+  return inverseColor(
+    averageColorRaw(img, imgWidth, imgHeight, x, y, width, height)
+  );
+}
+
+/**
+ * Takes an image and return the average inverse color of the subsection of the image in the rectangle made by
+ * (x, y), (x+width, y+height).
+ */
+function averageInverseColor(
+  img: ImageData,
+  x: number,
+  y: number,
+  width: number,
+  height: number
+): Color {
+  return inverseColor(
+    averageColorRaw(img.data, img.width, img.height, x, y, width, height)
+  );
+}
+
 // https://en.wikipedia.org/wiki/Gaussian_elimination
 function gaussJordanElimination(matrix: number[][]) {
   const height = matrix.length;
@@ -363,4 +478,9 @@ export {
   imageToImageData,
   imageDataToImage,
   download,
+  averageColorRaw,
+  averageInverseColorRaw,
+  averageInverseColor,
+  inverseColor,
+  colorToCSS,
 };

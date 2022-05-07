@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import ZoomableCanvas from './ZoomableCanvas';
 import { extractCoordinates } from './lib/eventhelpers';
-import { Quadrilateral, Point, isQuadrilateralConvex } from './lib/geometry';
+import { ImagePair, averageInverseColor, colorToCSS } from './lib/imgkit';
+import {
+  Quadrilateral,
+  Point,
+  isQuadrilateralConvex,
+  midwayPoint,
+} from './lib/geometry';
 
 const drawCircle = (
   ctx: CanvasRenderingContext2D,
@@ -66,9 +72,6 @@ const findPointWithinDistance = (
   return hit ? hit[0] : null;
 };
 
-const SELECTED_COLOR = 'red';
-const UNSELECTED_COLOR = 'white';
-
 interface InteractiveCanvasProps {
   /** Width percentage of the screen the canvas should take (0 to 100) */
   widthPercentage: number;
@@ -77,7 +80,7 @@ interface InteractiveCanvasProps {
   heightPercentage: number;
 
   /** The image to show on the canvas */
-  image: HTMLImageElement;
+  image: ImagePair;
 
   /** Callback on selected corners change */
   onCornersChange: (corners: Quadrilateral) => void;
@@ -99,14 +102,27 @@ function InteractiveCanvas({
   // Compute the downscaling/upscaling ratio so that the image fully fits on the canvas.
   // We don't want to distort the image here so we just pick the maximum image dimension to compute the ratio.
   let ratio;
-  if (image.width > image.height) {
-    ratio = canvasWidth / image.width;
+  if (image.data.width > image.data.height) {
+    ratio = canvasWidth / image.data.width;
   } else {
-    ratio = canvasHeight / image.height;
+    ratio = canvasHeight / image.data.height;
   }
 
-  const realWidth = ratio * image.width;
-  const realHeight = ratio * image.height;
+  const imageMinDimension = Math.min(image.data.width, image.data.height);
+  const colorBoxSizeComputation = 0.1 * imageMinDimension;
+  const computeInverseColor = (p: Point) =>
+    colorToCSS(
+      averageInverseColor(
+        image.data,
+        p.x - colorBoxSizeComputation / 2,
+        p.y - colorBoxSizeComputation / 2,
+        colorBoxSizeComputation / 2,
+        colorBoxSizeComputation / 2
+      )
+    );
+
+  const realWidth = ratio * image.data.width;
+  const realHeight = ratio * image.data.height;
 
   // order is: topLeft, topRight, bottomRight, bottomLeft
   const [corners, setCorners] = useState<Quadrilateral>([
@@ -131,8 +147,8 @@ function InteractiveCanvas({
         x,
         y,
         cornerRadius,
-        index === selectedCorner ? SELECTED_COLOR : UNSELECTED_COLOR,
-        3
+        computeInverseColor({ x, y }),
+        index === selectedCorner ? 8 : 4
       );
     });
   };
@@ -147,13 +163,15 @@ function InteractiveCanvas({
 
     lines.forEach(([idx1, idx2]) => {
       const selected = idx1 === selectedCorner || idx2 === selectedCorner;
-      // TODO(proper-colors): use a color with a good contrast on the image
+      const corner1 = corners[idx1];
+      const corner2 = corners[idx2];
+      const midway = midwayPoint(corner1, corner2);
       drawDashedLine(
         context,
         corners[idx1],
         corners[idx2],
-        selected ? 2 : 1,
-        selected ? SELECTED_COLOR : UNSELECTED_COLOR
+        selected ? 3 : 1,
+        computeInverseColor(midway)
       );
     });
   };
@@ -165,11 +183,11 @@ function InteractiveCanvas({
   ) => {
     context.clearRect(0, 0, width, height);
     context.drawImage(
-      image,
+      image.element,
       0,
       0,
-      image.width,
-      image.height,
+      image.data.width,
+      image.data.height,
       0,
       0,
       realWidth,

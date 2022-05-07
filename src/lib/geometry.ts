@@ -48,4 +48,12 @@ const segmentsIntersect = ([a, b]: Segment, [c, d]: Segment) =>
 const isQuadrilateralConvex = ([tl, tr, br, bl]: Quadrilateral) =>
   segmentsIntersect([tr, bl], [tl, br]);
 
-export { isQuadrilateralConvex, segmentsIntersect };
+/*
+ * Returns a point that is the middle of the segment formed by the two provided points
+ */
+const midwayPoint = (p1: Point, p2: Point) => ({
+  x: (p1.x + p2.x) / 2,
+  y: (p1.y + p2.y) / 2,
+});
+
+export { isQuadrilateralConvex, segmentsIntersect, midwayPoint };

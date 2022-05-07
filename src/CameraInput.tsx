@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 import InteractiveCanvas from './InteractiveCanvas';
-import { distortImage, imageToImageData, download } from './lib/imgkit';
+import {
+  ImagePair,
+  distortImage,
+  imageToImageData,
+  download,
+} from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
 
 // Unstyled button component
@@ -38,7 +43,7 @@ function Button({ name, action }: { name: string; action: () => void }) {
 }
 
 function CameraInput() {
-  const [image, setImage] = useState<HTMLImageElement | null>(null);
+  const [image, setImage] = useState<ImagePair | null>(null);
   const [corners, setCorners] = useState<Quadrilateral | null>(null);
   const reader = new FileReader();
 
@@ -46,20 +51,22 @@ function CameraInput() {
     if (reader.result) {
       const loadedImage = new Image();
       loadedImage.src = reader.result as string;
-      setImage(loadedImage);
+      setImage({
+        element: loadedImage,
+        data: imageToImageData(loadedImage),
+      });
     }
   };
 
   const onCrop = () => {
     // TODO: use a web worker
-    const nonNullImage = image as HTMLImageElement;
-    const newImage = new ImageData(nonNullImage.width, nonNullImage.height);
+    const nonNullImage = image as ImagePair;
+    const newImage = new ImageData(
+      nonNullImage.data.width,
+      nonNullImage.data.height
+    );
     download(
-      distortImage(
-        imageToImageData(nonNullImage),
-        newImage,
-        corners as Quadrilateral
-      )
+      distortImage(nonNullImage.data, newImage, corners as Quadrilateral)
     );
   };
 
