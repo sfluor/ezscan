@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Div100vh from 'react-div-100vh';
 import InteractiveCanvas from './InteractiveCanvas';
 import {
   ImagePair,
@@ -70,12 +71,12 @@ function CameraInput() {
   };
 
   return (
-    <div>
+    <Div100vh style={{ width: '100vw' }}>
       <div
         id="container"
         style={{
-          width: '100vw',
-          height: '90vh',
+          width: '100%',
+          height: '90%',
         }}
       >
         <input
@@ -89,7 +90,7 @@ function CameraInput() {
             }
           }}
           style={{
-            height: '5vh',
+            height: '5%',
           }}
         />
         {image && (
@@ -108,7 +109,7 @@ function CameraInput() {
           justifyContent: 'space-around',
           width: '100%',
           backgroundColor: '#232946',
-          height: '10vh',
+          height: '10%',
           alignItems: 'center',
         }}
       >
@@ -116,7 +117,7 @@ function CameraInput() {
         {image && <Button name="Crop" action={onCrop} />}
         {/* <Button name="Next" /> */}
       </footer>
-    </div>
+    </Div100vh>
   );
 }
 
