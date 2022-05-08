@@ -5,6 +5,7 @@ import {
   Quadrilateral,
   Point,
   midwayPoint,
+  findPointWithinDistance,
 } from './geometry';
 
 const segmentsIntersectTests: [Quadrilateral, boolean][] = [
@@ -115,5 +116,61 @@ test.each(isLowerRightTests)(
   'isLowerRight(%o) should be %o',
   ({ width, height, x, y }, expected) => {
     expect(isLowerRight(width, height, x, y)).toEqual(expected);
+  }
+);
+
+const findPointWithinDistanceTests: [
+  {
+    points: Point[];
+    rx: number;
+    ry: number;
+    maxDistance: number;
+  },
+  number | null
+][] = [
+  [
+    {
+      points: [],
+      rx: 0,
+      ry: 0,
+      maxDistance: 100,
+    },
+    null,
+  ],
+
+  [
+    {
+      points: [
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+      ],
+      rx: 1.6,
+      ry: 1.6,
+      maxDistance: 2,
+    },
+    2,
+  ],
+  [
+    {
+      points: [
+        { x: 0, y: 0 },
+        { x: 1, y: 1 },
+        { x: 2, y: 2 },
+      ],
+      rx: 1.6,
+      ry: 1.6,
+      maxDistance: 0.1,
+    },
+    null,
+  ],
+];
+
+test.each(findPointWithinDistanceTests)(
+  'findPointWithinDistance(%o) should be %o',
+  ({ points, rx, ry, maxDistance }, expected) => {
+    expect(findPointWithinDistance(points, rx, ry, maxDistance)).toEqual(
+      expected
+    );
   }
 );

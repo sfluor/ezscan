@@ -87,4 +87,40 @@ const midwayPoint = (p1: Point, p2: Point) => ({
   y: (p1.y + p2.y) / 2,
 });
 
-export { isQuadrilateralConvex, segmentsIntersect, midwayPoint, isLowerRight };
+/**
+ * Given a list of points of {x, y} and a point, it will find the first point within the circle of center
+ * (rx,ry) and of radius "distance".
+ *
+ * If multiple points satisfy this it will return the point that is the closest to (rx,ry)
+ *
+ * It returns the index of the found point if any, otherwise null;
+ */
+const findPointWithinDistance = (
+  points: Point[],
+  rx: number,
+  ry: number,
+  maxDistance: number
+): number | null => {
+  const hit = points
+    .map(({ x, y }, idx) => [idx, (x - rx) ** 2 + (y - ry) ** 2])
+    .sort(([_, da], [__, db]) => {
+      if (da < db) {
+        return -1;
+      }
+      if (da > db) {
+        return 1;
+      }
+      return 0;
+    })
+    .find(([_, distance]) => distance < maxDistance ** 2);
+
+  return hit ? hit[0] : null;
+};
+
+export {
+  isQuadrilateralConvex,
+  segmentsIntersect,
+  midwayPoint,
+  isLowerRight,
+  findPointWithinDistance,
+};
