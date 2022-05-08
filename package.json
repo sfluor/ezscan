@@ -109,6 +109,7 @@
     "roots": [
       "<rootDir>/src"
     ],
+    "testTimeout": 1000,
     "collectCoverageFrom": [
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/**/*.d.ts"
