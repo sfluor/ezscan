@@ -13,7 +13,8 @@ interface Size {
 const extractTargetSize = (
   event: React.MouseEvent | React.TouchEvent
 ): Size => {
-  const { clientWidth, clientHeight } = event.target as Element;
+  const target = event.target as Element;
+  const { clientWidth, clientHeight } = target;
 
   return { width: clientWidth, height: clientHeight };
 };
