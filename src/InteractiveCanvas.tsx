@@ -8,6 +8,10 @@ import {
   isQuadrilateralConvex,
   midwayPoint,
   findPointWithinDistance,
+  Size,
+  sizeToPixels,
+  multiplySize,
+  scaleSize,
 } from './lib/geometry';
 
 const drawCircle = (
@@ -44,11 +48,8 @@ const drawDashedLine = (
 };
 
 interface InteractiveCanvasProps {
-  /** Width percentage of the screen the canvas should take (0 to 100) */
-  widthPercentage: number;
-
-  /** Height percentage of the screen the canvas should take (0 to 100) */
-  heightPercentage: number;
+  /** Width and height percentage of the screen the canvas should take (0 to 100) */
+  sizePct: Size;
 
   /** The image to show on the canvas */
   image: ImagePair;
@@ -57,15 +58,23 @@ interface InteractiveCanvasProps {
   onCornersChange: (corners: Quadrilateral) => void;
 }
 
+/*
+ * We have multiple sizes involved here:
+ *
+ */
 function InteractiveCanvas({
-  widthPercentage,
-  heightPercentage,
+  sizePct,
   image,
   onCornersChange,
   ...rest
 }: InteractiveCanvasProps) {
-  const canvasHeight = (heightPercentage * window.innerHeight) / 100;
-  const canvasWidth = (widthPercentage * window.innerWidth) / 100;
+  const canvasSize = scaleSize(
+    multiplySize(sizePct, {
+      width: window.innerWidth,
+      height: window.innerHeight,
+    }),
+    1 / 100
+  );
 
   const cornerRadius = 10;
   const clickCornerRadius = 10 * cornerRadius;
@@ -74,9 +83,9 @@ function InteractiveCanvas({
   // We don't want to distort the image here so we just pick the maximum image dimension to compute the ratio.
   let ratio;
   if (image.data.width > image.data.height) {
-    ratio = canvasWidth / image.data.width;
+    ratio = canvasSize.width / image.data.width;
   } else {
-    ratio = canvasHeight / image.data.height;
+    ratio = canvasSize.height / image.data.height;
   }
 
   const imageMinDimension = Math.min(image.data.width, image.data.height);
@@ -211,18 +220,14 @@ function InteractiveCanvas({
 
   return (
     <ZoomableCanvas
-      height={canvasHeight}
-      width={canvasWidth}
+      size={canvasSize}
       image={image}
       onMouseDown={handleMouseDown}
       onTouchStart={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchEnd={handleMouseUp}
       onMove={handleMouseMove}
-      style={{
-        width: `${canvasWidth}px`,
-        height: `${canvasHeight}px`,
-      }}
+      style={sizeToPixels(canvasSize)}
       draw={draw}
       {...rest}
     />

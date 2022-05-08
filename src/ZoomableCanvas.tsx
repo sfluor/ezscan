@@ -11,7 +11,7 @@ import {
   inverseColor,
   colorToCSS,
 } from './lib/imgkit';
-import { isLowerRight, Point } from './lib/geometry';
+import { Size, isLowerRight, Point } from './lib/geometry';
 
 /*
  * Draw a hatched rectangle on the canvas (using (x,y) as the top left corner).
@@ -68,8 +68,7 @@ interface ZoomableCanvasProps {
 
   style: React.CSSProperties;
 
-  height: number;
-  width: number;
+  size: Size;
 }
 
 // TODO: currently the zoom window displayed sources the image from the

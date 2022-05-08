@@ -94,8 +94,7 @@ function CameraInput() {
         />
         {image && (
           <InteractiveCanvas
-            widthPercentage={100}
-            heightPercentage={85}
+            sizePct={{ width: 100, height: 85 }}
             onCornersChange={setCorners}
             image={image}
           />

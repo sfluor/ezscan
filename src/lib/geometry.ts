@@ -10,6 +10,21 @@ export interface Size {
 
 type Segment = [Point, Point];
 
+const multiplySize = (a: Size, b: Size) => ({
+  width: a.width * b.width,
+  height: a.height * b.height,
+});
+
+const scaleSize = (a: Size, x: number) => ({
+  width: a.width * x,
+  height: a.height * x,
+});
+
+const sizeToPixels = (size: Size) => ({
+  width: `${size.width}px`,
+  height: `${size.height}px`,
+});
+
 export type Quadrilateral = [Point, Point, Point, Point];
 
 /*
@@ -128,4 +143,7 @@ export {
   midwayPoint,
   isLowerRight,
   findPointWithinDistance,
+  multiplySize,
+  scaleSize,
+  sizeToPixels,
 };

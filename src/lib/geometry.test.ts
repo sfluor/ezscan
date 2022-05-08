@@ -1,11 +1,14 @@
 import {
   isLowerRight,
+  Size,
   isQuadrilateralConvex,
   segmentsIntersect,
   Quadrilateral,
   Point,
   midwayPoint,
   findPointWithinDistance,
+  multiplySize,
+  scaleSize,
 } from './geometry';
 
 const segmentsIntersectTests: [Quadrilateral, boolean][] = [
@@ -172,5 +175,43 @@ test.each(findPointWithinDistanceTests)(
     expect(findPointWithinDistance(points, rx, ry, maxDistance)).toEqual(
       expected
     );
+  }
+);
+
+const multiplySizeTests: [Size, Size, Size][] = [
+  [
+    { width: 10, height: 25 },
+    { width: 0, height: 2 },
+    { width: 0, height: 50 },
+  ],
+  [
+    { width: 10, height: 25 },
+    { width: 2, height: 0 },
+    { width: 20, height: 0 },
+  ],
+  [
+    { width: 11, height: 12 },
+    { width: 2, height: 3 },
+    { width: 22, height: 36 },
+  ],
+];
+
+test.each(multiplySizeTests)(
+  'multiplySize(%o, %o) should be %o',
+  (a, b, expected) => {
+    expect(multiplySize(a, b)).toEqual(expected);
+  }
+);
+
+const scaleSizeTests: [Size, number, Size][] = [
+  [{ width: 10, height: 25 }, 0, { width: 0, height: 0 }],
+  [{ width: 10, height: 25 }, 2, { width: 20, height: 50 }],
+  [{ width: 11, height: 12 }, 3, { width: 33, height: 36 }],
+];
+
+test.each(scaleSizeTests)(
+  'scaleSize(%o, %o) should be %o',
+  (a, b, expected) => {
+    expect(scaleSize(a, b)).toEqual(expected);
   }
 );
