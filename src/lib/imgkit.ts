@@ -247,11 +247,14 @@ function averageColorRaw(
   img: Uint8ClampedArray,
   imgWidth: number,
   imgHeight: number,
-  x: number,
-  y: number,
+  rawX: number,
+  rawY: number,
   width: number,
   height: number
 ): Color {
+  const x = Math.min(Math.max(rawX, 0), imgWidth);
+  const y = Math.min(Math.max(rawY, 0), imgHeight);
+
   const minX = Math.round(Math.max(0, x));
   const minY = Math.round(Math.max(0, y));
   const maxX = Math.round(Math.min(imgWidth, x + width));

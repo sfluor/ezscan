@@ -146,6 +146,38 @@ describe('should compute average image color', () => {
     expect(computed).toEqual(expected);
     expect(computedInverse).toEqual(inverseColor(expected));
   });
+
+
+  test('pixel column of size 4 with negative start', () => {
+    const sHeight = 255;
+    const sWidth = 4;
+    const computed = averageColorRaw(
+      imageData,
+      width,
+      height,
+      100, // start x
+      -200, // start y
+      sWidth, // width
+      sHeight // height
+    );
+    const computedInverse = averageInverseColorRaw(
+      imageData,
+      width,
+      height,
+      100, // start x
+      -150, // start y
+      sWidth, // width
+      sHeight // height
+    );
+
+    const expected = {
+      R: 102,
+      G: 127,
+      B: 115,
+    };
+    expect(computed).toEqual(expected);
+    expect(computedInverse).toEqual(inverseColor(expected));
+  });
 });
 
 const transposeMatrixTests: [number[][], number[][]][] = [
