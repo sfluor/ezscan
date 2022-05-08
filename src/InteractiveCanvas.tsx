@@ -220,8 +220,6 @@ function InteractiveCanvas({
 
   const handleMouseMove = (event: React.MouseEvent | React.TouchEvent) => {
     if (selectedCorner !== null) {
-      // Disable scrolling on mobile if we are currently moving a corner
-      event.preventDefault();
       const point = extractCoordinates(event);
       const newCorners: Quadrilateral = [...corners];
       newCorners[selectedCorner] = point;
@@ -247,7 +245,7 @@ function InteractiveCanvas({
       onMouseUp={handleMouseUp}
       onTouchEnd={handleMouseUp}
       onMove={handleMouseMove}
-      style={sizeToPixels(canvasSize)}
+      style={{ ...sizeToPixels(canvasSize), touchAction: 'none' }}
       draw={draw}
       {...rest}
     />

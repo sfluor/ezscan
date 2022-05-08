@@ -38,10 +38,10 @@ interface CanvasProps {
 }
 
 function Canvas(props: CanvasProps) {
-  const { draw, ...rest } = props;
+  const { draw, width, height, ...rest } = props;
   const canvasRef = useCanvas(draw);
 
-  return <canvas ref={canvasRef} {...rest} />;
+  return <canvas ref={canvasRef} width={width} height={height} {...rest} />;
 }
 
 export default Canvas;
