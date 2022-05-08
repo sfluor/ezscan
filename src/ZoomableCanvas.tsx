@@ -74,7 +74,7 @@ interface ZoomableCanvasProps {
 // TODO: currently the zoom window displayed sources the image from the
 // downscaled/upscaled canvas when we should use a hidden canvas having the original image size
 function ZoomableCanvas(props: ZoomableCanvasProps) {
-  const { draw, onMove, image, ...rest } = props;
+  const { draw, onMove, image, size, ...rest } = props;
 
   const [zoom, setZoom] = useState({
     lowerRight: false,
@@ -159,12 +159,12 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
     event: React.MouseEvent | React.TouchEvent
   ) => {
     const target = extractCoordinates(event);
-    const size = extractTargetSize(event);
+    const targetSize = extractTargetSize(event);
     setZoom({
       visible,
       // Reverse the value here since we want to draw the zoom square
       // at the opposite of the mouse
-      lowerRight: !isLowerRight(size, target),
+      lowerRight: !isLowerRight(targetSize, target),
       mouseX: target.x,
       mouseY: target.y,
     });
@@ -182,6 +182,8 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
       draw={enrichedDraw}
       onMouseMove={enrichedOnMove}
       onTouchMove={enrichedOnMove}
+      width={size.width}
+      height={size.height}
       onMouseEnter={(event: React.MouseEvent) => updateZoom(true, event)}
       onMouseLeave={(event: React.MouseEvent) => updateZoom(false, event)}
       {...rest}

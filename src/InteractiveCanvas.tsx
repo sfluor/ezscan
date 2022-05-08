@@ -4,6 +4,7 @@ import { extractCoordinates } from './lib/eventhelpers';
 import { ImagePair, averageInverseColor, colorToCSS } from './lib/imgkit';
 import {
   Quadrilateral,
+  mapQuadrilateral,
   Point,
   isQuadrilateralConvex,
   midwayPoint,
@@ -54,13 +55,23 @@ interface InteractiveCanvasProps {
   /** The image to show on the canvas */
   image: ImagePair;
 
-  /** Callback on selected corners change */
+  /** Callback on selected corners change, the provided coordinates are in the image dimension space */
   onCornersChange: (corners: Quadrilateral) => void;
 }
 
 /*
  * We have multiple sizes involved here:
  *
+ * a. The window inner size, this is the size of the browser window (TODO: on smartphones this is broken because it includes the bookmark bar)
+ * b. The provided sizePct parameter, will be used to determine the size of the canvas using the window inner size.
+ * c. The size of the canvas (sizePct * window.size)
+ * d. The loaded image size (available via image.data.width/height)
+ * e. The scaled image size (this one is computed so that the maximum dimension of the image perfectly fits in the canvas)
+ *
+ * The corners coordinates are computed in (c) but we should crop the image with coordinates scaled with (e).
+ *
+ * This is why we don't call onCornersChange directly on the stored corners but we first scale them back to the original image
+ * dimension.
  */
 function InteractiveCanvas({
   sizePct,
@@ -81,7 +92,7 @@ function InteractiveCanvas({
 
   // Compute the downscaling/upscaling ratio so that the image fully fits on the canvas.
   // We don't want to distort the image here so we just pick the maximum image dimension to compute the ratio.
-  let ratio;
+  let ratio: number;
   if (image.data.width > image.data.height) {
     ratio = canvasSize.width / image.data.width;
   } else {
@@ -112,13 +123,22 @@ function InteractiveCanvas({
     { x: 0, y: realHeight },
   ];
 
+  // See comment above but we have to resize the conrers before calling the callback hence this helper
+  const cornersChangedCallback = (corners: Quadrilateral) => {
+    const normalized = mapQuadrilateral(corners, (p) => ({
+      x: Math.round(p.x / ratio),
+      y: Math.round(p.y / ratio),
+    }));
+    onCornersChange(normalized);
+  };
+
   // order is: topLeft, topRight, bottomRight, bottomLeft
   const [corners, setCorners] = useState<Quadrilateral>(defaultCorners);
 
   useEffect(() => {
     // Init corners upon changing image
     setCorners(defaultCorners);
-    onCornersChange(defaultCorners);
+    cornersChangedCallback(defaultCorners);
   }, [image]);
 
   const [selectedCorner, setSelectedCorner] = useState<number | null>(null);
@@ -213,7 +233,7 @@ function InteractiveCanvas({
         point.y < realHeight
       ) {
         setCorners(newCorners);
-        onCornersChange(newCorners);
+        cornersChangedCallback(newCorners);
       }
     }
   };

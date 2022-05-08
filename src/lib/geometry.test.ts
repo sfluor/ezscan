@@ -9,6 +9,7 @@ import {
   findPointWithinDistance,
   multiplySize,
   scaleSize,
+  mapQuadrilateral,
 } from './geometry';
 
 const segmentsIntersectTests: [Quadrilateral, boolean][] = [
@@ -213,5 +214,33 @@ test.each(scaleSizeTests)(
   'scaleSize(%o, %o) should be %o',
   (a, b, expected) => {
     expect(scaleSize(a, b)).toEqual(expected);
+  }
+);
+
+const defaultQuadrilateral: Quadrilateral = [
+  { x: 0, y: 0 },
+  { x: 1, y: 1 },
+  { x: 2, y: 2 },
+  { x: 3, y: 3 },
+];
+const mapQuadrilateralTests: [Quadrilateral, (p: Point) => any, any][] = [
+  [
+    defaultQuadrilateral,
+    (p) => ({ x: 2 * p.x, y: 3 * p.y }),
+    [
+      { x: 0, y: 0 },
+      { x: 2, y: 3 },
+      { x: 4, y: 6 },
+      { x: 6, y: 9 },
+    ],
+  ],
+  [defaultQuadrilateral, (p) => p.x, [0, 1, 2, 3]],
+  [defaultQuadrilateral, (p) => p.x * p.y, [0, 1, 4, 9]],
+];
+
+test.each(mapQuadrilateralTests)(
+  'mapQuadrilateral(%o, %o) should be %o',
+  (q, mapper, expected) => {
+    expect(mapQuadrilateral(q, mapper)).toEqual(expected);
   }
 );

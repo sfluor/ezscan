@@ -32,6 +32,9 @@ interface CanvasProps {
   onTouchMove: React.TouchEventHandler;
   onMouseEnter: React.MouseEventHandler;
   onMouseLeave: React.MouseEventHandler;
+
+  width: number;
+  height: number;
 }
 
 function Canvas(props: CanvasProps) {

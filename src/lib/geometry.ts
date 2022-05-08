@@ -28,6 +28,14 @@ const sizeToPixels = (size: Size) => ({
 export type Quadrilateral = [Point, Point, Point, Point];
 
 /*
+ * Map operation but on a quadrilateral
+ */
+const mapQuadrilateral = <T>(
+  q: Quadrilateral,
+  mapper: (point: Point) => T
+): [T, T, T, T] => [mapper(q[0]), mapper(q[1]), mapper(q[2]), mapper(q[3])];
+
+/*
  * Given a rectangle (here it's a square for simplicity)
  * Indicates if the current position (assuming 0 is the top left corner) is in the upper left part or on the lower right part.
  *
@@ -146,4 +154,5 @@ export {
   multiplySize,
   scaleSize,
   sizeToPixels,
+  mapQuadrilateral,
 };
