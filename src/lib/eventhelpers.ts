@@ -1,14 +1,9 @@
 import React from 'react';
-import { Point } from './geometry';
+import { Point, Size } from './geometry';
 
 export type MouseEventListener = (
   event: React.MouseEvent | React.TouchEvent
 ) => void;
-
-interface Size {
-  width: number;
-  height: number;
-}
 
 const extractTargetSize = (
   event: React.MouseEvent | React.TouchEvent

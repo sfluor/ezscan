@@ -11,7 +11,7 @@ import {
   inverseColor,
   colorToCSS,
 } from './lib/imgkit';
-import { isLowerRight } from './lib/geometry';
+import { isLowerRight, Point } from './lib/geometry';
 
 /*
  * Draw a hatched rectangle on the canvas (using (x,y) as the top left corner).
@@ -20,8 +20,7 @@ import { isLowerRight } from './lib/geometry';
  */
 const drawHatchedSquare = (
   context: CanvasRenderingContext2D,
-  x: number,
-  y: number,
+  { x, y }: Point,
   size: number,
   backgroundColor: string,
   lineColor: string
@@ -94,14 +93,15 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
     draw(context, width, height);
     if (zoom.visible) {
       // Take min(20% of image, 50px) as the zoom box size
-      const zoomBoxSize = Math.max(50, Math.min(width, height) * 0.2);
-      const zoomPadding = zoomBoxSize / 2;
+      const zoomBoxDimension = Math.max(50, Math.min(width, height) * 0.2);
+      const zoomBoxSize = { width: zoomBoxDimension, height: zoomBoxDimension };
+      const zoomPadding = zoomBoxDimension / 2;
 
       let coords;
       if (zoom.lowerRight) {
         coords = {
-          x: context.canvas.width - zoomBoxSize - zoomPadding,
-          y: context.canvas.height - zoomBoxSize - zoomPadding,
+          x: context.canvas.width - zoomBoxDimension - zoomPadding,
+          y: context.canvas.height - zoomBoxDimension - zoomPadding,
         };
       } else {
         coords = {
@@ -113,14 +113,12 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
       const zoomRatio = 2;
 
       // Zoom on a centered squared over the mouse position
-      const sx = zoom.mouseX - zoomBoxSize / 2 / zoomRatio;
-      const sy = zoom.mouseY - zoomBoxSize / 2 / zoomRatio;
+      const sx = zoom.mouseX - zoomBoxDimension / 2 / zoomRatio;
+      const sy = zoom.mouseY - zoomBoxDimension / 2 / zoomRatio;
 
       const contrastColor = averageInverseColor(
         image.data,
-        coords.x,
-        coords.y,
-        zoomBoxSize,
+        coords,
         zoomBoxSize
       );
 
@@ -128,9 +126,8 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
       context.beginPath();
       drawHatchedSquare(
         context,
-        coords.x,
-        coords.y,
-        zoomBoxSize,
+        coords,
+        zoomBoxDimension,
         colorToCSS(contrastColor),
         colorToCSS(inverseColor(contrastColor))
       );
@@ -140,19 +137,19 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
         context.canvas,
         sx,
         sy,
-        zoomBoxSize / zoomRatio,
-        zoomBoxSize / zoomRatio,
+        zoomBoxDimension / zoomRatio,
+        zoomBoxDimension / zoomRatio,
         coords.x,
         coords.y,
-        zoomBoxSize,
-        zoomBoxSize
+        zoomBoxDimension,
+        zoomBoxDimension
       );
 
       // Finally draw the border
       context.beginPath();
       context.strokeStyle = colorToCSS(contrastColor);
-      context.lineWidth = zoomBoxSize / 20;
-      context.rect(coords.x, coords.y, zoomBoxSize, zoomBoxSize);
+      context.lineWidth = zoomBoxDimension / 20;
+      context.rect(coords.x, coords.y, zoomBoxDimension, zoomBoxDimension);
       context.setLineDash([]);
       context.stroke();
     }
@@ -162,15 +159,15 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
     visible: boolean,
     event: React.MouseEvent | React.TouchEvent
   ) => {
-    const { x, y } = extractCoordinates(event);
-    const { width, height } = extractTargetSize(event);
+    const target = extractCoordinates(event);
+    const size = extractTargetSize(event);
     setZoom({
       visible,
       // Reverse the value here since we want to draw the zoom square
       // at the opposite of the mouse
-      lowerRight: !isLowerRight(width, height, x, y),
-      mouseX: x,
-      mouseY: y,
+      lowerRight: !isLowerRight(size, target),
+      mouseX: target.x,
+      mouseY: target.y,
     });
   };
 

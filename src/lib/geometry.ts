@@ -3,6 +3,11 @@ export interface Point {
   y: number;
 }
 
+export interface Size {
+  width: number;
+  height: number;
+}
+
 type Segment = [Point, Point];
 
 export type Quadrilateral = [Point, Point, Point, Point];
@@ -35,7 +40,7 @@ export type Quadrilateral = [Point, Point, Point, Point];
  *  and check if it's greater than the point's y coordinate or not.
  *
  */
-const isLowerRight = (width: number, height: number, x: number, y: number) =>
+const isLowerRight = ({ width, height }: Size, { x, y }: Point) =>
   height - (height / width) * x < y;
 
 /*

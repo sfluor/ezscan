@@ -115,7 +115,7 @@ const isLowerRightTests: [
 test.each(isLowerRightTests)(
   'isLowerRight(%o) should be %o',
   ({ width, height, x, y }, expected) => {
-    expect(isLowerRight(width, height, x, y)).toEqual(expected);
+    expect(isLowerRight({ width, height }, { x, y })).toEqual(expected);
   }
 );
 

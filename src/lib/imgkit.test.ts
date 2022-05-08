@@ -94,21 +94,15 @@ describe('should compute average image color', () => {
     const sWidth = 255;
     const computed = averageColorRaw(
       imageData,
-      width,
-      height,
-      0, // start x
-      100, // start y
-      sWidth, // width
-      sHeight // height
+      { width, height },
+      { x: 0, y: 100 },
+      { width: sWidth, height: sHeight }
     );
     const computedInverse = averageInverseColorRaw(
       imageData,
-      width,
-      height,
-      0, // start x
-      100, // start y
-      sWidth, // width
-      sHeight // height
+      { width, height },
+      { x: 0, y: 100 },
+      { width: sWidth, height: sHeight }
     );
 
     const expected = {
@@ -125,21 +119,15 @@ describe('should compute average image color', () => {
     const sWidth = 4;
     const computed = averageColorRaw(
       imageData,
-      width,
-      height,
-      100, // start x
-      0, // start y
-      sWidth, // width
-      sHeight // height
+      { width, height },
+      { x: 100, y: 0 },
+      { width: sWidth, height: sHeight }
     );
     const computedInverse = averageInverseColorRaw(
       imageData,
-      width,
-      height,
-      100, // start x
-      0, // start y
-      sWidth, // width
-      sHeight // height
+      { width, height },
+      { x: 100, y: 0 },
+      { width: sWidth, height: sHeight }
     );
 
     const expected = {
@@ -156,21 +144,15 @@ describe('should compute average image color', () => {
     const sWidth = 4;
     const computed = averageColorRaw(
       imageData,
-      width,
-      height,
-      100, // start x
-      -200, // start y
-      sWidth, // width
-      sHeight // height
+      { width, height },
+      { x: 100, y: -200 },
+      { width: sWidth, height: sHeight }
     );
     const computedInverse = averageInverseColorRaw(
       imageData,
-      width,
-      height,
-      100, // start x
-      -150, // start y
-      sWidth, // width
-      sHeight // height
+      { width, height },
+      { x: 100, y: -200 },
+      { width: sWidth, height: sHeight }
     );
 
     const expected = {
@@ -291,7 +273,7 @@ const inverseTests: [number[][], number[][]][] = [
 ];
 
 // Normalize the matrix to avoid the test failing because 2.999999 != 3
-const normalizeMatrix = (matrix) =>
+const normalizeMatrix = (matrix: number[][]) =>
   matrix.map((row) =>
     row.map(Math.round).map((v) => (Object.is(v, -0) ? 0 : v))
   );
@@ -378,9 +360,9 @@ test.each(distortTests)(
     const imagePath = path.join(__dirname, '__fixtures__', expectedImageFile);
 
     const promise = new Promise((resolve, reject) => {
-      const readImage = (imgpath) => `file://${imgpath}`;
+      const readImage = (imgpath: string) => `file://${imgpath}`;
 
-      const newImage = (imgpath, callback) => {
+      const newImage = (imgpath: string, callback: any) => {
         const image = new Image();
         image.onload = () => callback(image);
         image.onerror = () => {
@@ -393,17 +375,12 @@ test.each(distortTests)(
         return image;
       };
 
-      newImage(basePath, (base) => {
-        newImage(imagePath, (image) => {
-          const baseData = imageToImageData(base).data;
-          const imgData = imageToImageData(image).data;
+      newImage(basePath, (base: HTMLImageElement) => {
+        newImage(imagePath, (image: HTMLImageElement) => {
+          const baseData: Uint8ClampedArray = imageToImageData(base).data;
+          const imgData: Uint8ClampedArray = imageToImageData(image).data;
 
-          const distorted = distortImageRaw(
-            baseData,
-            base.width,
-            base.height,
-            srcCorners
-          );
+          const distorted = distortImageRaw(baseData, base, srcCorners);
           // Wrap into uint8clamped array because otherwise it's return as an object instead of an array
           // making the test fail.
           expect(distorted).toEqual(new Uint8ClampedArray(imgData));

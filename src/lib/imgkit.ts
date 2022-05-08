@@ -1,5 +1,5 @@
 /* eslint no-param-reassign: "error" */
-import { Quadrilateral, Point } from './geometry';
+import { Size, Quadrilateral, Point } from './geometry';
 
 // Exposes R / G / B color interfaces
 // Values are ranging from 0 to 255
@@ -181,8 +181,7 @@ function pixelIndex(x: number, y: number, width: number) {
 function bilinearInterpolation(
   img: Uint8ClampedArray,
   width: number,
-  x: number,
-  y: number,
+  { x, y }: Point,
   channels: number[]
 ) {
   // See: https://en.wikipedia.org/wiki/Bilinear_interpolation
@@ -248,20 +247,17 @@ function inverseColor(color: Color): Color {
  */
 function averageColorRaw(
   img: Uint8ClampedArray,
-  imgWidth: number,
-  imgHeight: number,
-  rawX: number,
-  rawY: number,
-  width: number,
-  height: number
+  imgSize: Size,
+  corner: Point,
+  zoneSize: Size
 ): Color {
-  const x = Math.min(Math.max(rawX, 0), imgWidth);
-  const y = Math.min(Math.max(rawY, 0), imgHeight);
+  const x = Math.min(Math.max(corner.x, 0), imgSize.width);
+  const y = Math.min(Math.max(corner.y, 0), imgSize.height);
 
   const minX = Math.round(Math.max(0, x));
   const minY = Math.round(Math.max(0, y));
-  const maxX = Math.round(Math.min(imgWidth, x + width));
-  const maxY = Math.round(Math.min(imgHeight, y + height));
+  const maxX = Math.round(Math.min(imgSize.width, x + zoneSize.width));
+  const maxY = Math.round(Math.min(imgSize.height, y + zoneSize.height));
 
   const color: Color = {
     R: 0,
@@ -273,7 +269,7 @@ function averageColorRaw(
 
   for (let ix = minX; ix < maxX; ix += 1) {
     for (let iy = minY; iy < maxY; iy += 1) {
-      const index = pixelIndex(ix, iy, imgWidth);
+      const index = pixelIndex(ix, iy, imgSize.width);
 
       color.R += img[index];
       color.G += img[index + 1];
@@ -295,32 +291,19 @@ function averageColorRaw(
  */
 function averageInverseColorRaw(
   img: Uint8ClampedArray,
-  imgWidth: number,
-  imgHeight: number,
-  x: number,
-  y: number,
-  width: number,
-  height: number
+  imgSize: Size,
+  corner: Point,
+  zoneSize: Size
 ): Color {
-  return inverseColor(
-    averageColorRaw(img, imgWidth, imgHeight, x, y, width, height)
-  );
+  return inverseColor(averageColorRaw(img, imgSize, corner, zoneSize));
 }
 
 /**
  * Takes an image and return the average inverse color of the subsection of the image in the rectangle made by
  * (x, y), (x+width, y+height).
  */
-function averageInverseColor(
-  img: ImageData,
-  x: number,
-  y: number,
-  width: number,
-  height: number
-): Color {
-  return inverseColor(
-    averageColorRaw(img.data, img.width, img.height, x, y, width, height)
-  );
+function averageInverseColor(img: ImageData, corner: Point, size: Size): Color {
+  return inverseColor(averageColorRaw(img.data, img, corner, size));
 }
 
 // https://en.wikipedia.org/wiki/Gaussian_elimination
@@ -431,16 +414,15 @@ function distortMatrix(srcCorners: Quadrilateral, dstCorners: Quadrilateral) {
 
 function distortImageRaw(
   img: Uint8ClampedArray,
-  width: number,
-  height: number,
+  size: Size,
   srcCorners: Quadrilateral
 ): Uint8ClampedArray {
   const dst = new Uint8ClampedArray(img.length);
   const dstCorners: Quadrilateral = [
     { x: 0, y: 0 },
-    { x: width, y: 0 },
-    { x: width, y: height },
-    { x: 0, y: height },
+    { x: size.width, y: 0 },
+    { x: size.width, y: size.height },
+    { x: 0, y: size.height },
   ];
 
   // Keep only the 2 first rows since we only want to compute x and y
@@ -450,14 +432,14 @@ function distortImageRaw(
   const channels = [0, 0, 0, 0];
   for (let i = 0; i < dst.length; i += 4) {
     const idx = i / 4;
-    const x = idx % width;
-    const y = Math.floor(idx / width);
+    const x = idx % size.width;
+    const y = Math.floor(idx / size.width);
 
     const [xs, ys] = matrixMultVector(M, planToHomogenousCoordinates({ x, y }));
 
     // RGBA channels
     // const channels = simpleInterpolation(img, xs, ys);
-    bilinearInterpolation(img, width, xs, ys, channels);
+    bilinearInterpolation(img, size.width, { x: xs, y: ys }, channels);
     channels.forEach((value, nb) => {
       dst[i + nb] = value;
     });
@@ -469,7 +451,7 @@ function distortImageRaw(
 // distortImage the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
 function distortImage(img: ImageData, srcCorners: Quadrilateral): ImageData {
   return new ImageData(
-    distortImageRaw(img.data, img.width, img.height, srcCorners),
+    distortImageRaw(img.data, img, srcCorners),
     img.width,
     img.height
   );
