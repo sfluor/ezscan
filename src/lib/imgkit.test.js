@@ -383,24 +383,17 @@ test.each(distortTests)(
 
       console.log("dirname", __dirname);
     const promise = new Promise((resolve, reject) => {
-      const readImage = (imgpath) =>
-        fs.readFile(imgpath, (err, data) => {
-          console.log('err', err);
-          console.log('data', data);
-          if (err) {
-            reject(err);
-          }
-          console.log('read image !');
-          return data;
-        });
+        const readImage = (imgpath) => `file://${imgpath}`;
 
       const newImage = (imgpath, callback) => {
         const image = new Image();
         image.onload = () => callback(image);
-        image.onerror = () =>
+        image.onerror = err => {
+          console.error(err);
           reject(
-            new Error(`Something went wrong loading image at: ${imgpath}`)
+            new Error(`Something went wrong loading image at: ${imgpath}\n${Object.keys(err)}`)
           );
+        }
         image.src = readImage(imgpath);
 
         return image;
