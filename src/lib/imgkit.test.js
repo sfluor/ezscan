@@ -1,3 +1,5 @@
+import path from 'path';
+import { Quadrilateral } from './geometry';
 import {
   Color,
   inverseColor,
@@ -7,6 +9,8 @@ import {
   averageInverseColorRaw,
   transposeMatrixInPlace,
   argmax,
+  imageToImageData,
+  distortImageRaw,
 } from './imgkit';
 
 const inverseColorsTests: [Color, Color][] = [
@@ -297,5 +301,117 @@ test.each(inverseTests)(
   (input, expected) => {
     expect(normalizeMatrix(inverse(input))).toEqual(expected);
     expect(normalizeMatrix(inverse(expected))).toEqual(input);
+  }
+);
+
+const distortTests: [Quadrilateral, string][] = [
+  [
+    [
+      {
+        x: 444,
+        y: 79,
+      },
+      {
+        x: 624,
+        y: 77,
+      },
+      {
+        x: 618,
+        y: 327,
+      },
+      {
+        x: 440,
+        y: 327,
+      },
+    ],
+    'red.png',
+  ],
+  [
+    [
+      {
+        x: 180,
+        y: 158,
+      },
+      {
+        x: 276,
+        y: 161,
+      },
+      {
+        x: 281,
+        y: 214,
+      },
+      {
+        x: 203,
+        y: 218,
+      },
+    ],
+    'yellow.png',
+  ],
+  [
+    [
+      {
+        x: 305,
+        y: 109,
+      },
+      {
+        x: 401,
+        y: 122,
+      },
+      {
+        x: 408,
+        y: 230,
+      },
+      {
+        x: 315,
+        y: 234,
+      },
+    ],
+    'blue.png',
+  ],
+];
+
+const baseDistortImage = 'red_blue_yellow.png';
+test.each(distortTests)(
+  `distortImage(${baseDistortImage}, %o) should be like image stored at %s`,
+  (srcCorners, expectedImageFile) => {
+    const basePath = path.join(__dirname, '__fixtures__', baseDistortImage);
+    const imagePath = path.join(__dirname, '__fixtures__', expectedImageFile);
+
+    const promise = new Promise((resolve, reject) => {
+      const readImage = (imgpath) => `file://${imgpath}`;
+
+      const newImage = (imgpath, callback) => {
+        const image = new Image();
+        image.onload = () => callback(image);
+        image.onerror = () => {
+          reject(
+            new Error(`Something went wrong loading image at: ${imgpath}`)
+          );
+        };
+        image.src = readImage(imgpath);
+
+        return image;
+      };
+
+      newImage(basePath, (base) => {
+        newImage(imagePath, (image) => {
+          const baseData = imageToImageData(base).data;
+          const imgData = imageToImageData(image).data;
+
+          const distorted = distortImageRaw(
+            baseData,
+            base.width,
+            base.height,
+            srcCorners
+          );
+          // Wrap into uint8clamped array because otherwise it's return as an object instead of an array
+          // making the test fail.
+          expect(distorted).toEqual(new Uint8ClampedArray(imgData));
+          resolve('Finished');
+        });
+      });
+    });
+
+    return promise;
   }
 );

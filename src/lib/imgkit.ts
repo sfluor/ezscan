@@ -179,7 +179,8 @@ function pixelIndex(x: number, y: number, width: number) {
 }
 
 function bilinearInterpolation(
-  img: ImageData,
+  img: Uint8ClampedArray,
+  width: number,
   x: number,
   y: number,
   channels: number[]
@@ -190,10 +191,10 @@ function bilinearInterpolation(
   const y1 = Math.floor(y);
 
   // Consider that x2 is just x1 + 1 and y2 = y1 + 1 to avoid using ceil and ending with x1 == x2 or y1 == y2
-  const q11 = pixelIndex(x1, y1, img.width);
-  const q12 = pixelIndex(x1, y1 + 1, img.width);
-  const q21 = pixelIndex(x1 + 1, y1, img.width);
-  const q22 = pixelIndex(x1 + 1, y1 + 1, img.width);
+  const q11 = pixelIndex(x1, y1, width);
+  const q12 = pixelIndex(x1, y1 + 1, width);
+  const q21 = pixelIndex(x1 + 1, y1, width);
+  const q22 = pixelIndex(x1 + 1, y1 + 1, width);
 
   const dx = x - x1;
   const dy = y - y1;
@@ -206,10 +207,10 @@ function bilinearInterpolation(
 
   for (let c = 0; c < 4; c += 1) {
     channels[c] =
-      f11 * img.data[q11 + c] +
-      f12 * img.data[q12 + c] +
-      f21 * img.data[q21 + c] +
-      f22 * img.data[q22 + c];
+      f11 * img[q11 + c] +
+      f12 * img[q12 + c] +
+      f21 * img[q21 + c] +
+      f22 * img[q22 + c];
   }
 }
 
@@ -428,41 +429,50 @@ function distortMatrix(srcCorners: Quadrilateral, dstCorners: Quadrilateral) {
   return matrixMultMatrix(source, invDestination);
 }
 
-// distortImage the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
-function distortImage(img: ImageData, srcCorners: Quadrilateral) {
-  const dst = new ImageData(img.width, img.height);
+function distortImageRaw(
+  img: Uint8ClampedArray,
+  width: number,
+  height: number,
+  srcCorners: Quadrilateral
+): Uint8ClampedArray {
+  const dst = new Uint8ClampedArray(img.length);
   const dstCorners: Quadrilateral = [
     { x: 0, y: 0 },
-    { x: dst.width, y: 0 },
-    { x: dst.width, y: dst.height },
-    { x: 0, y: dst.height },
+    { x: width, y: 0 },
+    { x: width, y: height },
+    { x: 0, y: height },
   ];
 
   // Keep only the 2 first rows since we only want to compute x and y
   const M = distortMatrix(srcCorners, dstCorners).slice(0, 2);
 
-  let x;
-  let y;
-  let idx;
-
   // Avoid recrating this array every time so we do it only once
   const channels = [0, 0, 0, 0];
-  for (let i = 0; i < dst.data.length; i += 4) {
-    idx = i / 4;
-    x = idx % dst.width;
-    y = Math.floor(idx / dst.width);
+  for (let i = 0; i < dst.length; i += 4) {
+    const idx = i / 4;
+    const x = idx % width;
+    const y = Math.floor(idx / width);
 
     const [xs, ys] = matrixMultVector(M, planToHomogenousCoordinates({ x, y }));
 
     // RGBA channels
     // const channels = simpleInterpolation(img, xs, ys);
-    bilinearInterpolation(img, xs, ys, channels);
+    bilinearInterpolation(img, width, xs, ys, channels);
     channels.forEach((value, nb) => {
-      dst.data[i + nb] = value;
+      dst[i + nb] = value;
     });
   }
 
   return dst;
+}
+
+// distortImage the given img (expected to be in ImageData format, see here: https://developer.mozilla.org/en-US/docs/Web/API/ImageData)
+function distortImage(img: ImageData, srcCorners: Quadrilateral): ImageData {
+  return new ImageData(
+    distortImageRaw(img.data, img.width, img.height, srcCorners),
+    img.width,
+    img.height
+  );
 }
 
 // function simpleInterpolation(img, x, y, channels) {
@@ -480,6 +490,7 @@ export {
   inverse,
   argmax,
   distortImage,
+  distortImageRaw,
   imageToImageData,
   imageDataToImage,
   openImageInNewTab,
