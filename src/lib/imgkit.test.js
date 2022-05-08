@@ -1,4 +1,3 @@
-import fs from 'fs';
 import path from 'path';
 import { Quadrilateral } from './geometry';
 import {
@@ -10,7 +9,8 @@ import {
   averageInverseColorRaw,
   transposeMatrixInPlace,
   argmax,
-    imageToImageData,
+  imageToImageData,
+  distortImageRaw,
 } from './imgkit';
 
 const inverseColorsTests: [Color, Color][] = [
@@ -345,7 +345,7 @@ const distortTests: [Quadrilateral, string][] = [
         y: 218,
       },
     ],
-    'blue.png',
+    'yellow.png',
   ],
   [
     [
@@ -366,7 +366,7 @@ const distortTests: [Quadrilateral, string][] = [
         y: 234,
       },
     ],
-    'yellow.png',
+    'blue.png',
   ],
 ];
 
@@ -375,35 +375,39 @@ test.each(distortTests)(
   `distortImage(${baseDistortImage}, %o) should be like image stored at %s`,
   (srcCorners, expectedImageFile) => {
     const basePath = path.join(__dirname, '__fixtures__', baseDistortImage);
-    const imagePath = path.join(
-      __dirname,
-      '__fixtures__',
-      expectedImageFile
-    );
+    const imagePath = path.join(__dirname, '__fixtures__', expectedImageFile);
 
-      console.log("dirname", __dirname);
     const promise = new Promise((resolve, reject) => {
-        const readImage = (imgpath) => `file://${imgpath}`;
+      const readImage = (imgpath) => `file://${imgpath}`;
 
       const newImage = (imgpath, callback) => {
         const image = new Image();
         image.onload = () => callback(image);
-        image.onerror = err => {
-          console.error(err);
+        image.onerror = () => {
           reject(
-            new Error(`Something went wrong loading image at: ${imgpath}\n${Object.keys(err)}`)
+            new Error(`Something went wrong loading image at: ${imgpath}`)
           );
-        }
+        };
         image.src = readImage(imgpath);
 
         return image;
       };
 
       newImage(basePath, (base) => {
-          console.log("base", base);
         newImage(imagePath, (image) => {
-          console.log('image', image);
-          resolve('bim');
+          const baseData = imageToImageData(base).data;
+          const imgData = imageToImageData(image).data;
+
+          const distorted = distortImageRaw(
+            baseData,
+            base.width,
+            base.height,
+            srcCorners
+          );
+          // Wrap into uint8clamped array because otherwise it's return as an object instead of an array
+          // making the test fail.
+          expect(distorted).toEqual(new Uint8ClampedArray(imgData));
+          resolve('Finished');
         });
       });
     });
