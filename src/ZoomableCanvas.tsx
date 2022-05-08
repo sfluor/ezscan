@@ -73,6 +73,8 @@ interface ZoomableCanvasProps {
   width: number;
 }
 
+// TODO: currently the zoom window displayed sources the image from the
+// downscaled/upscaled canvas when we should use a hidden canvas having the original image size
 function ZoomableCanvas(props: ZoomableCanvasProps) {
   const { draw, onMove, image, ...rest } = props;
 

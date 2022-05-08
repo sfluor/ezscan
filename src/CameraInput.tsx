@@ -51,11 +51,14 @@ function CameraInput() {
   reader.onload = () => {
     if (reader.result) {
       const loadedImage = new Image();
-      loadedImage.src = reader.result as string;
-      setImage({
-        element: loadedImage,
-        data: imageToImageData(loadedImage),
+      loadedImage.addEventListener('load', () => {
+        setImage({
+          element: loadedImage,
+          data: imageToImageData(loadedImage),
+        });
       });
+
+      loadedImage.src = reader.result as string;
     }
   };
 
