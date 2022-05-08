@@ -117,7 +117,6 @@ function InteractiveCanvas({
 
   const drawCorners = (context: CanvasRenderingContext2D) => {
     corners.forEach(({ x, y }, index) => {
-      // TODO(proper-colors): use a color with a good contrast on the image
       drawCircle(
         context,
         x,
