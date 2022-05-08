@@ -121,21 +121,24 @@ function InteractiveCanvas({
       )
     );
 
-  const realWidth = ratio * image.data.width;
-  const realHeight = ratio * image.data.height;
+  const realWidth = Math.round(ratio * image.data.width);
+  const realHeight = Math.round(ratio * image.data.height);
 
-  // order is: topLeft, topRight, bottomRight, bottomLeft
-  const [corners, setCorners] = useState<Quadrilateral>([
+  const defaultCorners: Quadrilateral = [
     { x: 0, y: 0 },
     { x: realWidth, y: 0 },
     { x: realWidth, y: realHeight },
     { x: 0, y: realHeight },
-  ]);
+  ];
+
+  // order is: topLeft, topRight, bottomRight, bottomLeft
+  const [corners, setCorners] = useState<Quadrilateral>(defaultCorners);
 
   useEffect(() => {
-    // Init corners only once
-    onCornersChange(corners);
-  }, []);
+    // Init corners upon changing image
+    setCorners(defaultCorners);
+    onCornersChange(defaultCorners);
+  }, [image]);
 
   const [selectedCorner, setSelectedCorner] = useState<number | null>(null);
 
