@@ -7,6 +7,7 @@ import {
   Point,
   isQuadrilateralConvex,
   midwayPoint,
+  findPointWithinDistance,
 } from './lib/geometry';
 
 const drawCircle = (
