@@ -1,3 +1,6 @@
+import fs from 'fs';
+import path from 'path';
+import { Quadrilateral } from './geometry';
 import {
   Color,
   inverseColor,
@@ -7,6 +10,7 @@ import {
   averageInverseColorRaw,
   transposeMatrixInPlace,
   argmax,
+    imageToImageData,
 } from './imgkit';
 
 const inverseColorsTests: [Color, Color][] = [
@@ -297,5 +301,120 @@ test.each(inverseTests)(
   (input, expected) => {
     expect(normalizeMatrix(inverse(input))).toEqual(expected);
     expect(normalizeMatrix(inverse(expected))).toEqual(input);
+  }
+);
+
+const distortTests: [Quadrilateral, string][] = [
+  [
+    [
+      {
+        x: 444,
+        y: 79,
+      },
+      {
+        x: 624,
+        y: 77,
+      },
+      {
+        x: 618,
+        y: 327,
+      },
+      {
+        x: 440,
+        y: 327,
+      },
+    ],
+    'red.png',
+  ],
+  [
+    [
+      {
+        x: 180,
+        y: 158,
+      },
+      {
+        x: 276,
+        y: 161,
+      },
+      {
+        x: 281,
+        y: 214,
+      },
+      {
+        x: 203,
+        y: 218,
+      },
+    ],
+    'blue.png',
+  ],
+  [
+    [
+      {
+        x: 305,
+        y: 109,
+      },
+      {
+        x: 401,
+        y: 122,
+      },
+      {
+        x: 408,
+        y: 230,
+      },
+      {
+        x: 315,
+        y: 234,
+      },
+    ],
+    'yellow.png',
+  ],
+];
+
+const baseDistortImage = 'red_blue_yellow.png';
+test.each(distortTests)(
+  `distortImage(${baseDistortImage}, %o) should be like image stored at %s`,
+  (srcCorners, expectedImageFile) => {
+    const basePath = path.join(__dirname, '__fixtures__', baseDistortImage);
+    const imagePath = path.join(
+      __dirname,
+      '__fixtures__',
+      expectedImageFile
+    );
+
+      console.log("dirname", __dirname);
+    const promise = new Promise((resolve, reject) => {
+      const readImage = (imgpath) =>
+        fs.readFile(imgpath, (err, data) => {
+          console.log('err', err);
+          console.log('data', data);
+          if (err) {
+            reject(err);
+          }
+          console.log('read image !');
+          return data;
+        });
+
+      const newImage = (imgpath, callback) => {
+        const image = new Image();
+        image.onload = () => callback(image);
+        image.onerror = () =>
+          reject(
+            new Error(`Something went wrong loading image at: ${imgpath}`)
+          );
+        image.src = readImage(imgpath);
+
+        return image;
+      };
+
+      newImage(basePath, (base) => {
+          console.log("base", base);
+        newImage(imagePath, (image) => {
+          console.log('image', image);
+          resolve('bim');
+        });
+      });
+    });
+
+    return promise;
   }
 );

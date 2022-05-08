@@ -438,19 +438,17 @@ function distortImage(img: ImageData, srcCorners: Quadrilateral) {
     { x: 0, y: dst.height },
   ];
 
+  console.log(srcCorners);
+
   // Keep only the 2 first rows since we only want to compute x and y
   const M = distortMatrix(srcCorners, dstCorners).slice(0, 2);
-
-  let x;
-  let y;
-  let idx;
 
   // Avoid recrating this array every time so we do it only once
   const channels = [0, 0, 0, 0];
   for (let i = 0; i < dst.data.length; i += 4) {
-    idx = i / 4;
-    x = idx % dst.width;
-    y = Math.floor(idx / dst.width);
+    const idx = i / 4;
+    const x = idx % dst.width;
+    const y = Math.floor(idx / dst.width);
 
     const [xs, ys] = matrixMultVector(M, planToHomogenousCoordinates({ x, y }));
 
