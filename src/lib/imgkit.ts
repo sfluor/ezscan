@@ -48,12 +48,14 @@ function imageDataToImage(imgData: ImageData): string {
 function openImageInNewTab(imageData: ImageData) {
   const url = imageDataToImage(imageData);
   const image = new Image();
-  image.src = url;
   const newWindow = window.open('about:blank');
   if (newWindow) {
-    setTimeout(() => {
+    image.addEventListener('load', () => {
       newWindow.document.write(image.outerHTML);
-    }, 500);
+    });
+    image.src = url;
+  } else {
+    throw new Error('An error occurred while opening a new tab');
   }
 }
 

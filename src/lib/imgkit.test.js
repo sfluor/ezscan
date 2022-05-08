@@ -147,7 +147,6 @@ describe('should compute average image color', () => {
     expect(computedInverse).toEqual(inverseColor(expected));
   });
 
-
   test('pixel column of size 4 with negative start', () => {
     const sHeight = 255;
     const sWidth = 4;
