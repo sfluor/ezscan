@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import ZoomableCanvas from './ZoomableCanvas';
+import { useFullSize } from './FullScreenDiv';
 import { extractCoordinates } from './lib/eventhelpers';
 import { ImagePair, averageInverseColor, colorToCSS } from './lib/imgkit';
 import {
@@ -79,25 +80,23 @@ function InteractiveCanvas({
   onCornersChange,
   ...rest
 }: InteractiveCanvasProps) {
-  const canvasSize = scaleSize(
-    multiplySize(sizePct, {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    }),
-    1 / 100
-  );
+  const deviceSize = useFullSize() || {
+    width: window.innerWidth,
+    height: window.innerHeight,
+    boom: 1,
+  };
+
+  const canvasSize = scaleSize(multiplySize(sizePct, deviceSize), 1 / 100);
 
   const cornerRadius = 10;
   const clickCornerRadius = 10 * cornerRadius;
 
   // Compute the downscaling/upscaling ratio so that the image fully fits on the canvas.
   // We don't want to distort the image here so we just pick the maximum image dimension to compute the ratio.
-  let ratio: number;
-  if (image.data.width > image.data.height) {
-    ratio = canvasSize.width / image.data.width;
-  } else {
-    ratio = canvasSize.height / image.data.height;
-  }
+  const ratio: number = Math.min(
+    canvasSize.width / image.data.width,
+    canvasSize.height / image.data.height
+  );
 
   const imageMinDimension = Math.min(image.data.width, image.data.height);
   const colorBoxSizeComputation = Math.round(0.1 * imageMinDimension);
@@ -113,14 +112,13 @@ function InteractiveCanvas({
     );
   };
 
-  const realWidth = Math.round(ratio * image.data.width);
-  const realHeight = Math.round(ratio * image.data.height);
+  const scaledSize = scaleSize(image.data, ratio);
 
   const defaultCorners: Quadrilateral = [
     { x: 0, y: 0 },
-    { x: realWidth, y: 0 },
-    { x: realWidth, y: realHeight },
-    { x: 0, y: realHeight },
+    { x: scaledSize.width, y: 0 },
+    { x: scaledSize.width, y: scaledSize.height },
+    { x: 0, y: scaledSize.height },
   ];
 
   // See comment above but we have to resize the conrers before calling the callback hence this helper
@@ -193,8 +191,8 @@ function InteractiveCanvas({
       image.data.height,
       0,
       0,
-      realWidth,
-      realHeight
+      scaledSize.width,
+      scaledSize.height
     );
 
     drawCorners(context);
@@ -227,8 +225,8 @@ function InteractiveCanvas({
       // Sanity check that the shape selected by the user makes sense
       if (
         isQuadrilateralConvex(newCorners) &&
-        point.x < realWidth &&
-        point.y < realHeight
+        point.x < scaledSize.width &&
+        point.y < scaledSize.height
       ) {
         setCorners(newCorners);
         cornersChangedCallback(newCorners);
