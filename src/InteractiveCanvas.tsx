@@ -73,6 +73,8 @@ interface InteractiveCanvasProps {
  *
  * This is why we don't call onCornersChange directly on the stored corners but we first scale them back to the original image
  * dimension.
+ *
+ * TODO: center the image when it's not the same size as the screen (will need to center both verticaly and horizontally)
  */
 function InteractiveCanvas({
   sizePct,
