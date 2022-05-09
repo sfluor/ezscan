@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Div100vh from 'react-div-100vh';
+import FullScreenDiv from './FullScreenDiv';
 import InteractiveCanvas from './InteractiveCanvas';
 import {
   ImagePair,
@@ -71,7 +71,7 @@ function CameraInput() {
   };
 
   return (
-    <Div100vh style={{ width: '100vw' }}>
+    <FullScreenDiv>
       <div
         id="container"
         style={{
@@ -117,7 +117,7 @@ function CameraInput() {
         {image && <Button name="Crop" action={onCrop} />}
         {/* <Button name="Next" /> */}
       </footer>
-    </Div100vh>
+    </FullScreenDiv>
   );
 }
 
