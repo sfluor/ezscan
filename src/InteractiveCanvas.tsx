@@ -144,15 +144,8 @@ function InteractiveCanvas({
   const [selectedCorner, setSelectedCorner] = useState<number | null>(null);
 
   const drawCorners = (context: CanvasRenderingContext2D) => {
-    corners.forEach(({ x, y }, index) => {
-      drawCircle(
-        context,
-        x,
-        y,
-        cornerRadius,
-        computeInverseColor({ x, y }),
-        index === selectedCorner ? 8 : 4
-      );
+    corners.forEach(({ x, y }) => {
+      drawCircle(context, x, y, cornerRadius, computeInverseColor({ x, y }), 4);
     });
   };
 

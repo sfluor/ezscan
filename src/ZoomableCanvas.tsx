@@ -91,8 +91,8 @@ function ZoomableCanvas(props: ZoomableCanvasProps) {
   ) => {
     draw(context, width, height);
     if (zoom.visible) {
-      // Take min(20% of image, 50px) as the zoom box size
-      const zoomBoxDimension = Math.max(50, Math.min(width, height) * 0.2);
+      // Take min(20% of image, 100px) as the zoom box size
+      const zoomBoxDimension = Math.max(100, Math.min(width, height) * 0.2);
       const zoomBoxSize = { width: zoomBoxDimension, height: zoomBoxDimension };
       const zoomPadding = zoomBoxDimension / 2;
 
