@@ -21,3 +21,8 @@ body {
   color: #fffffe;
   font-weight: 700;
 }
+
+/* Trick from https://github.com/marella/material-design-icons/tree/main/svg#styling to style svgs*/
+svg {
+  fill: currentColor;
+}

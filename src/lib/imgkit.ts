@@ -1,6 +1,11 @@
 /* eslint no-param-reassign: "error" */
 import { Size, Quadrilateral, Point } from './geometry';
 
+export enum Direction {
+  Left = 1,
+  Right,
+}
+
 // Exposes R / G / B color interfaces
 // Values are ranging from 0 to 255
 export interface Color {
@@ -25,6 +30,9 @@ export interface ImagePair {
 
 // Global converter used to do conversions from/to Image/ImageData
 const CONVERTER = document.createElement('canvas');
+
+// Canvas used to rotate elements
+const ROTATER = document.createElement('canvas');
 
 // Convert an Image into an ImageData using a hidden canvas
 function imageToImageData(img: HTMLImageElement): ImageData {
@@ -457,6 +465,36 @@ function distortImage(img: ImageData, srcCorners: Quadrilateral): ImageData {
   );
 }
 
+// TODO: this could probably made wayyy faster
+function rotateImage(
+  img: ImagePair,
+  direction: Direction,
+  callback: (pair: ImagePair) => void
+) {
+  // Use squared max dimension for canvas size since we will trim at the end anyway
+  ROTATER.width = img.data.height;
+  ROTATER.height = img.data.width;
+
+  const ctx = ROTATER.getContext('2d') as CanvasRenderingContext2D;
+
+  // Determine the sign of the rotation
+  const sign = direction === Direction.Left ? -1 : 1;
+
+  ctx.translate(ROTATER.width / 2, ROTATER.height / 2);
+  ctx.rotate((sign * Math.PI) / 2);
+  ctx.drawImage(img.element, -img.data.width / 2, -img.data.height / 2);
+
+  const image = new Image();
+  image.onload = function () {
+    callback({
+      element: image,
+      // we are swapping width and height here since the image got rotated
+      data: imageToImageData(image),
+    });
+  };
+  image.src = ROTATER.toDataURL();
+}
+
 // function simpleInterpolation(img, x, y, channels) {
 //   const start = pixelIndex(Math.round(x), Math.round(y));
 //
@@ -481,4 +519,5 @@ export {
   averageInverseColor,
   inverseColor,
   colorToCSS,
+  rotateImage,
 };

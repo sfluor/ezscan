@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { ReactComponent as Crop } from '@material-design-icons/svg/round/crop.svg';
+import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_left.svg';
+import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_right.svg';
 import FullScreenDiv from './FullScreenDiv';
 import InteractiveCanvas from './InteractiveCanvas';
 import {
@@ -6,18 +9,29 @@ import {
   distortImage,
   imageToImageData,
   openImageInNewTab,
+  rotateImage,
+  Direction,
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
 
 // Unstyled button component
-function Button({ name, action }: { name: string; action: () => void }) {
-  const lowerName = name.toLowerCase();
+function Button({
+  name,
+  action,
+  children,
+}: {
+  name: string;
+  children: React.ReactNode;
+  action: () => void;
+}) {
+  const lowerName = name.toLowerCase().replace(' ', '_');
 
   return (
     <button
       id={`${lowerName}-btn`}
       type="button"
       style={{
+        alignItems: 'center',
         background: 'none',
         border: 'none',
         color: 'inherit',
@@ -32,12 +46,9 @@ function Button({ name, action }: { name: string; action: () => void }) {
         textAlign: 'center',
       }}
       onClick={action}
+      onKeyDown={action}
     >
-      <img
-        style={{ height: '3vh' }}
-        src={`${process.env.PUBLIC_URL}/icons/${lowerName}.svg`}
-        alt={name}
-      />
+      {children}
       <span>{name}</span>
     </button>
   );
@@ -68,6 +79,10 @@ function CameraInput() {
     openImageInNewTab(
       distortImage((image as ImagePair).data, corners as Quadrilateral)
     );
+  };
+
+  const onRotate = (direction: Direction) => {
+    rotateImage(image as ImagePair, direction, setImage);
   };
 
   return (
@@ -113,9 +128,21 @@ function CameraInput() {
           alignItems: 'center',
         }}
       >
-        {/* <Button name="Back" /> */}
-        {image && <Button name="Crop" action={onCrop} />}
-        {/* <Button name="Next" /> */}
+        {image && (
+          <Button name="Rotate left" action={() => onRotate(Direction.Left)}>
+            <RotateLeft color="white" />
+          </Button>
+        )}
+        {image && (
+          <Button name="Crop" action={onCrop}>
+            <Crop color="white" />
+          </Button>
+        )}
+        {image && (
+          <Button name="Rotate right" action={() => onRotate(Direction.Right)}>
+            <RotateRight color="white" />
+          </Button>
+        )}
       </footer>
     </FullScreenDiv>
   );
