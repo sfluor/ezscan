@@ -15,6 +15,10 @@ import {
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
 
+// TODO: move colors to file
+const primaryColor = '#232946';
+const secondaryColor = 'white';
+
 const buttonStyle: React.CSSProperties = {
   alignItems: 'center',
   background: 'none',
@@ -31,6 +35,17 @@ const buttonStyle: React.CSSProperties = {
   textAlign: 'center',
 };
 
+function LandingDocumentation() {
+  return (
+    <div style={{ color: primaryColor }}>
+      <h2>Welcome on ezscan</h2>
+      <div>
+        To start scanning stuff hit the <b>Load</b> button below !
+      </div>
+    </div>
+  );
+}
+
 function FileInput({
   onChange,
 }: {
@@ -46,7 +61,7 @@ function FileInput({
         onChange={onChange}
         style={{ display: 'none' }}
       />
-      <Camera color="white" />
+      <Camera color={secondaryColor} />
       <span>Load</span>
     </label>
   );
@@ -110,7 +125,7 @@ function CameraInput() {
   };
 
   return (
-    <FullScreenDiv>
+    <FullScreenDiv style={{ display: 'flex', flexDirection: 'column' }}>
       <div
         id="container"
         style={{
@@ -118,12 +133,14 @@ function CameraInput() {
           height: '90%',
         }}
       >
-        {image && (
+        {image ? (
           <InteractiveCanvas
             sizePct={{ width: 100, height: 85 }}
             onCornersChange={setCorners}
             image={image}
           />
+        ) : (
+          <LandingDocumentation />
         )}
       </div>
       <footer
@@ -133,7 +150,7 @@ function CameraInput() {
           flexDirection: 'row',
           justifyContent: 'space-around',
           width: '100%',
-          backgroundColor: '#232946',
+          backgroundColor: primaryColor,
           height: '10%',
           alignItems: 'center',
         }}
@@ -147,17 +164,17 @@ function CameraInput() {
         />
         {image && (
           <Button name="Rotate left" action={() => onRotate(Direction.Left)}>
-            <RotateLeft color="white" />
+            <RotateLeft color={secondaryColor} />
           </Button>
         )}
         {image && (
           <Button name="Crop" action={onCrop}>
-            <Crop color="white" />
+            <Crop color={secondaryColor} />
           </Button>
         )}
         {image && (
           <Button name="Rotate right" action={() => onRotate(Direction.Right)}>
-            <RotateRight color="white" />
+            <RotateRight color={secondaryColor} />
           </Button>
         )}
       </footer>
