@@ -58,6 +58,8 @@ interface InteractiveCanvasProps {
 
   /** Callback on selected corners change, the provided coordinates are in the image dimension space */
   onCornersChange: (corners: Quadrilateral) => void;
+
+  style: React.CSSProperties;
 }
 
 /*
@@ -80,6 +82,7 @@ function InteractiveCanvas({
   sizePct,
   image,
   onCornersChange,
+  style,
   ...rest
 }: InteractiveCanvasProps) {
   const deviceSize = useFullSize() || {
@@ -238,7 +241,7 @@ function InteractiveCanvas({
       onMouseUp={handleMouseUp}
       onTouchEnd={handleMouseUp}
       onMove={handleMouseMove}
-      style={{ ...sizeToPixels(canvasSize), touchAction: 'none' }}
+      style={{ ...style, ...sizeToPixels(canvasSize), touchAction: 'none' }}
       draw={draw}
       {...rest}
     />

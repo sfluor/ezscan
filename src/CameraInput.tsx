@@ -15,6 +15,8 @@ import {
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
 
+// For icons: https://marella.me/material-design-icons/demo/svg/
+
 // TODO: move colors to file
 const primaryColor = '#232946';
 const secondaryColor = 'white';
@@ -33,6 +35,8 @@ const buttonStyle: React.CSSProperties = {
   outline: 'inherit',
   padding: '1vh 2vh',
   textAlign: 'center',
+  animationName: 'slideLeft,fadeIn',
+  animationDuration: '500ms',
 };
 
 function LandingDocumentation() {
@@ -137,6 +141,10 @@ function CameraInput() {
           <InteractiveCanvas
             sizePct={{ width: 100, height: 85 }}
             onCornersChange={setCorners}
+            style={{
+              animationName: 'fadeIn',
+              animationDuration: '500ms',
+            }}
             image={image}
           />
         ) : (
