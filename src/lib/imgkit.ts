@@ -485,7 +485,7 @@ function rotateImage(
   ctx.drawImage(img.element, -img.data.width / 2, -img.data.height / 2);
 
   const image = new Image();
-  image.onload = function () {
+  image.onload = () => {
     callback({
       element: image,
       // we are swapping width and height here since the image got rotated

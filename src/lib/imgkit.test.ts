@@ -362,7 +362,10 @@ test.each(distortTests)(
     const promise = new Promise((resolve, reject) => {
       const readImage = (imgpath: string) => `file://${imgpath}`;
 
-      const newImage = (imgpath: string, callback: any) => {
+      const newImage = (
+        imgpath: string,
+        callback: (i: HTMLImageElement) => void
+      ) => {
         const image = new Image();
         image.onload = () => callback(image);
         image.onerror = () => {

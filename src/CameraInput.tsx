@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ReactComponent as Crop } from '@material-design-icons/svg/round/crop.svg';
 import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_left.svg';
 import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_right.svg';
+import { ReactComponent as Camera } from '@material-design-icons/svg/round/camera.svg';
 import FullScreenDiv from './FullScreenDiv';
 import InteractiveCanvas from './InteractiveCanvas';
 import {
@@ -13,6 +14,43 @@ import {
   Direction,
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
+
+const buttonStyle: React.CSSProperties = {
+  alignItems: 'center',
+  background: 'none',
+  border: 'none',
+  color: 'inherit',
+  cursor: 'pointer',
+  display: 'flex',
+  flexDirection: 'column',
+  font: 'inherit',
+  justifyContent: 'center',
+  lineHeight: '3vh',
+  outline: 'inherit',
+  padding: '1vh 2vh',
+  textAlign: 'center',
+};
+
+function FileInput({
+  onChange,
+}: {
+  onChange: React.ChangeEventHandler<HTMLInputElement>;
+}) {
+  return (
+    <label htmlFor="camera" style={buttonStyle}>
+      <input
+        type="file"
+        name="camera"
+        id="camera"
+        accept="image/*"
+        onChange={onChange}
+        style={{ display: 'none' }}
+      />
+      <Camera color="white" />
+      <span>Load</span>
+    </label>
+  );
+}
 
 // Unstyled button component
 function Button({
@@ -30,21 +68,7 @@ function Button({
     <button
       id={`${lowerName}-btn`}
       type="button"
-      style={{
-        alignItems: 'center',
-        background: 'none',
-        border: 'none',
-        color: 'inherit',
-        cursor: 'pointer',
-        display: 'flex',
-        flexDirection: 'column',
-        font: 'inherit',
-        justifyContent: 'center',
-        lineHeight: '3vh',
-        outline: 'inherit',
-        padding: '1vh 2vh',
-        textAlign: 'center',
-      }}
+      style={buttonStyle}
       onClick={action}
       onKeyDown={action}
     >
@@ -94,20 +118,6 @@ function CameraInput() {
           height: '90%',
         }}
       >
-        <input
-          type="file"
-          name="camera"
-          id="camera"
-          accept="image/*"
-          onChange={(event) => {
-            if (event.target.files) {
-              reader.readAsDataURL(event.target.files[0]);
-            }
-          }}
-          style={{
-            height: '5%',
-          }}
-        />
         {image && (
           <InteractiveCanvas
             sizePct={{ width: 100, height: 85 }}
@@ -128,6 +138,13 @@ function CameraInput() {
           alignItems: 'center',
         }}
       >
+        <FileInput
+          onChange={(event) => {
+            if (event.target.files) {
+              reader.readAsDataURL(event.target.files[0]);
+            }
+          }}
+        />
         {image && (
           <Button name="Rotate left" action={() => onRotate(Direction.Left)}>
             <RotateLeft color="white" />

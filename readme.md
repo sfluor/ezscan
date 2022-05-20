@@ -20,6 +20,9 @@ To format the code you can do `yarn lint-fix`
 ## Todos
 
 
+- center image
+- multiple files
+- show loading
 - translation in french
 - fix the favicon
 - use a web worker for distorting
