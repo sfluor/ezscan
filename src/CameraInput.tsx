@@ -176,13 +176,13 @@ function CameraInput() {
           </Button>
         )}
         {image && (
-          <Button name="Crop" action={onCrop}>
-            <Crop color={secondaryColor} />
+          <Button name="Rotate right" action={() => onRotate(Direction.Right)}>
+            <RotateRight color={secondaryColor} />
           </Button>
         )}
         {image && (
-          <Button name="Rotate right" action={() => onRotate(Direction.Right)}>
-            <RotateRight color={secondaryColor} />
+          <Button name="Crop" action={onCrop}>
+            <Crop color={secondaryColor} />
           </Button>
         )}
       </footer>
