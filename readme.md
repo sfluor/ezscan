@@ -22,13 +22,11 @@ To format the code you can do `yarn lint-fix`
 
 - figure out why we can't load big images
 - center image
-- multiple files
 - show loading
 - translation in french
 - fix the favicon
 - use a web worker for distorting
 - images imported instead of public dir
-- allow to reorder images / have more than one images / delete images
 - auto detect borders
 - precommit hooks
 - export to PDF

@@ -8,6 +8,7 @@ import ImagesList, { NamedImage } from './ImagesList';
 
 function App() {
   const [images, setImages] = useState<Array<NamedImage>>([]);
+  const [count, setCount] = useState<number>(1);
 
   const navigate = useNavigate();
 
@@ -34,8 +35,9 @@ function App() {
               onAdd={(image) => {
                 const newImages = [
                   ...images,
-                  { ...image, name: `image-${images.length + 1}` },
+                  { ...image, name: `image-${count}` },
                 ];
+                setCount(count + 1);
                 setImages(newImages);
                 navigate('/pages', { replace: true });
               }}
@@ -44,7 +46,13 @@ function App() {
         />
         <Route
           path="/pages"
-          element={<ImagesList images={images} onReset={onReset} />}
+          element={
+            <ImagesList
+              images={images}
+              onReset={onReset}
+              setImages={setImages}
+            />
+          }
         />
       </Routes>
     </div>
