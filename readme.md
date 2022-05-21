@@ -20,6 +20,7 @@ To format the code you can do `yarn lint-fix`
 ## Todos
 
 
+- figure out why we can't load big images
 - center image
 - multiple files
 - show loading

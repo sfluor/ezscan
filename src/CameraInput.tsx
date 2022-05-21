@@ -12,7 +12,6 @@ import {
   distortImage,
   imageToImageData,
   imageDataToImage,
-  openImageInNewTab,
   rotateImage,
   Direction,
 } from './lib/imgkit';
@@ -98,7 +97,7 @@ function Button({
   );
 }
 
-function CameraInput() {
+function CameraInput({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   const [images, setImages] = useState<Array<ImagePair>>([]);
   const [corners, setCorners] = useState<Quadrilateral | null>(null);
   const reader = new FileReader();
@@ -141,9 +140,7 @@ function CameraInput() {
     setImages(images.slice(0, -1) || []);
   };
 
-  const onNext = () => {
-    openImageInNewTab((currentImage as ImagePair).data);
-  };
+  const onNext = () => onAdd(currentImage as ImagePair);
 
   const onRotate = (direction: Direction) => {
     rotateImage(currentImage as ImagePair, direction, (rotated) =>
