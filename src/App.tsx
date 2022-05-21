@@ -4,7 +4,7 @@ import './App.css';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 // TODO: rename camera input
 import CameraInput from './CameraInput';
-import PagesList, { NamedImage } from './PagesList';
+import ImagesList, { NamedImage } from './ImagesList';
 
 function App() {
   const [images, setImages] = useState<Array<NamedImage>>([]);
@@ -44,7 +44,7 @@ function App() {
         />
         <Route
           path="/pages"
-          element={<PagesList images={images} onReset={onReset} />}
+          element={<ImagesList images={images} onReset={onReset} />}
         />
       </Routes>
     </div>

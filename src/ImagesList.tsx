@@ -5,7 +5,7 @@ import colors from './colors';
 
 export type NamedImage = ImagePair & { name: string };
 
-function PagesList({
+function ImagesList({
   images,
   onReset,
 }: {
@@ -51,4 +51,4 @@ function PagesList({
   );
 }
 
-export default PagesList;
+export default ImagesList;
