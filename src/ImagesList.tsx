@@ -1,4 +1,5 @@
 import React from 'react';
+import { jsPDF } from 'jspdf';
 import { Link } from 'react-router-dom';
 import {
   DragDropContext,
@@ -95,6 +96,25 @@ function ImagesList({
     setImages(newImages);
   };
 
+  const onSave = () => {
+    // eslint-disable-next-line new-cap
+    const doc = new jsPDF();
+    const padding = 10;
+    // TODO: properly pick maxdimension
+    images.forEach((image) => {
+      doc.addImage(
+        image.element,
+        'jpeg',
+        padding,
+        padding,
+        doc.internal.pageSize.getWidth() - 2 * padding,
+        doc.internal.pageSize.getHeight() - 2 * padding
+      );
+      doc.addPage();
+    });
+    doc.save('capture.pdf');
+  };
+
   return (
     <div>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -126,6 +146,9 @@ function ImagesList({
       <Link to="/capture"> Add more </Link>
       <button type="button" onClick={onReset}>
         Reset
+      </button>
+      <button type="button" onClick={onSave}>
+        Save as PDF
       </button>
     </div>
   );

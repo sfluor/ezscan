@@ -21,6 +21,8 @@ To format the code you can do `yarn lint-fix`
 
 
 - figure out why we can't load big images
+- fix PDF save if the image is horizontal
+- tune PDF parameters (sizes / more than one image per page. etc)
 - center image
 - show loading
 - translation in french
@@ -29,7 +31,6 @@ To format the code you can do `yarn lint-fix`
 - images imported instead of public dir
 - auto detect borders
 - precommit hooks
-- export to PDF
 - compress images
 - friendlier UI (home page, list of screens, etc.)
 - favicon
