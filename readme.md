@@ -22,6 +22,7 @@ To format the code you can do `yarn lint-fix`
 
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal
+- name PDF output
 - tune PDF parameters (sizes / more than one image per page. etc)
 - center image
 - show loading
