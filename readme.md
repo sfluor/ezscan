@@ -22,6 +22,7 @@ To format the code you can do `yarn lint-fix`
 
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal
+- show that images list is draggable
 - name PDF output
 - tune PDF parameters (sizes / more than one image per page. etc)
 - center image
@@ -30,12 +31,11 @@ To format the code you can do `yarn lint-fix`
 - fix the favicon
 - use a web worker for distorting
 - images imported instead of public dir
-- auto detect borders
+- auto detect borders on submitted image
 - precommit hooks
-- compress images
+- compress images when saving PDF ?
 - friendlier UI (home page, list of screens, etc.)
 - favicon
 - manifest.json for SPA like on android
-- bundle JSpdf correctly
 - fix camera input on firefox mobile
 - performances
