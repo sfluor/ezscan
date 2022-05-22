@@ -17,7 +17,10 @@ function PDFSaver({
     const doc = new jsPDF();
     const padding = 10;
     // TODO: properly pick maxdimension
-    images.forEach((image) => {
+    images.forEach((image, index) => {
+      if (index > 0) {
+        doc.addPage();
+      }
       doc.addImage(
         image.element,
         'jpeg',
@@ -26,7 +29,6 @@ function PDFSaver({
         doc.internal.pageSize.getWidth() - 2 * padding,
         doc.internal.pageSize.getHeight() - 2 * padding
       );
-      doc.addPage();
     });
     doc.save('capture.pdf');
     onReset();
