@@ -16,7 +16,6 @@ function Button({
   horizontal?: boolean;
   filled?: boolean;
 }) {
-  const lowerName = name.toLowerCase().replace(' ', '_');
   const [pressed, setPressed] = useState<boolean>(false);
 
   const onPressEnd = () => {
@@ -66,7 +65,6 @@ function Button({
 
   return (
     <button
-      id={`${lowerName}-btn`}
       type="button"
       style={buttonStyle}
       // Press events
