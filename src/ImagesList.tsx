@@ -1,5 +1,4 @@
 import React from 'react';
-import { jsPDF } from 'jspdf';
 import { useNavigate } from 'react-router-dom';
 import {
   DragDropContext,
@@ -16,6 +15,7 @@ import { ImagePair } from './lib/imgkit';
 import Footer from './Footer';
 import FooterButton from './FooterButton';
 import colors from './colors';
+import routes from './routes';
 
 export type NamedImage = ImagePair & { name: string };
 
@@ -129,25 +129,6 @@ function ImagesList({
     setImages(newImages);
   };
 
-  const onSave = () => {
-    // eslint-disable-next-line new-cap
-    const doc = new jsPDF();
-    const padding = 10;
-    // TODO: properly pick maxdimension
-    images.forEach((image) => {
-      doc.addImage(
-        image.element,
-        'jpeg',
-        padding,
-        padding,
-        doc.internal.pageSize.getWidth() - 2 * padding,
-        doc.internal.pageSize.getHeight() - 2 * padding
-      );
-      doc.addPage();
-    });
-    doc.save('capture.pdf');
-  };
-
   const navigate = useNavigate();
 
   return (
@@ -182,14 +163,17 @@ function ImagesList({
         <FooterButton
           // TODO: this should ask for capture directly instead of going back to the capture page
           name="Add"
-          action={() => navigate('/capture', { replace: true })}
+          action={() => navigate(routes.editor, { replace: true })}
         >
           <AddAPhoto color={colors.secondary} />
         </FooterButton>
         <FooterButton name="Reset" action={onReset}>
           <Delete color={colors.secondary} />
         </FooterButton>
-        <FooterButton name="Save" action={onSave}>
+        <FooterButton
+          name="Save"
+          action={() => navigate(routes.save, { replace: true })}
+        >
           <Save color={colors.secondary} />
         </FooterButton>
       </Footer>

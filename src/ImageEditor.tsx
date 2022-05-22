@@ -20,7 +20,6 @@ import Footer from './Footer';
 import FooterButton, { footerButtonStyle } from './FooterButton';
 import colors from './colors';
 
-// For icons: https://marella.me/material-design-icons/demo/svg/
 function FileInput({
   onChange,
 }: {
