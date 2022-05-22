@@ -1,8 +1,12 @@
 import React from 'react';
 import { jsPDF } from 'jspdf';
 import { ReactComponent as Download } from '@material-design-icons/svg/round/download.svg';
-import { ReactComponent as Clear } from '@material-design-icons/svg/round/clear.svg';
+import { ReactComponent as Delete } from '@material-design-icons/svg/round/delete.svg';
+import { ReactComponent as ArrowBack } from '@material-design-icons/svg/round/arrow_back.svg';
+import { useNavigate } from 'react-router-dom';
 import { NamedImage } from './ImagesList';
+import Footer from './Footer';
+import FooterButton from './FooterButton';
 import Button from './Button';
 
 function PDFSaver({
@@ -12,6 +16,8 @@ function PDFSaver({
   images: Array<NamedImage>;
   onReset: () => void;
 }) {
+  const navigate = useNavigate();
+
   const onDownload = () => {
     // eslint-disable-next-line new-cap
     const doc = new jsPDF();
@@ -34,23 +40,25 @@ function PDFSaver({
     onReset();
   };
   return (
-    <div style={{ margin: '20px' }}>
-      <Button
-        action={onDownload}
-        name="Download"
-        icon={<Download />}
-        horizontal
-        filled
-      />
-      <br />
-      <Button
-        action={onReset}
-        name="Reset"
-        icon={<Clear />}
-        horizontal
-        filled
-      />
-    </div>
+    <>
+      <div style={{ margin: '20px' }}>
+        <Button
+          action={onDownload}
+          name="Download"
+          icon={<Download />}
+          horizontal
+          filled
+        />
+      </div>
+      <Footer>
+        <FooterButton
+          name="Back"
+          action={() => navigate(-1)}
+          icon={<ArrowBack />}
+        />
+        <FooterButton name="Reset" action={onReset} icon={<Delete />} />
+      </Footer>
+    </>
   );
 }
 
