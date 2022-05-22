@@ -181,7 +181,8 @@ function ImagesList({
         }}
       >
         <h2>
-          Scanned pages ({images.length} {images.length > 1 ? 'pages' : 'page'})
+          📸 Scanned pages ({images.length}{' '}
+          {images.length > 1 ? 'pages' : 'page'})
         </h2>
         <span>
           You can re-order the scans by dragging them (you can also remove the
