@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Crop } from '@material-design-icons/svg/round/crop.svg';
 import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_90_degrees_ccw.svg';
 import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_90_degrees_cw.svg';
@@ -18,6 +19,7 @@ import {
 import { Quadrilateral } from './lib/geometry';
 import Footer from './Footer';
 import FooterButton from './FooterButton';
+import routes from './routes';
 
 function FileInput({
   triggerUpload,
@@ -105,7 +107,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
     htmlImage.src = imageDataToImage(distorted);
   };
 
-  const onPrevious = () => {
+  const onUndo = () => {
     setImages(images.slice(0, -1) || []);
   };
 
@@ -116,6 +118,8 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
       setImages([...images, rotated])
     );
   };
+
+  const navigate = useNavigate();
 
   return (
     <>
@@ -148,11 +152,11 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
         {imageIsLoaded && (
           <>
             {hasMoreThanOneImage ? (
-              <FooterButton name="Undo" action={onPrevious} icon={<Undo />} />
+              <FooterButton name="Undo" action={onUndo} icon={<Undo />} />
             ) : (
               <FooterButton
                 name="Back"
-                action={onPrevious}
+                action={() => navigate(routes.home)}
                 icon={<ArrowBack />}
               />
             )}

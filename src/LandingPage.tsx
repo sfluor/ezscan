@@ -35,7 +35,13 @@ function LandingPage() {
 
   return (
     <div
-      style={{ color: colors.tertiary, padding: '5% 10%', overflowY: 'scroll' }}
+      style={{
+        color: colors.tertiary,
+        padding: '5% 10%',
+        overflowY: 'scroll',
+        animationName: 'fadeIn',
+        animationDuration: '1s',
+      }}
     >
       <h1>Welcome on Easy Scan !</h1>
       <span>
@@ -67,9 +73,16 @@ function LandingPage() {
         </span>
         <ul>
           {entries.map((entry, index) => (
-            // This is a static list so it's ok to use the index as the key
-            // eslint-disable-next-line react/no-array-index-key
-            <li key={index} style={{ marginBottom: '15px' }}>
+            <li
+              // This is a static list so it's ok to use the index as the key
+              // eslint-disable-next-line react/no-array-index-key
+              key={index}
+              style={{
+                marginBottom: '15px',
+                animationName: 'fadeIn,slideLeft',
+                animationDuration: `${1000 + 250 * index}ms`,
+              }}
+            >
               {entry}
             </li>
           ))}
