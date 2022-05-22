@@ -34,7 +34,9 @@ function LandingPage() {
   const navigate = useNavigate();
 
   return (
-    <div style={{ color: colors.tertiary, padding: '5% 10%' }}>
+    <div
+      style={{ color: colors.tertiary, padding: '5% 10%', overflowY: 'scroll' }}
+    >
       <h1>Welcome on Easy Scan !</h1>
       <span>
         Easy Scan is a tool to scan and edit multiple images and save them as a
