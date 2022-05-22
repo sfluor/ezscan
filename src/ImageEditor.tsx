@@ -35,7 +35,7 @@ function FileInput({
         onChange={onChange}
         style={{ display: 'none' }}
       />
-      <Camera color={colors.secondary} />
+      <Camera color={colors.tertiary} />
       <span>Load</span>
     </label>
   );
@@ -128,30 +128,30 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
           <>
             {hasMoreThanOneImage ? (
               <FooterButton name="Undo" action={onPrevious}>
-                <Undo color={colors.secondary} />
+                <Undo color={colors.tertiary} />
               </FooterButton>
             ) : (
               <FooterButton name="Previous" action={onPrevious}>
-                <ArrowBack color={colors.secondary} />
+                <ArrowBack color={colors.tertiary} />
               </FooterButton>
             )}
             <FooterButton
               name="Rotate left"
               action={() => onRotate(Direction.Left)}
             >
-              <RotateLeft color={colors.secondary} />
+              <RotateLeft color={colors.tertiary} />
             </FooterButton>
             <FooterButton
               name="Rotate right"
               action={() => onRotate(Direction.Right)}
             >
-              <RotateRight color={colors.secondary} />
+              <RotateRight color={colors.tertiary} />
             </FooterButton>
             <FooterButton name="Crop" action={onCrop}>
-              <Crop color={colors.secondary} />
+              <Crop color={colors.tertiary} />
             </FooterButton>
             <FooterButton name="Next" action={onNext}>
-              <ArrowForward color={colors.secondary} />
+              <ArrowForward color={colors.tertiary} />
             </FooterButton>
           </>
         )}

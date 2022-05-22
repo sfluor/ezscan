@@ -29,13 +29,13 @@ function DragIndicator({ style }: { style: React.CSSProperties }) {
         alignItems: 'center',
       }}
     >
-      <DragIndicatorIcon color={colors.secondary} />
+      <DragIndicatorIcon color={colors.tertiary} />
       <DragIndicatorIcon
-        color={colors.secondary}
+        color={colors.tertiary}
         // Negative margin to pack the 3 indicator icons together
         style={{ margin: '-5px' }}
       />
-      <DragIndicatorIcon color={colors.secondary} />
+      <DragIndicatorIcon color={colors.tertiary} />
     </div>
   );
 }
@@ -61,8 +61,9 @@ function DraggableImageItem({
             margin: '10px',
             display: 'flex',
             alignItems: 'center',
-            border: `${snapshot.isDragging ? '2px dashed' : '1px solid'} ${
-              colors.secondary
+            backgroundColor: colors.primary,
+            border: `2px ${snapshot.isDragging ? 'dashed' : 'solid'} ${
+              snapshot.isDragging ? colors.lightSecondary : colors.tertiary
             }`,
             ...provided.draggableProps.style,
           }}
@@ -79,7 +80,7 @@ function DraggableImageItem({
           />
           <span
             style={{
-              color: colors.secondary,
+              color: colors.tertiary,
               paddingLeft: '20px',
             }}
           >
@@ -133,6 +134,7 @@ function ImagesList({
 
   return (
     <>
+      <h4> You can drag and drop images to re-arrange them</h4>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="images-list">
           {(provided) => (
@@ -165,16 +167,16 @@ function ImagesList({
           name="Add"
           action={() => navigate(routes.editor, { replace: true })}
         >
-          <AddAPhoto color={colors.secondary} />
+          <AddAPhoto color={colors.tertiary} />
         </FooterButton>
         <FooterButton name="Reset" action={onReset}>
-          <Delete color={colors.secondary} />
+          <Delete color={colors.tertiary} />
         </FooterButton>
         <FooterButton
           name="Save"
           action={() => navigate(routes.save, { replace: true })}
         >
-          <Save color={colors.secondary} />
+          <Save color={colors.tertiary} />
         </FooterButton>
       </Footer>
     </>

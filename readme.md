@@ -17,6 +17,10 @@ To run tests you can do `yarn test`
 
 To format the code you can do `yarn lint-fix`
 
+### Dev
+
+To find icons: https://marella.me/material-design-icons/demo/svg/
+
 ## Todos
 
 
@@ -33,8 +37,8 @@ To format the code you can do `yarn lint-fix`
 - confirmation on previous
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal
-- show that images list is draggable
 - name PDF output
+- add reaction to buttons
 - tune PDF parameters (sizes / more than one image per page. etc)
 - center image
 - show loading

@@ -12,7 +12,7 @@ import routes from './routes';
 
 function LandingDocumentation() {
   return (
-    <div style={{ color: colors.secondary }}>
+    <div style={{ color: colors.tertiary }}>
       <h2>Welcome on ezscan</h2>
       <div>
         To start scanning stuff hit the <b>Load</b> button below !
@@ -38,8 +38,8 @@ function App() {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        color: colors.secondary,
-        backgroundColor: colors.primary,
+        color: colors.tertiary,
+        backgroundColor: colors.lightPrimary,
       }}
     >
       <Routes>
