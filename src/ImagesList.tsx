@@ -164,13 +164,13 @@ function ImagesList({
         <FooterButton
           // TODO: this should ask for capture directly instead of going back to the capture page
           name="Add"
-          action={() => navigate(routes.editor, { replace: true })}
+          action={() => navigate(routes.editor)}
           icon={<AddAPhoto />}
         />
         <FooterButton name="Reset" action={onReset} icon={<Delete />} />
         <FooterButton
           name="Save"
-          action={() => navigate(routes.save, { replace: true })}
+          action={() => navigate(routes.save)}
           icon={<Save />}
         />
       </Footer>

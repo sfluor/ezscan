@@ -63,7 +63,7 @@ function App() {
                 ];
                 setCount(count + 1);
                 setImages(newImages);
-                navigate(routes.list, { replace: true });
+                navigate(routes.list);
               }}
             />
           }

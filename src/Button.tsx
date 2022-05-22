@@ -56,8 +56,8 @@ function Button({
     display: 'flex',
     flexDirection: horizontal ? 'row' : 'column',
     font: 'inherit',
-    justifyContent: 'center',
-    lineHeight: '3vh',
+    justifyContent: 'space-between',
+    height: '100%',
     outline: 'inherit',
     padding: '1vh 2vh',
     textAlign: 'center',
@@ -82,7 +82,7 @@ function Button({
       onBlur={onCancel}
     >
       {React.cloneElement(icon, { color: iconColor })}
-      <span>{name}</span>
+      <span style={{ fontSize: '12px' }}>{name}</span>
     </button>
   );
 }
