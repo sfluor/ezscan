@@ -5,4 +5,5 @@ export default {
   secondary: '#D90429',
   lightSecondary: '#EF233C',
   tertiary: '#EDF2F4',
+  lightTertiary: 'white',
 };

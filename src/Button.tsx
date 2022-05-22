@@ -31,7 +31,8 @@ function Button({
     setPressed(false);
   };
 
-  const color = pressed ? colors.lightSecondary : colors.tertiary;
+  const iconColor = pressed ? colors.secondary : colors.tertiary;
+  const color = pressed ? colors.lightSecondary : colors.lightTertiary;
   let border;
   let backgroundColor;
 
@@ -80,7 +81,7 @@ function Button({
       onTouchCancel={onCancel}
       onBlur={onCancel}
     >
-      {React.cloneElement(icon, { color })}
+      {React.cloneElement(icon, { color: iconColor })}
       <span>{name}</span>
     </button>
   );

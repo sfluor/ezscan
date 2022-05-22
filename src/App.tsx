@@ -59,7 +59,7 @@ function App() {
               onAdd={(image) => {
                 const newImages = [
                   ...images,
-                  { ...image, name: `image-${count}` },
+                  { ...image, name: `Image ${count}` },
                 ];
                 setCount(count + 1);
                 setImages(newImages);

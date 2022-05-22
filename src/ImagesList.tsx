@@ -78,6 +78,7 @@ function DraggableImageItem({
             style={{
               maxWidth: '100px',
               maxHeight: '100px',
+              border: `1px solid ${colors.tertiary}`,
             }}
           />
           <span

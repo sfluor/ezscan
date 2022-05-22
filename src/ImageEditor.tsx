@@ -138,7 +138,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
               <FooterButton name="Undo" action={onPrevious} icon={<Undo />} />
             ) : (
               <FooterButton
-                name="Previous"
+                name="Back"
                 action={onPrevious}
                 icon={<ArrowBack />}
               />
