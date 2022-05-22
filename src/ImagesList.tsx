@@ -134,9 +134,16 @@ function ImagesList({
   onReset: () => void;
   setImages: (images: Array<NamedImage>) => void;
 }) {
-  const date = new Date();
-  const dateString = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}-${date.getMilliseconds()}`;
-  const [filename, setFilename] = useState<string>(`scan-${dateString}`);
+  const dateString = new Date()
+    .toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    })
+    .replace(/\//g, '-');
+  const [filename, setFilename] = useState<string>(
+    `scan-${dateString}-${Math.round(Math.random() * 1_000)}`
+  );
 
   const onDragEnd = (result: DropResult) => {
     // Outside the authorized boundaries
