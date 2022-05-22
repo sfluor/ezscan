@@ -53,7 +53,7 @@ function FileInput({
   );
 }
 
-function CameraInput({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
+function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   const [images, setImages] = useState<Array<ImagePair>>([]);
   const [corners, setCorners] = useState<Quadrilateral | null>(null);
   const reader = new FileReader();
@@ -165,4 +165,4 @@ function CameraInput({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   );
 }
 
-export default CameraInput;
+export default ImageEditor;

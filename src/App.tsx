@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import './App.css';
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 // TODO: rename camera input
-import CameraInput from './CameraInput';
+import ImageEditor from './ImageEditor';
 import ImagesList, { NamedImage } from './ImagesList';
 import FullScreenDiv from './FullScreenDiv';
 
@@ -33,7 +33,7 @@ function App() {
         <Route
           path="/capture"
           element={
-            <CameraInput
+            <ImageEditor
               onAdd={(image) => {
                 const newImages = [
                   ...images,
