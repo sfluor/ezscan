@@ -24,6 +24,10 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 ## Todos
 
 
+- app works offline + 
+```jsx
+    <span> 📶 Works offline: you don't need to be connected to internet, once you visited the website once you can keep using the app.</span>
+```
 - add version hash on the footer
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal
