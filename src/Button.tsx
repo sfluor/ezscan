@@ -19,26 +19,31 @@ function Button({
   const [pressed, setPressed] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
 
-  const onPressEnd = () => {
+  const onPressEnd = (event: React.SyntheticEvent) => {
+    event.preventDefault();
     setPressed(false);
     action();
   };
 
-  const onHover = () => {
+  const onHover = (event: React.SyntheticEvent) => {
+    event.preventDefault();
     setHovered(true);
   };
 
-  const onHoverEnd = () => {
+  const onHoverEnd = (event: React.SyntheticEvent) => {
+    event.preventDefault();
     setHovered(false);
   };
 
-  const onPress = () => {
+  const onPress = (event: React.SyntheticEvent) => {
+    event.preventDefault();
     setPressed(true);
   };
 
-  const onCancel = () => {
+  const onCancel = (event: React.SyntheticEvent) => {
+    event.preventDefault();
     setPressed(false);
-    onHoverEnd();
+    onHoverEnd(event);
   };
 
   const iconColor = pressed ? colors.secondary : colors.tertiary;

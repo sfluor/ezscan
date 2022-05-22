@@ -22,6 +22,7 @@ import reorder from './lib/arrayhelpers';
 export type NamedImage = ImagePair & { name: string };
 
 function DragIndicator({ style }: { style: React.CSSProperties }) {
+  const fontSize = '22px';
   return (
     <div
       style={{
@@ -31,13 +32,13 @@ function DragIndicator({ style }: { style: React.CSSProperties }) {
         alignItems: 'center',
       }}
     >
-      <DragIndicatorIcon color={colors.tertiary} />
+      <DragIndicatorIcon color={colors.tertiary} style={{ fontSize }} />
       <DragIndicatorIcon
         color={colors.tertiary}
         // Negative margin to pack the 3 indicator icons together
-        style={{ margin: '-5px' }}
+        style={{ margin: '-5px', fontSize }}
       />
-      <DragIndicatorIcon color={colors.tertiary} />
+      <DragIndicatorIcon color={colors.tertiary} style={{ fontSize }} />
     </div>
   );
 }
