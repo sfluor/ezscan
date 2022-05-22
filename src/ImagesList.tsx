@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   DragDropContext,
@@ -129,6 +129,13 @@ function ImagesList({
   };
 
   const navigate = useNavigate();
+
+  // Redirect to home page if we have no images
+  useEffect(() => {
+    if (!images || images.length === 0) {
+      navigate(routes.home);
+    }
+  }, []);
 
   return (
     <>
