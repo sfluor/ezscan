@@ -1,25 +1,15 @@
 import React, { useState } from 'react';
 
 import './App.css';
-import { Routes, Route, Link, Navigate, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 // TODO: rename camera input
 import ImageEditor from './ImageEditor';
 import ImagesList, { NamedImage } from './ImagesList';
+import LandingPage from './LandingPage';
 import FullScreenDiv from './FullScreenDiv';
 import PDFSaver from './PDFSaver';
 import colors from './colors';
 import routes from './routes';
-
-function LandingDocumentation() {
-  return (
-    <div style={{ color: colors.tertiary }}>
-      <h2>Welcome on ezscan</h2>
-      <div>
-        To start scanning stuff hit the <b>Load</b> button below !
-      </div>
-    </div>
-  );
-}
 
 function App() {
   const [images, setImages] = useState<Array<NamedImage>>([]);
@@ -43,15 +33,7 @@ function App() {
       }}
     >
       <Routes>
-        <Route
-          path={routes.home}
-          element={
-            <div>
-              <LandingDocumentation />
-              <Link to={routes.editor}>Start capturing</Link>
-            </div>
-          }
-        />
+        <Route path={routes.home} element={<LandingPage />} />
         <Route
           path={routes.editor}
           element={

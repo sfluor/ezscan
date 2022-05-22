@@ -91,7 +91,7 @@ function DraggableImageItem({
           </span>
           <Button
             name="Remove"
-            style={{ marginLeft: 'auto' }}
+            style={{ marginLeft: 'auto', fontSize: '18px' }}
             action={onDelete}
             icon={<Remove />}
             horizontal

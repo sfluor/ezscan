@@ -56,7 +56,7 @@ function Button({
     display: 'flex',
     flexDirection: horizontal ? 'row' : 'column',
     font: 'inherit',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
     height: '100%',
     outline: 'inherit',
     padding: '1vh 2vh',
@@ -81,8 +81,18 @@ function Button({
       onTouchCancel={onCancel}
       onBlur={onCancel}
     >
-      {React.cloneElement(icon, { color: iconColor })}
-      <span style={{ fontSize: '12px' }}>{name}</span>
+      {React.cloneElement(icon, {
+        color: iconColor,
+        fontSize: style?.fontSize,
+      })}
+      <span
+        style={{
+          fontSize: style?.fontSize || '12px',
+          margin: horizontal ? '5px' : '0px',
+        }}
+      >
+        {name}
+      </span>
     </button>
   );
 }

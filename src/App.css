@@ -8,12 +8,13 @@ body {
   flex-direction: column;
   margin: 0;
   font-family: Roboto;
-  font-weight: 450;
 }
 
 /* Trick from https://github.com/marella/material-design-icons/tree/main/svg#styling to style svgs*/
 svg {
   fill: currentColor;
+  width: 1em;
+  height: 1em;
 }
 
 @keyFrames slideLeft {
