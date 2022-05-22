@@ -6,6 +6,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import ImageEditor from './ImageEditor';
 import ImagesList, { NamedImage } from './ImagesList';
 import FullScreenDiv from './FullScreenDiv';
+import colors from './colors';
 
 function App() {
   const [images, setImages] = useState<Array<NamedImage>>([]);
@@ -20,7 +21,14 @@ function App() {
   };
 
   return (
-    <FullScreenDiv style={{ display: 'flex', flexDirection: 'column' }}>
+    <FullScreenDiv
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        color: colors.secondary,
+        backgroundColor: colors.primary,
+      }}
+    >
       <Routes>
         <Route
           path="/"

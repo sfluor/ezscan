@@ -1,13 +1,3 @@
-/*
- * TODO(sami): review CSS
- * Colors
- * bg #232946
- * button #eebbc3
- * paragraph #b8c1ec
- * headline #fffffe
- * button text #232946
- */
-
 html,
 body {
   height: 100%;
@@ -18,7 +8,6 @@ body {
   flex-direction: column;
   margin: 0;
   font-family: proxima-nova, sans-serif;
-  color: #fffffe;
   font-weight: 700;
 }
 

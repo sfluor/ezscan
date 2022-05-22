@@ -23,7 +23,7 @@ import colors from './colors';
 
 function LandingDocumentation() {
   return (
-    <div style={{ color: colors.primary }}>
+    <div style={{ color: colors.secondary }}>
       <h2>Welcome on ezscan</h2>
       <div>
         To start scanning stuff hit the <b>Load</b> button below !

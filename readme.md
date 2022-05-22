@@ -20,6 +20,16 @@ To format the code you can do `yarn lint-fix`
 ## Todos
 
 
+- review colors:
+> /*
+>* TODO(sami): review CSS
+>* Colors
+>* bg #232946
+>* button #eebbc3
+>* paragraph #b8c1ec
+>* headline #fffffe
+>* button text #232946
+>*/
 - use undo instead of return
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal

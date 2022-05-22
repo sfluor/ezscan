@@ -35,10 +35,13 @@ function DraggableImageItem({
           {...provided.draggableProps}
           {...provided.dragHandleProps}
           style={{
-            padding: '5px',
+            padding: '15px',
+            margin: '10px',
             display: 'flex',
             alignItems: 'center',
-            border: snapshot.isDragging ? `3px solid ${colors.primary}` : '',
+            border: `${snapshot.isDragging ? '2px dashed' : '1px solid'} ${
+              colors.secondary
+            }`,
             ...provided.draggableProps.style,
           }}
         >
@@ -53,7 +56,7 @@ function DraggableImageItem({
           />
           <span
             style={{
-              color: colors.primary,
+              color: colors.secondary,
               paddingLeft: '20px',
             }}
           >
