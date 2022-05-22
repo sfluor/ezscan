@@ -34,7 +34,7 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 >* headline #fffffe
 >* button text #232946
 >*/
-- confirmation on previous
+- confirmation on previous / reset
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal
 - name PDF output

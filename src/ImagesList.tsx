@@ -16,6 +16,7 @@ import Footer from './Footer';
 import FooterButton from './FooterButton';
 import colors from './colors';
 import routes from './routes';
+import reorder from './lib/arrayhelpers';
 
 export type NamedImage = ImagePair & { name: string };
 
@@ -115,13 +116,9 @@ function ImagesList({
       return;
     }
 
-    // Swap images
-    const newImages = [...images];
-    const tmp = newImages[result.destination.index];
-    newImages[result.destination.index] = newImages[result.source.index];
-    newImages[result.source.index] = tmp;
-
-    setImages(newImages);
+    const from = result.source.index;
+    const to = result.destination.index;
+    setImages(reorder(images, from, to));
   };
 
   const removeImage = (index: number) => {
@@ -144,8 +141,9 @@ function ImagesList({
               style={{
                 display: 'flex',
                 flexDirection: 'column',
-                padding: '5%',
+                margin: '5%',
                 justifyContent: 'space-between',
+                overflowY: 'scroll',
               }}
             >
               {images.map((image, index) => (
