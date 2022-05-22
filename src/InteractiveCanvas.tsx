@@ -103,16 +103,21 @@ function InteractiveCanvas({
     canvasSize.height / image.data.height
   );
 
-  const imageMinDimension = Math.min(image.data.width, image.data.height);
-  const colorBoxSizeComputation = Math.round(0.1 * imageMinDimension);
   const computeInverseColor = (p: Point) => {
-    const halfBoxDimension = Math.round(colorBoxSizeComputation / 2);
-    const halfBoxSize = { width: halfBoxDimension, height: halfBoxDimension };
+    const areaDimension = 2 * cornerRadius;
+    const halfAreaDimension = Math.round(areaDimension / 2);
+    const areaSize = {
+      width: areaDimension,
+      height: areaDimension,
+    };
     return colorToCSS(
       averageInverseColor(
         image.data,
-        { x: p.x - halfBoxDimension, y: p.y - halfBoxDimension },
-        halfBoxSize
+        {
+          x: Math.round(p.x / ratio) - halfAreaDimension,
+          y: Math.round(p.y / ratio) - halfAreaDimension,
+        },
+        areaSize
       )
     );
   };
