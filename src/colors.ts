@@ -2,8 +2,8 @@
 export default {
   primary: '#222831',
   lightPrimary: '#393E46',
-  secondary: '#00ADB5',
-  lightSecondary: '#00ADB5',
+  secondary: '#E04D01',
+  lightSecondary: '#FF7700',
   tertiary: '#EEEEEE',
   lightTertiary: 'white',
 };
