@@ -5,6 +5,7 @@ import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/
 import { ReactComponent as Camera } from '@material-design-icons/svg/round/camera.svg';
 import { ReactComponent as ArrowBack } from '@material-design-icons/svg/round/arrow_back.svg';
 import { ReactComponent as ArrowForward } from '@material-design-icons/svg/round/arrow_forward.svg';
+import { ReactComponent as Undo } from '@material-design-icons/svg/round/undo.svg';
 import InteractiveCanvas from './InteractiveCanvas';
 import {
   ImagePair,
@@ -20,18 +21,6 @@ import FooterButton, { footerButtonStyle } from './FooterButton';
 import colors from './colors';
 
 // For icons: https://marella.me/material-design-icons/demo/svg/
-
-function LandingDocumentation() {
-  return (
-    <div style={{ color: colors.secondary }}>
-      <h2>Welcome on ezscan</h2>
-      <div>
-        To start scanning stuff hit the <b>Load</b> button below !
-      </div>
-    </div>
-  );
-}
-
 function FileInput({
   onChange,
 }: {
@@ -76,6 +65,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   };
 
   const imageIsLoaded = images.length > 0;
+  const hasMoreThanOneImage = images.length > 1;
   const currentImage = imageIsLoaded ? images[images.length - 1] : null;
 
   const onCrop = () => {
@@ -113,7 +103,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
           height: '90%',
         }}
       >
-        {imageIsLoaded ? (
+        {imageIsLoaded && (
           <InteractiveCanvas
             sizePct={{ width: 100, height: 85 }}
             onCornersChange={setCorners}
@@ -123,23 +113,29 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
             }}
             image={currentImage as ImagePair}
           />
-        ) : (
-          <LandingDocumentation />
         )}
       </div>
       <Footer>
-        <FileInput
-          onChange={(event) => {
-            if (event.target.files) {
-              reader.readAsDataURL(event.target.files[0]);
-            }
-          }}
-        />
+        {!imageIsLoaded && (
+          <FileInput
+            onChange={(event) => {
+              if (event.target.files) {
+                reader.readAsDataURL(event.target.files[0]);
+              }
+            }}
+          />
+        )}
         {imageIsLoaded && (
           <>
-            <FooterButton name="Previous" action={onPrevious}>
-              <ArrowBack color={colors.secondary} />
-            </FooterButton>
+            {hasMoreThanOneImage ? (
+              <FooterButton name="Undo" action={onPrevious}>
+                <Undo color={colors.secondary} />
+              </FooterButton>
+            ) : (
+              <FooterButton name="Previous" action={onPrevious}>
+                <ArrowBack color={colors.secondary} />
+              </FooterButton>
+            )}
             <FooterButton
               name="Rotate left"
               action={() => onRotate(Direction.Left)}

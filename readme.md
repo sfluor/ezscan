@@ -30,7 +30,7 @@ To format the code you can do `yarn lint-fix`
 >* headline #fffffe
 >* button text #232946
 >*/
-- use undo instead of return
+- confirmation on previous
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal
 - show that images list is draggable

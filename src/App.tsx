@@ -8,6 +8,17 @@ import ImagesList, { NamedImage } from './ImagesList';
 import FullScreenDiv from './FullScreenDiv';
 import colors from './colors';
 
+function LandingDocumentation() {
+  return (
+    <div style={{ color: colors.secondary }}>
+      <h2>Welcome on ezscan</h2>
+      <div>
+        To start scanning stuff hit the <b>Load</b> button below !
+      </div>
+    </div>
+  );
+}
+
 function App() {
   const [images, setImages] = useState<Array<NamedImage>>([]);
   const [count, setCount] = useState<number>(1);
@@ -34,6 +45,7 @@ function App() {
           path="/"
           element={
             <div>
+              <LandingDocumentation />
               <Link to="/capture">Start capturing</Link>
             </div>
           }
