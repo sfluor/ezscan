@@ -11,12 +11,34 @@ import { ReactComponent as AddAPhoto } from '@material-design-icons/svg/round/ad
 import { ReactComponent as Remove } from '@material-design-icons/svg/round/remove_circle.svg';
 import { ReactComponent as Save } from '@material-design-icons/svg/round/save.svg';
 import { ReactComponent as Delete } from '@material-design-icons/svg/round/delete.svg';
+import { ReactComponent as DragIndicatorIcon } from '@material-design-icons/svg/round/drag_indicator.svg';
 import { ImagePair } from './lib/imgkit';
 import Footer from './Footer';
 import FooterButton from './FooterButton';
 import colors from './colors';
 
 export type NamedImage = ImagePair & { name: string };
+
+function DragIndicator({ style }: { style: React.CSSProperties }) {
+  return (
+    <div
+      style={{
+        ...style,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+      }}
+    >
+      <DragIndicatorIcon color={colors.secondary} />
+      <DragIndicatorIcon
+        color={colors.secondary}
+        // Negative margin to pack the 3 indicator icons together
+        style={{ margin: '-5px' }}
+      />
+      <DragIndicatorIcon color={colors.secondary} />
+    </div>
+  );
+}
 
 function DraggableImageItem({
   image,
@@ -45,6 +67,7 @@ function DraggableImageItem({
             ...provided.draggableProps.style,
           }}
         >
+          <DragIndicator style={{ paddingRight: '15px' }} />
           <img
             key={image.name}
             src={image.element.src}
