@@ -17,10 +17,19 @@ function Button({
   filled?: boolean;
 }) {
   const [pressed, setPressed] = useState<boolean>(false);
+  const [hovered, setHovered] = useState<boolean>(false);
 
   const onPressEnd = () => {
     setPressed(false);
     action();
+  };
+
+  const onHover = () => {
+    setHovered(true);
+  };
+
+  const onHoverEnd = () => {
+    setHovered(false);
   };
 
   const onPress = () => {
@@ -29,6 +38,7 @@ function Button({
 
   const onCancel = () => {
     setPressed(false);
+    onHoverEnd();
   };
 
   const iconColor = pressed ? colors.secondary : colors.tertiary;
@@ -37,10 +47,8 @@ function Button({
   let backgroundColor;
 
   if (filled) {
-    backgroundColor = pressed ? colors.lightPrimary : colors.primary;
-    border = `${pressed ? 3 : 2}px solid ${
-      pressed ? colors.secondary : colors.lightSecondary
-    }`;
+    backgroundColor = hovered || pressed ? colors.lightPrimary : colors.primary;
+    border = `3px solid ${pressed ? colors.secondary : colors.lightSecondary}`;
   } else {
     backgroundColor = 'inherit';
     border = 'none';
@@ -80,6 +88,9 @@ function Button({
       onMouseOut={onCancel}
       onTouchCancel={onCancel}
       onBlur={onCancel}
+      // Hover events
+      onMouseOver={onHover}
+      onFocus={onHover}
     >
       {React.cloneElement(icon, {
         color: iconColor,
