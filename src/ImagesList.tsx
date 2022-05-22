@@ -24,7 +24,7 @@ import reorder from './lib/arrayhelpers';
 
 const saveAsPDF = (images: Array<NamedImage>, file: string) => {
   // eslint-disable-next-line new-cap
-  const doc = new jsPDF();
+  const doc = new jsPDF('p', 'pt', 'a4', true);
   const padding = 10;
   // TODO: properly pick maxdimension
   images.forEach((image, index) => {
@@ -33,11 +33,13 @@ const saveAsPDF = (images: Array<NamedImage>, file: string) => {
     }
     doc.addImage(
       image.element,
-      'jpeg',
+      'png',
       padding,
       padding,
       doc.internal.pageSize.getWidth() - 2 * padding,
-      doc.internal.pageSize.getHeight() - 2 * padding
+      doc.internal.pageSize.getHeight() - 2 * padding,
+      '',
+      'FAST'
     );
   });
   doc.save(file);
