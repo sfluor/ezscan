@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ReactComponent as Crop } from '@material-design-icons/svg/round/crop.svg';
-import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_left.svg';
-import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_right.svg';
+import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_90_degrees_ccw.svg';
+import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_90_degrees_cw.svg';
 import { ReactComponent as Camera } from '@material-design-icons/svg/round/camera.svg';
 import { ReactComponent as ArrowBack } from '@material-design-icons/svg/round/arrow_back.svg';
 import { ReactComponent as ArrowForward } from '@material-design-icons/svg/round/arrow_forward.svg';
