@@ -16,28 +16,11 @@ import {
   Direction,
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
+import Footer from './Footer';
+import FooterButton, { footerButtonStyle } from './FooterButton';
 import colors from './colors';
 
 // For icons: https://marella.me/material-design-icons/demo/svg/
-
-// TODO: move colors to file
-const buttonStyle: React.CSSProperties = {
-  alignItems: 'center',
-  background: 'none',
-  border: 'none',
-  color: 'inherit',
-  cursor: 'pointer',
-  display: 'flex',
-  flexDirection: 'column',
-  font: 'inherit',
-  justifyContent: 'center',
-  lineHeight: '3vh',
-  outline: 'inherit',
-  padding: '1vh 2vh',
-  textAlign: 'center',
-  animationName: 'slideLeft,fadeIn',
-  animationDuration: '500ms',
-};
 
 function LandingDocumentation() {
   return (
@@ -56,7 +39,7 @@ function FileInput({
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }) {
   return (
-    <label htmlFor="camera" style={buttonStyle}>
+    <label htmlFor="camera" style={footerButtonStyle}>
       <input
         type="file"
         name="camera"
@@ -68,32 +51,6 @@ function FileInput({
       <Camera color={colors.secondary} />
       <span>Load</span>
     </label>
-  );
-}
-
-// Unstyled button component
-function Button({
-  name,
-  action,
-  children,
-}: {
-  name: string;
-  children: React.ReactNode;
-  action: () => void;
-}) {
-  const lowerName = name.toLowerCase().replace(' ', '_');
-
-  return (
-    <button
-      id={`${lowerName}-btn`}
-      type="button"
-      style={buttonStyle}
-      onClick={action}
-      onKeyDown={action}
-    >
-      {children}
-      <span>{name}</span>
-    </button>
   );
 }
 
@@ -171,18 +128,7 @@ function CameraInput({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
           <LandingDocumentation />
         )}
       </div>
-      <footer
-        style={{
-          flexShrink: 0,
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          width: '100%',
-          backgroundColor: colors.primary,
-          height: '10%',
-          alignItems: 'center',
-        }}
-      >
+      <Footer>
         <FileInput
           onChange={(event) => {
             if (event.target.files) {
@@ -191,31 +137,31 @@ function CameraInput({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
           }}
         />
         {imageIsLoaded && (
-          <Button name="Previous" action={onPrevious}>
-            <ArrowBack color={colors.secondary} />
-          </Button>
+          <>
+            <FooterButton name="Previous" action={onPrevious}>
+              <ArrowBack color={colors.secondary} />
+            </FooterButton>
+            <FooterButton
+              name="Rotate left"
+              action={() => onRotate(Direction.Left)}
+            >
+              <RotateLeft color={colors.secondary} />
+            </FooterButton>
+            <FooterButton
+              name="Rotate right"
+              action={() => onRotate(Direction.Right)}
+            >
+              <RotateRight color={colors.secondary} />
+            </FooterButton>
+            <FooterButton name="Crop" action={onCrop}>
+              <Crop color={colors.secondary} />
+            </FooterButton>
+            <FooterButton name="Next" action={onNext}>
+              <ArrowForward color={colors.secondary} />
+            </FooterButton>
+          </>
         )}
-        {imageIsLoaded && (
-          <Button name="Rotate left" action={() => onRotate(Direction.Left)}>
-            <RotateLeft color={colors.secondary} />
-          </Button>
-        )}
-        {imageIsLoaded && (
-          <Button name="Rotate right" action={() => onRotate(Direction.Right)}>
-            <RotateRight color={colors.secondary} />
-          </Button>
-        )}
-        {imageIsLoaded && (
-          <Button name="Crop" action={onCrop}>
-            <Crop color={colors.secondary} />
-          </Button>
-        )}
-        {imageIsLoaded && (
-          <Button name="Next" action={onNext}>
-            <ArrowForward color={colors.secondary} />
-          </Button>
-        )}
-      </footer>
+      </Footer>
     </FullScreenDiv>
   );
 }
