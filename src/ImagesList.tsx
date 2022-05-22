@@ -33,7 +33,7 @@ const saveAsPDF = (images: Array<NamedImage>, file: string) => {
     }
     doc.addImage(
       image.element,
-      'png',
+      'jpeg',
       padding,
       padding,
       doc.internal.pageSize.getWidth() - 2 * padding,
