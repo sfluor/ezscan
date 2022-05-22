@@ -23,6 +23,7 @@ function LandingPage() {
       <a
         href="https://github.com/sfluor/ezscan"
         target="_blank"
+        style={{ color: colors.secondary }}
         rel="noreferrer"
       >
         project is open source
