@@ -140,7 +140,13 @@ function ImagesList({
 
   return (
     <>
-      <h4> You can drag and drop images to re-arrange them</h4>
+      <div
+        style={{
+          padding: '5% 5% 1% 5%',
+        }}
+      >
+        <h2>Re-order (drag and drop) / remove pages</h2>
+      </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="images-list">
           {(provided) => (

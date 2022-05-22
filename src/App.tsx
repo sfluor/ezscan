@@ -41,7 +41,7 @@ function App() {
               onAdd={(image) => {
                 const newImages = [
                   ...images,
-                  { ...image, name: `Image ${count}` },
+                  { ...image, name: `Scan ${count}` },
                 ];
                 setCount(count + 1);
                 setImages(newImages);
