@@ -5,7 +5,6 @@ import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/
 import { ReactComponent as Camera } from '@material-design-icons/svg/round/camera.svg';
 import { ReactComponent as ArrowBack } from '@material-design-icons/svg/round/arrow_back.svg';
 import { ReactComponent as ArrowForward } from '@material-design-icons/svg/round/arrow_forward.svg';
-import FullScreenDiv from './FullScreenDiv';
 import InteractiveCanvas from './InteractiveCanvas';
 import {
   ImagePair,
@@ -106,7 +105,7 @@ function CameraInput({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   };
 
   return (
-    <FullScreenDiv style={{ display: 'flex', flexDirection: 'column' }}>
+    <>
       <div
         id="container"
         style={{
@@ -162,7 +161,7 @@ function CameraInput({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
           </>
         )}
       </Footer>
-    </FullScreenDiv>
+    </>
   );
 }
 

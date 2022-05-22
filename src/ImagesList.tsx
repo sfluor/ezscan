@@ -1,13 +1,19 @@
 import React from 'react';
 import { jsPDF } from 'jspdf';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   DragDropContext,
   Droppable,
   Draggable,
   DropResult,
 } from 'react-beautiful-dnd';
+import { ReactComponent as AddAPhoto } from '@material-design-icons/svg/round/add_a_photo.svg';
+import { ReactComponent as Remove } from '@material-design-icons/svg/round/remove_circle.svg';
+import { ReactComponent as Save } from '@material-design-icons/svg/round/save.svg';
+import { ReactComponent as Delete } from '@material-design-icons/svg/round/delete.svg';
 import { ImagePair } from './lib/imgkit';
+import Footer from './Footer';
+import FooterButton from './FooterButton';
 import colors from './colors';
 
 export type NamedImage = ImagePair & { name: string };
@@ -58,7 +64,8 @@ function DraggableImageItem({
             style={{ marginLeft: 'auto' }}
             onClick={onDelete}
           >
-            Remove{' '}
+            <span>Remove</span>
+            <Remove color={colors.primary} />
           </button>
         </div>
       )}
@@ -115,8 +122,10 @@ function ImagesList({
     doc.save('capture.pdf');
   };
 
+  const navigate = useNavigate();
+
   return (
-    <div>
+    <>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="images-list">
           {(provided) => (
@@ -143,14 +152,22 @@ function ImagesList({
           )}
         </Droppable>
       </DragDropContext>
-      <Link to="/capture"> Add more </Link>
-      <button type="button" onClick={onReset}>
-        Reset
-      </button>
-      <button type="button" onClick={onSave}>
-        Save as PDF
-      </button>
-    </div>
+      <Footer>
+        <FooterButton
+          // TODO: this should ask for capture directly instead of going back to the capture page
+          name="Add"
+          action={() => navigate('/capture', { replace: true })}
+        >
+          <AddAPhoto color={colors.secondary} />
+        </FooterButton>
+        <FooterButton name="Reset" action={onReset}>
+          <Delete color={colors.secondary} />
+        </FooterButton>
+        <FooterButton name="Save" action={onSave}>
+          <Save color={colors.secondary} />
+        </FooterButton>
+      </Footer>
+    </>
   );
 }
 

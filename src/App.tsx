@@ -5,6 +5,7 @@ import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 // TODO: rename camera input
 import CameraInput from './CameraInput';
 import ImagesList, { NamedImage } from './ImagesList';
+import FullScreenDiv from './FullScreenDiv';
 
 function App() {
   const [images, setImages] = useState<Array<NamedImage>>([]);
@@ -14,11 +15,12 @@ function App() {
 
   const onReset = () => {
     setImages([]);
+    setCount(1);
     navigate('/', { replace: true });
   };
 
   return (
-    <div>
+    <FullScreenDiv style={{ display: 'flex', flexDirection: 'column' }}>
       <Routes>
         <Route
           path="/"
@@ -55,7 +57,7 @@ function App() {
           }
         />
       </Routes>
-    </div>
+    </FullScreenDiv>
   );
 }
 

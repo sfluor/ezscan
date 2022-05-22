@@ -12,6 +12,7 @@ function Footer({ children }: { children: React.ReactNode }) {
         width: '100%',
         backgroundColor: colors.primary,
         height: '10%',
+        marginTop: 'auto',
         alignItems: 'center',
       }}
     >
