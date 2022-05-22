@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ReactComponent as Crop } from '@material-design-icons/svg/round/crop.svg';
 import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_90_degrees_ccw.svg';
 import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_90_degrees_cw.svg';
@@ -20,31 +20,16 @@ import Footer from './Footer';
 import FooterButton from './FooterButton';
 
 function FileInput({
-  onChange,
+  triggerUpload,
+  inputElement,
 }: {
-  onChange: React.ChangeEventHandler<HTMLInputElement>;
+  triggerUpload: () => void;
+  inputElement: React.ReactElement;
 }) {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const triggerUpload = () => {
-    if (inputRef.current !== null) {
-      inputRef.current.click();
-    }
-  };
-
   return (
     <>
       <FooterButton name="Load" icon={<Camera />} action={triggerUpload} />
-      <input
-        type="file"
-        ref={inputRef}
-        hidden
-        name="camera"
-        id="camera"
-        accept="image/*"
-        onChange={onChange}
-        style={{ display: 'none' }}
-      />
+      {inputElement}
     </>
   );
 }
@@ -52,6 +37,7 @@ function FileInput({
 function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   const [images, setImages] = useState<Array<ImagePair>>([]);
   const [corners, setCorners] = useState<Quadrilateral | null>(null);
+
   const reader = new FileReader();
 
   // TODO: show loading
@@ -71,9 +57,39 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
     }
   };
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const triggerUpload = () => {
+    if (inputRef.current !== null) {
+      inputRef.current.click();
+    }
+  };
+  const inputElement = (
+    <input
+      type="file"
+      ref={inputRef}
+      hidden
+      name="camera"
+      id="camera"
+      accept="image/*"
+      onChange={(event) => {
+        if (event.target.files) {
+          reader.readAsDataURL(event.target.files[0]);
+        }
+      }}
+      style={{ display: 'none' }}
+    />
+  );
+
   const imageIsLoaded = images.length > 0;
   const hasMoreThanOneImage = images.length > 1;
   const currentImage = imageIsLoaded ? images[images.length - 1] : null;
+
+  // If we don't have an image loaded already trigger an upload
+  useEffect(() => {
+    if (!imageIsLoaded) {
+      triggerUpload();
+    }
+  }, []);
 
   const onCrop = () => {
     // TODO: use a web worker
@@ -125,11 +141,8 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
       <Footer>
         {!imageIsLoaded && (
           <FileInput
-            onChange={(event) => {
-              if (event.target.files) {
-                reader.readAsDataURL(event.target.files[0]);
-              }
-            }}
+            inputElement={inputElement}
+            triggerUpload={triggerUpload}
           />
         )}
         {imageIsLoaded && (
