@@ -50,7 +50,7 @@ function Button({
     backgroundColor = hovered || pressed ? colors.lightPrimary : colors.primary;
     border = `3px solid ${pressed ? colors.secondary : colors.lightSecondary}`;
   } else {
-    backgroundColor = 'inherit';
+    backgroundColor = hovered ? colors.lightPrimary : 'inherit';
     border = 'none';
   }
 
