@@ -24,32 +24,18 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 ## Todos
 
 
-- review colors:
-> /*
->* TODO(sami): review CSS
->* Colors
->* bg #232946
->* button #eebbc3
->* paragraph #b8c1ec
->* headline #fffffe
->* button text #232946
->*/
-- confirmation on previous / reset
+- add version hash on the footer
 - figure out why we can't load big images
 - fix PDF save if the image is horizontal
-- name PDF output
-- add reaction to buttons
 - tune PDF parameters (sizes / more than one image per page. etc)
 - center image
 - show loading
 - translation in french
 - fix the favicon
 - use a web worker for distorting
-- images imported instead of public dir
 - auto detect borders on submitted image
 - precommit hooks
 - compress images when saving PDF ?
-- friendlier UI (home page, list of screens, etc.)
 - favicon
 - manifest.json for SPA like on android
 - fix camera input on firefox mobile
