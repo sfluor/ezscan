@@ -14,6 +14,7 @@ import { ReactComponent as DragIndicatorIcon } from '@material-design-icons/svg/
 import { ImagePair } from './lib/imgkit';
 import Footer from './Footer';
 import FooterButton from './FooterButton';
+import Button from './Button';
 import colors from './colors';
 import routes from './routes';
 import reorder from './lib/arrayhelpers';
@@ -87,14 +88,13 @@ function DraggableImageItem({
           >
             {image.name}
           </span>
-          <button
-            type="button"
+          <Button
+            name="Remove"
             style={{ marginLeft: 'auto' }}
-            onClick={onDelete}
-          >
-            <span>Remove</span>
-            <Remove color={colors.primary} />
-          </button>
+            action={onDelete}
+            icon={<Remove />}
+            horizontal
+          />
         </div>
       )}
     </Draggable>
@@ -164,18 +164,14 @@ function ImagesList({
           // TODO: this should ask for capture directly instead of going back to the capture page
           name="Add"
           action={() => navigate(routes.editor, { replace: true })}
-        >
-          <AddAPhoto color={colors.tertiary} />
-        </FooterButton>
-        <FooterButton name="Reset" action={onReset}>
-          <Delete color={colors.tertiary} />
-        </FooterButton>
+          icon={<AddAPhoto />}
+        />
+        <FooterButton name="Reset" action={onReset} icon={<Delete />} />
         <FooterButton
           name="Save"
           action={() => navigate(routes.save, { replace: true })}
-        >
-          <Save color={colors.tertiary} />
-        </FooterButton>
+          icon={<Save />}
+        />
       </Footer>
     </>
   );

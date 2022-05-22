@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { ReactComponent as Crop } from '@material-design-icons/svg/round/crop.svg';
 import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_left.svg';
 import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_right.svg';
@@ -17,27 +17,35 @@ import {
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
 import Footer from './Footer';
-import FooterButton, { footerButtonStyle } from './FooterButton';
-import colors from './colors';
+import FooterButton from './FooterButton';
 
 function FileInput({
   onChange,
 }: {
   onChange: React.ChangeEventHandler<HTMLInputElement>;
 }) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const triggerUpload = () => {
+    if (inputRef.current !== null) {
+      inputRef.current.click();
+    }
+  };
+
   return (
-    <label htmlFor="camera" style={footerButtonStyle}>
+    <>
+      <FooterButton name="Load" icon={<Camera />} action={triggerUpload} />
       <input
         type="file"
+        ref={inputRef}
+        hidden
         name="camera"
         id="camera"
         accept="image/*"
         onChange={onChange}
         style={{ display: 'none' }}
       />
-      <Camera color={colors.tertiary} />
-      <span>Load</span>
-    </label>
+    </>
   );
 }
 
@@ -127,32 +135,26 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
         {imageIsLoaded && (
           <>
             {hasMoreThanOneImage ? (
-              <FooterButton name="Undo" action={onPrevious}>
-                <Undo color={colors.tertiary} />
-              </FooterButton>
+              <FooterButton name="Undo" action={onPrevious} icon={<Undo />} />
             ) : (
-              <FooterButton name="Previous" action={onPrevious}>
-                <ArrowBack color={colors.tertiary} />
-              </FooterButton>
+              <FooterButton
+                name="Previous"
+                action={onPrevious}
+                icon={<ArrowBack />}
+              />
             )}
             <FooterButton
               name="Rotate left"
               action={() => onRotate(Direction.Left)}
-            >
-              <RotateLeft color={colors.tertiary} />
-            </FooterButton>
+              icon={<RotateLeft />}
+            />
             <FooterButton
               name="Rotate right"
               action={() => onRotate(Direction.Right)}
-            >
-              <RotateRight color={colors.tertiary} />
-            </FooterButton>
-            <FooterButton name="Crop" action={onCrop}>
-              <Crop color={colors.tertiary} />
-            </FooterButton>
-            <FooterButton name="Next" action={onNext}>
-              <ArrowForward color={colors.tertiary} />
-            </FooterButton>
+              icon={<RotateRight />}
+            />
+            <FooterButton name="Crop" action={onCrop} icon={<Crop />} />
+            <FooterButton name="Next" action={onNext} icon={<ArrowForward />} />
           </>
         )}
       </Footer>

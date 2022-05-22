@@ -3,7 +3,7 @@ import { jsPDF } from 'jspdf';
 import { ReactComponent as Download } from '@material-design-icons/svg/round/download.svg';
 import { ReactComponent as Clear } from '@material-design-icons/svg/round/clear.svg';
 import { NamedImage } from './ImagesList';
-import colors from './colors';
+import Button from './Button';
 
 function PDFSaver({
   images,
@@ -32,13 +32,22 @@ function PDFSaver({
     onReset();
   };
   return (
-    <div>
-      <button type="button" onClick={onDownload}>
-        Download <Download colors={colors.secondary} />
-      </button>
-      <button type="button" onClick={onReset}>
-        Reset <Clear colors={colors.secondary} />
-      </button>
+    <div style={{ margin: '20px' }}>
+      <Button
+        action={onDownload}
+        name="Download"
+        icon={<Download />}
+        horizontal
+        filled
+      />
+      <br />
+      <Button
+        action={onReset}
+        name="Reset"
+        icon={<Clear />}
+        horizontal
+        filled
+      />
     </div>
   );
 }

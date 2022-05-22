@@ -1,19 +1,7 @@
 import React from 'react';
+import Button from './Button';
 
-export const footerButtonStyle: React.CSSProperties = {
-  alignItems: 'center',
-  background: 'none',
-  border: 'none',
-  color: 'inherit',
-  cursor: 'pointer',
-  display: 'flex',
-  flexDirection: 'column',
-  font: 'inherit',
-  justifyContent: 'center',
-  lineHeight: '3vh',
-  outline: 'inherit',
-  padding: '1vh 2vh',
-  textAlign: 'center',
+const footerButtonAnimation: React.CSSProperties = {
   animationName: 'slideLeft,fadeIn',
   animationDuration: '500ms',
 };
@@ -22,25 +10,19 @@ export const footerButtonStyle: React.CSSProperties = {
 function FooterButton({
   name,
   action,
-  children,
+  icon,
 }: {
   name: string;
-  children: React.ReactNode;
+  icon: React.ReactElement;
   action: () => void;
 }) {
-  const lowerName = name.toLowerCase().replace(' ', '_');
-
   return (
-    <button
-      id={`${lowerName}-btn`}
-      type="button"
-      style={footerButtonStyle}
-      onClick={action}
-      onKeyDown={action}
-    >
-      {children}
-      <span>{name}</span>
-    </button>
+    <Button
+      icon={icon}
+      name={name}
+      action={action}
+      style={footerButtonAnimation}
+    />
   );
 }
 
