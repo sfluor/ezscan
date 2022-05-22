@@ -1,5 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { jsPDF } from 'jspdf';
 import {
   DragDropContext,
   Droppable,
@@ -10,16 +11,37 @@ import { ReactComponent as AddAPhoto } from '@material-design-icons/svg/round/ad
 import { ReactComponent as Remove } from '@material-design-icons/svg/round/remove_circle.svg';
 import { ReactComponent as Save } from '@material-design-icons/svg/round/save.svg';
 import { ReactComponent as Delete } from '@material-design-icons/svg/round/delete.svg';
+import { ReactComponent as Edit } from '@material-design-icons/svg/round/edit.svg';
 import { ReactComponent as DragIndicatorIcon } from '@material-design-icons/svg/round/drag_indicator.svg';
-import { ImagePair } from './lib/imgkit';
+import { NamedImage } from './lib/imgkit';
 import Footer from './Footer';
 import FooterButton from './FooterButton';
 import Button from './Button';
+import Input from './Input';
 import colors from './colors';
 import routes from './routes';
 import reorder from './lib/arrayhelpers';
 
-export type NamedImage = ImagePair & { name: string };
+const saveAsPDF = (images: Array<NamedImage>, file: string) => {
+  // eslint-disable-next-line new-cap
+  const doc = new jsPDF();
+  const padding = 10;
+  // TODO: properly pick maxdimension
+  images.forEach((image, index) => {
+    if (index > 0) {
+      doc.addPage();
+    }
+    doc.addImage(
+      image.element,
+      'jpeg',
+      padding,
+      padding,
+      doc.internal.pageSize.getWidth() - 2 * padding,
+      doc.internal.pageSize.getHeight() - 2 * padding
+    );
+  });
+  doc.save(file);
+};
 
 function DragIndicator({ style }: { style: React.CSSProperties }) {
   const fontSize = '22px';
@@ -112,6 +134,10 @@ function ImagesList({
   onReset: () => void;
   setImages: (images: Array<NamedImage>) => void;
 }) {
+  const date = new Date();
+  const dateString = `${date.getDate()}-${date.getMonth()}-${date.getFullYear()}-${date.getMilliseconds()}`;
+  const [filename, setFilename] = useState<string>(`scan-${dateString}`);
+
   const onDragEnd = (result: DropResult) => {
     // Outside the authorized boundaries
     if (!result.destination) {
@@ -145,7 +171,21 @@ function ImagesList({
           padding: '5% 5% 1% 5%',
         }}
       >
-        <h2>Re-order (drag and drop) / remove pages</h2>
+        <h2>
+          Scanned pages ({images.length} {images.length > 1 ? 'pages' : 'page'})
+        </h2>
+        <span>
+          You can re-order the scans by dragging them (you can also remove the
+          ones you do not want anymore).
+        </span>
+        <form style={{ marginTop: '20px' }}>
+          <Input
+            value={filename}
+            onChange={setFilename}
+            label="Edit filename:"
+            icon={<Edit />}
+          />
+        </form>
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
         <Droppable droppableId="images-list">
@@ -184,7 +224,7 @@ function ImagesList({
         <FooterButton name="Reset" action={onReset} icon={<Delete />} />
         <FooterButton
           name="Save"
-          action={() => navigate(routes.save)}
+          action={() => saveAsPDF(images, filename)}
           icon={<Save />}
         />
       </Footer>

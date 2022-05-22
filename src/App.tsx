@@ -4,10 +4,10 @@ import './App.css';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 // TODO: rename camera input
 import ImageEditor from './ImageEditor';
-import ImagesList, { NamedImage } from './ImagesList';
+import ImagesList from './ImagesList';
+import { NamedImage } from './lib/imgkit';
 import LandingPage from './LandingPage';
 import FullScreenDiv from './FullScreenDiv';
-import PDFSaver from './PDFSaver';
 import colors from './colors';
 import routes from './routes';
 
@@ -59,10 +59,6 @@ function App() {
               setImages={setImages}
             />
           }
-        />
-        <Route
-          path={routes.save}
-          element={<PDFSaver images={images} onReset={onReset} />}
         />
         <Route path="*" element={<Navigate to={routes.home} replace />} />
       </Routes>

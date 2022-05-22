@@ -28,6 +28,8 @@ export interface ImagePair {
   data: ImageData;
 }
 
+export type NamedImage = ImagePair & { name: string };
+
 // Global converter used to do conversions from/to Image/ImageData
 const CONVERTER = document.createElement('canvas');
 
