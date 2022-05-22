@@ -1,9 +1,9 @@
 // https://colorhunt.co/palette/222831393e4600adb5eeeeee
 export default {
-  primary: '#222831',
-  lightPrimary: '#393E46',
+  primary: '#171717',
+  lightPrimary: '#202020',
   secondary: '#E04D01',
   lightSecondary: '#FF7700',
-  tertiary: '#EEEEEE',
+  tertiary: '#EDEDED',
   lightTertiary: 'white',
 };
