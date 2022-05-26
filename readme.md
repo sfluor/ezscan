@@ -24,22 +24,20 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 ## Todos
 
 
+- fix PDF save if the image is horizontal
+- fix camera input on firefox mobile
+- figure out why we can't load big images
+- use a web worker for distorting
+- show loading
+- fix the favicon
+- center image
 - app works offline + 
 ```jsx
     <span> 📶 Works offline: you don't need to be connected to internet, once you visited the website once you can keep using the app.</span>
 ```
-- add version hash on the footer
-- figure out why we can't load big images
-- fix PDF save if the image is horizontal
-- tune PDF parameters (sizes / more than one image per page. etc)
-- center image
-- show loading
-- fix the favicon
-- use a web worker for distorting
-- auto detect borders on submitted image
-- precommit hooks
-- compress images when saving PDF ?
-- favicon
 - manifest.json for SPA like on android
-- fix camera input on firefox mobile
+- auto detect borders on submitted image
+- add version hash on the footer
+- tune PDF parameters (sizes / more than one image per page. etc)
 - performances
+- compress images when saving PDF ?
