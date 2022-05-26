@@ -20,16 +20,7 @@ import FooterButton from './FooterButton';
 import routes from './routes';
 import { typography as typo } from './language';
 import ImageProcessor from './lib/workers/image_processor';
-
-const toImagePair = (data: ImageData, callback: (pair: ImagePair) => void) => {
-  const htmlImage = new Image();
-
-  htmlImage.addEventListener('load', () => {
-    callback({ element: htmlImage, data });
-  });
-
-  htmlImage.src = imageDataToImage(data);
-};
+import Loader from './Loader';
 
 function FileInput({
   triggerUpload,
@@ -53,6 +44,7 @@ function FileInput({
 function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   const [images, setImages] = useState<Array<ImagePair>>([]);
   const [corners, setCorners] = useState<Quadrilateral | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const reader = new FileReader();
 
@@ -107,20 +99,33 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
     }
   }, []);
 
+  const onNewImage = (data: ImageData) => {
+    const htmlImage = new Image();
+
+    htmlImage.addEventListener('load', () => {
+      setImages([...images, { element: htmlImage, data }]);
+      setIsLoading(false);
+    });
+
+    htmlImage.src = imageDataToImage(data);
+  };
+
   const processor = new ImageProcessor({
-    onDistort: (distorted) =>
-      toImagePair(distorted, (pair) => setImages([...images, pair])),
-    onRotate: (rotated) =>
-      toImagePair(rotated, (pair) => setImages([...images, pair])),
+    onDistort: onNewImage,
+    onRotate: onNewImage,
   });
 
-  const onCrop = () =>
+  const onCrop = () => {
+    setIsLoading(true);
     processor.distort(
       (currentImage as ImagePair).data,
       corners as Quadrilateral
     );
-  const onRotate = (direction: Direction) =>
+  };
+  const onRotate = (direction: Direction) => {
+    setIsLoading(true);
     processor.rotate((currentImage as ImagePair).data, direction);
+  };
 
   const onUndo = () => {
     setImages(images.slice(0, -1) || []);
@@ -129,6 +134,25 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
   const onNext = () => onAdd(currentImage as ImagePair);
 
   const navigate = useNavigate();
+
+  let component;
+  if (isLoading) {
+    component = <Loader />;
+  } else if (imageIsLoaded) {
+    component = (
+      <InteractiveCanvas
+        sizePct={{ width: 100, height: 85 }}
+        onCornersChange={setCorners}
+        style={{
+          animationName: 'fadeIn',
+          animationDuration: '500ms',
+        }}
+        image={currentImage as ImagePair}
+      />
+    );
+  } else {
+    component = null;
+  }
 
   return (
     <>
@@ -139,17 +163,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
           height: '90%',
         }}
       >
-        {imageIsLoaded && (
-          <InteractiveCanvas
-            sizePct={{ width: 100, height: 85 }}
-            onCornersChange={setCorners}
-            style={{
-              animationName: 'fadeIn',
-              animationDuration: '500ms',
-            }}
-            image={currentImage as ImagePair}
-          />
-        )}
+        {component}
       </div>
       <Footer>
         {!imageIsLoaded && (
