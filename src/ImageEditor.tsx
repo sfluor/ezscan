@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Crop } from '@material-design-icons/svg/round/crop.svg';
 import { ReactComponent as RotateLeft } from '@material-design-icons/svg/round/rotate_90_degrees_ccw.svg';
 import { ReactComponent as RotateRight } from '@material-design-icons/svg/round/rotate_90_degrees_cw.svg';
-import { ReactComponent as Camera } from '@material-design-icons/svg/round/camera.svg';
+import { ReactComponent as Camera } from '@material-design-icons/svg/round/camera_alt.svg';
 import { ReactComponent as ArrowBack } from '@material-design-icons/svg/round/arrow_back.svg';
 import { ReactComponent as ArrowForward } from '@material-design-icons/svg/round/arrow_forward.svg';
 import { ReactComponent as Undo } from '@material-design-icons/svg/round/undo.svg';
@@ -161,6 +161,9 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
         style={{
           width: '100%',
           height: '90%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         {component}

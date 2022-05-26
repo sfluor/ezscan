@@ -143,11 +143,11 @@ function InteractiveCanvas({
   // order is: topLeft, topRight, bottomRight, bottomLeft
   const [corners, setCorners] = useState<Quadrilateral>(defaultCorners);
 
+  // Init corners upon changing image or resizing
   useEffect(() => {
-    // Init corners upon changing image
     setCorners(defaultCorners);
     cornersChangedCallback(defaultCorners);
-  }, [image]);
+  }, [image, deviceSize]);
 
   const [selectedCorner, setSelectedCorner] = useState<number | null>(null);
 
@@ -239,14 +239,14 @@ function InteractiveCanvas({
 
   return (
     <ZoomableCanvas
-      size={canvasSize}
+      size={scaledSize}
       image={image}
       onMouseDown={handleMouseDown}
       onTouchStart={handleMouseDown}
       onMouseUp={handleMouseUp}
       onTouchEnd={handleMouseUp}
       onMove={handleMouseMove}
-      style={{ ...style, ...sizeToPixels(canvasSize), touchAction: 'none' }}
+      style={{ ...style, ...sizeToPixels(scaledSize), touchAction: 'none' }}
       draw={draw}
       {...rest}
     />

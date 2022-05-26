@@ -36,7 +36,7 @@ export function useFullSize(): Size | null {
 
   useEffect(() => {
     if (wasRenderedOnClientAtLeastOnce) {
-      return () => {}; //eslint-disable-line
+      return;
     }
 
     function setMeasuredSize() {
@@ -45,9 +45,6 @@ export function useFullSize(): Size | null {
     }
 
     window.addEventListener('resize', setMeasuredSize);
-    return () => {
-      window.removeEventListener('resize', setMeasuredSize);
-    };
   }, [wasRenderedOnClientAtLeastOnce]);
   return wasRenderedOnClientAtLeastOnce ? size : null;
 }

@@ -11,7 +11,8 @@ function Footer({ children }: { children: React.ReactNode }) {
         justifyContent: 'space-around',
         width: '100%',
         backgroundColor: colors.primary,
-        height: '55px',
+        minHeight: '60px',
+        height: '5%',
         marginTop: 'auto',
         alignItems: 'center',
       }}

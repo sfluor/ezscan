@@ -109,7 +109,7 @@ function Button({
     >
       {React.cloneElement(icon, {
         color: iconColor,
-        fontSize: style?.fontSize,
+        fontSize: style?.fontSize || '20px',
       })}
       {displayLabel && (
         <span

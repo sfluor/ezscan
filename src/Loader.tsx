@@ -117,7 +117,7 @@ function Loader() {
           />
         </circle>
       </svg>
-      <span>{typo.loading}</span>
+      <span style={{ margin: '20px' }}>{typo.loading}</span>
     </div>
   );
 }
