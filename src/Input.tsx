@@ -52,6 +52,7 @@ function Input({
             width: '200px',
             height: '100%',
             borderRight: border,
+            fontStyle: 'italic',
           }}
         />
         {React.cloneElement(icon, {
