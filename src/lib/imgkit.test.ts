@@ -13,6 +13,7 @@ import {
   distortImageRaw,
   Direction,
   rotateImageRaw,
+  grayscaleRaw,
 } from './imgkit';
 
 const inverseColorsTests: [Color, Color][] = [
@@ -449,5 +450,27 @@ test.each(rotateImageRawTests)(
   'rotateImageRaw(%o, %o, %o, %o) should be %o',
   (src, width, height, direction, expected) => {
     expect(rotateImageRaw(src, { width, height }, direction)).toEqual(expected);
+  }
+);
+
+// 4 pixels: 100, 50, 200 / 50, 100, 200 / 200, 50, 100 / 200, 100, 50
+const grayscaleTestImage = Uint8ClampedArray.from([
+  100, 50, 200, 12, 50, 100, 200, 255, 200, 50, 100, 18, 200, 100, 50, 27,
+]);
+
+const grayscaleTestImageOut = Uint8ClampedArray.from([
+  71, 71, 71, 12, 97, 97, 97, 255, 86, 86, 86, 18, 118, 118, 118, 27,
+]);
+
+const grayscaleTests: [Uint8ClampedArray, Uint8ClampedArray][] = [
+  [grayscaleTestImage, grayscaleTestImageOut],
+  // Should be idempotent
+  [grayscaleTestImageOut, grayscaleTestImageOut],
+];
+
+test.each(grayscaleTests)(
+  'grayscaleRaw(%o) should be %o',
+  (input, expected) => {
+    expect(grayscaleRaw(input)).toEqual(expected);
   }
 );

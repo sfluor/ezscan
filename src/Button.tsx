@@ -81,7 +81,7 @@ function Button({
 
   const { width } = useFullSize() || { width: 0 };
   let displayLabel;
-  if (hideLabelWidthThreshold !== null) {
+  if (hideLabelWidthThreshold) {
     displayLabel = width > hideLabelWidthThreshold;
   } else {
     displayLabel = true;

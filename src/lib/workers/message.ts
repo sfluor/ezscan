@@ -1,6 +1,7 @@
 export enum MessageType {
   Distort,
   Rotate,
+  Grayscale,
 }
 
 export interface Message {

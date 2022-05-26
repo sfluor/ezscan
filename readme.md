@@ -27,7 +27,6 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 - fix height issue on mobiles
 - fix touch events
 - figure out why we can't load big images
-- black and white filter
 - fix the favicon
 - center image
 - app works offline + 

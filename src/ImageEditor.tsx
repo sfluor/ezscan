@@ -7,6 +7,7 @@ import { ReactComponent as Camera } from '@material-design-icons/svg/round/camer
 import { ReactComponent as ArrowBack } from '@material-design-icons/svg/round/arrow_back.svg';
 import { ReactComponent as ArrowForward } from '@material-design-icons/svg/round/arrow_forward.svg';
 import { ReactComponent as Undo } from '@material-design-icons/svg/round/undo.svg';
+import { ReactComponent as Grayscale } from '@material-design-icons/svg/round/format_color_reset.svg';
 import InteractiveCanvas from './InteractiveCanvas';
 import {
   ImagePair,
@@ -99,7 +100,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
     }
   }, []);
 
-  const onNewImage = (data: ImageData) => {
+  const onProcessed = (data: ImageData) => {
     const htmlImage = new Image();
 
     htmlImage.addEventListener('load', () => {
@@ -110,10 +111,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
     htmlImage.src = imageDataToImage(data);
   };
 
-  const processor = new ImageProcessor({
-    onDistort: onNewImage,
-    onRotate: onNewImage,
-  });
+  const processor = new ImageProcessor({ onProcessed });
 
   const onCrop = () => {
     setIsLoading(true);
@@ -122,9 +120,15 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
       corners as Quadrilateral
     );
   };
+
   const onRotate = (direction: Direction) => {
     setIsLoading(true);
     processor.rotate((currentImage as ImagePair).data, direction);
+  };
+
+  const onGrayscale = () => {
+    setIsLoading(true);
+    processor.grayscale((currentImage as ImagePair).data);
   };
 
   const onUndo = () => {
@@ -200,6 +204,11 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
               name={typo.actions.rotateRight}
               action={() => onRotate(Direction.Right)}
               icon={<RotateRight />}
+            />
+            <FooterButton
+              name={typo.actions.grayscale}
+              action={onGrayscale}
+              icon={<Grayscale />}
             />
             <FooterButton
               name={typo.actions.crop}

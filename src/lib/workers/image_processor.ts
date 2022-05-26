@@ -5,25 +5,12 @@ import { Message, MessageType } from './message';
 class ImageProcessor {
   worker: Worker;
 
-  constructor({
-    onDistort,
-    onRotate,
-  }: {
-    onDistort: (image: ImageData) => void;
-    onRotate: (image: ImageData) => void;
-  }) {
+  constructor({ onProcessed }: { onProcessed: (image: ImageData) => void }) {
     this.worker = new Worker(new URL('./imgprocessing.js', import.meta.url));
 
     this.worker.onmessage = ({ data }) => {
       const message = data as Message;
-
-      if (message.type === MessageType.Distort) {
-        onDistort(message.content);
-      } else if (message.type === MessageType.Rotate) {
-        onRotate(message.content);
-      } else {
-        throw new Error(`Unknown message type: ${message.type}`);
-      }
+      onProcessed(message.content);
     };
   }
 
@@ -45,6 +32,16 @@ class ImageProcessor {
       args: {
         image,
         direction,
+      },
+    });
+  }
+
+  grayscale(image: ImageData) {
+    this.worker.postMessage({
+      type: MessageType.Grayscale,
+
+      args: {
+        image,
       },
     });
   }

@@ -29,6 +29,7 @@ interface Typography {
     reset: string;
     save: string;
     remove: string;
+    grayscale: string;
   };
   scan: string;
   scannedPages: string;
@@ -83,6 +84,7 @@ const french: Language = {
       reset: 'Tout annuler',
       save: 'Sauvegarder',
       remove: 'Supprimer',
+      grayscale: 'Niveaux de gris',
     },
     scan: 'Scan',
     scannedPages: 'Pages scannées',
@@ -131,6 +133,7 @@ const english: Language = {
       reset: 'Reset',
       save: 'Save',
       remove: 'Remove',
+      grayscale: 'Grayscale',
     },
     scan: 'Scan',
     scannedPages: 'Scanned pages',

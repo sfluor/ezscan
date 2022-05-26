@@ -366,6 +366,31 @@ function gaussJordanElimination(matrix: number[][]) {
   return matrix;
 }
 
+/**
+ * Converts the provided image into grayscale by using: C = 0.2126 R + 0.7152 G + 0.0722 B
+ */
+function grayscaleRaw(img: Uint8ClampedArray): Uint8ClampedArray {
+  const grayscaled = new Uint8ClampedArray(img.length);
+
+  for (let idx = 0; idx < img.length; idx += 4) {
+    const value = Math.round(
+      0.2126 * img[idx] + 0.7152 * img[idx + 1] + 0.0722 * img[idx + 2]
+    );
+    const alpha = img[idx + 3];
+
+    grayscaled[idx] = value;
+    grayscaled[idx + 1] = value;
+    grayscaled[idx + 2] = value;
+    grayscaled[idx + 3] = alpha;
+  }
+
+  return grayscaled;
+}
+
+function grayscale(img: ImageData): ImageData {
+  return new ImageData(grayscaleRaw(img.data), img.width, img.height);
+}
+
 /*
  * inverses a matrix using the gauss jordan elimination algorithm.
  * See: https://en.wikipedia.org/wiki/Gaussian_elimination
@@ -536,20 +561,22 @@ function rotateImage(img: ImageData, direction: Direction): ImageData {
 
 // Workaround to make the webworker work correctly
 export {
-  transposeMatrixInPlace,
-  cloneMatrix,
-  inverse,
   argmax,
+  averageColorRaw,
+  averageInverseColor,
+  averageInverseColorRaw,
+  cloneMatrix,
+  colorToCSS,
   distortImage,
   distortImageRaw,
-  imageToImageData,
+  grayscale,
+  grayscaleRaw,
   imageDataToImage,
-  openImageInNewTab,
-  averageColorRaw,
-  averageInverseColorRaw,
-  averageInverseColor,
+  imageToImageData,
+  inverse,
   inverseColor,
-  colorToCSS,
+  openImageInNewTab,
   rotateImage,
   rotateImageRaw,
+  transposeMatrixInPlace,
 };
