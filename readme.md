@@ -26,6 +26,7 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 
 - fix PDF save if the image is horizontal
 - fix camera input on firefox mobile
+- fix height issue on mobiles
 - figure out why we can't load big images
 - use a web worker for distorting
 - show loading
