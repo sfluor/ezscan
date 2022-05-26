@@ -35,6 +35,7 @@ interface Typography {
   page: (plural: boolean) => string;
   scanPageDescription: string;
   editFilename: string;
+  loading: string;
 }
 
 export interface Language {
@@ -89,6 +90,7 @@ const french: Language = {
     scanPageDescription:
       'Vous pouvez réordonner les pages (glisser déposer) et supprimer les pages que vous ne voulez pas inclure dans le PDF final.',
     editFilename: 'Modifier le nom du fichier',
+    loading: 'Image en cours de traitement...',
   },
 };
 
@@ -136,6 +138,7 @@ const english: Language = {
     scanPageDescription:
       'You can re-order the scans by dragging them (you can also remove the ones you do not want anymore).',
     editFilename: 'Edit filename',
+    loading: 'Processing image...',
   },
 };
 

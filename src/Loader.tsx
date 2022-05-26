@@ -1,5 +1,6 @@
 import React from 'react';
 import colors from './colors';
+import { typography as typo } from './language';
 
 // Credits to https://github.com/SamHerbert/SVG-Loaders
 function Loader() {
@@ -9,6 +10,7 @@ function Loader() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        flexDirection: 'column',
         height: '100%',
         width: '100%',
       }}
@@ -115,6 +117,7 @@ function Loader() {
           />
         </circle>
       </svg>
+      <span>{typo.loading}</span>
     </div>
   );
 }
