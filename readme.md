@@ -28,13 +28,13 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 - fix touch events
 - figure out why we can't load big images
 - fix the favicon
-- center image
 - app works offline + 
 ```jsx
     <span> 📶 Works offline: you don't need to be connected to internet, once you visited the website once you can keep using the app.</span>
 ```
 - manifest.json for SPA like on android
 - auto detect borders on submitted image
+- center image
 - add version hash on the footer
 - tune PDF parameters:
 - - Portrait / Landscape

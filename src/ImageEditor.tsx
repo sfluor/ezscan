@@ -111,7 +111,8 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
     htmlImage.src = imageDataToImage(data);
   };
 
-  const processor = new ImageProcessor({ onProcessed });
+  // Make sure we only spawn the imageprocessor once since it creates a web worker
+  const [processor] = useState(() => new ImageProcessor({ onProcessed }));
 
   const onCrop = () => {
     setIsLoading(true);
