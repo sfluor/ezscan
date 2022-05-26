@@ -11,6 +11,8 @@ import {
   argmax,
   imageToImageData,
   distortImageRaw,
+  Direction,
+  rotateImageRaw,
 } from './imgkit';
 
 const inverseColorsTests: [Color, Color][] = [
@@ -393,5 +395,59 @@ test.each(distortTests)(
     });
 
     return promise;
+  }
+);
+
+// 1 2 3
+// 4 5 6
+const rotateTestImage: Uint8ClampedArray = Uint8ClampedArray.from([
+  1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6,
+]);
+
+// 6 5 4
+// 3 2 1
+const rotateTestImageReversed: Uint8ClampedArray = Uint8ClampedArray.from([
+  6, 6, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 2, 1, 1, 1, 1,
+]);
+
+// 4 1
+// 5 2
+// 6 3
+const rotateTestImageRight: Uint8ClampedArray = Uint8ClampedArray.from([
+  4, 4, 4, 4, 1, 1, 1, 1, 5, 5, 5, 5, 2, 2, 2, 2, 6, 6, 6, 6, 3, 3, 3, 3,
+]);
+
+// 3 6
+// 2 5
+// 1 4
+const rotateTestImageLeft: Uint8ClampedArray = Uint8ClampedArray.from([
+  3, 3, 3, 3, 6, 6, 6, 6, 2, 2, 2, 2, 5, 5, 5, 5, 1, 1, 1, 1, 4, 4, 4, 4,
+]);
+
+const rotateImageRawTests: [
+  Uint8ClampedArray,
+  number,
+  number,
+  Direction,
+  Uint8ClampedArray
+][] = [
+  // Base
+  [rotateTestImage, 3, 2, Direction.Left, rotateTestImageLeft],
+  [rotateTestImage, 3, 2, Direction.Right, rotateTestImageRight],
+  // Right
+  [rotateTestImageRight, 2, 3, Direction.Right, rotateTestImageReversed],
+  [rotateTestImageRight, 2, 3, Direction.Left, rotateTestImage],
+  // Left
+  [rotateTestImageLeft, 2, 3, Direction.Right, rotateTestImage],
+  [rotateTestImageLeft, 2, 3, Direction.Left, rotateTestImageReversed],
+  // Reversed
+  [rotateTestImageReversed, 3, 2, Direction.Right, rotateTestImageLeft],
+  [rotateTestImageReversed, 3, 2, Direction.Left, rotateTestImageRight],
+];
+
+test.each(rotateImageRawTests)(
+  'rotateImageRaw(%o, %o, %o, %o) should be %o',
+  (src, width, height, direction, expected) => {
+    expect(rotateImageRaw(src, { width, height }, direction)).toEqual(expected);
   }
 );

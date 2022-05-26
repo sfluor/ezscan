@@ -10,10 +10,8 @@ import { ReactComponent as Undo } from '@material-design-icons/svg/round/undo.sv
 import InteractiveCanvas from './InteractiveCanvas';
 import {
   ImagePair,
-  distortImage,
   imageToImageData,
   imageDataToImage,
-  rotateImage,
   Direction,
 } from './lib/imgkit';
 import { Quadrilateral } from './lib/geometry';
@@ -21,6 +19,17 @@ import Footer from './Footer';
 import FooterButton from './FooterButton';
 import routes from './routes';
 import { typography as typo } from './language';
+import ImageProcessor from './lib/workers/image_processor';
+
+const toImagePair = (data: ImageData, callback: (pair: ImagePair) => void) => {
+  const htmlImage = new Image();
+
+  htmlImage.addEventListener('load', () => {
+    callback({ element: htmlImage, data });
+  });
+
+  htmlImage.src = imageDataToImage(data);
+};
 
 function FileInput({
   triggerUpload,
@@ -98,31 +107,26 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
     }
   }, []);
 
-  const onCrop = () => {
-    // TODO: use a web worker
-    const distorted = distortImage(
+  const processor = new ImageProcessor({
+    onDistort: (distorted) =>
+      toImagePair(distorted, (pair) => setImages([...images, pair])),
+    onRotate: (rotated) =>
+      toImagePair(rotated, (pair) => setImages([...images, pair])),
+  });
+
+  const onCrop = () =>
+    processor.distort(
       (currentImage as ImagePair).data,
       corners as Quadrilateral
     );
-    const htmlImage = new Image();
-    htmlImage.addEventListener('load', () => {
-      setImages([...images, { element: htmlImage, data: distorted }]);
-    });
-
-    htmlImage.src = imageDataToImage(distorted);
-  };
+  const onRotate = (direction: Direction) =>
+    processor.rotate((currentImage as ImagePair).data, direction);
 
   const onUndo = () => {
     setImages(images.slice(0, -1) || []);
   };
 
   const onNext = () => onAdd(currentImage as ImagePair);
-
-  const onRotate = (direction: Direction) => {
-    rotateImage(currentImage as ImagePair, direction, (rotated) =>
-      setImages([...images, rotated])
-    );
-  };
 
   const navigate = useNavigate();
 

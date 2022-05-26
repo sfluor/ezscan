@@ -31,13 +31,17 @@ export interface ImagePair {
 export type NamedImage = ImagePair & { name: string };
 
 // Global converter used to do conversions from/to Image/ImageData
-const CONVERTER = document.createElement('canvas');
-
-// Canvas used to rotate elements
-const ROTATER = document.createElement('canvas');
+const isInsideWorker =
+  // eslint-disable-next-line no-restricted-globals
+  typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope;
+const CONVERTER = isInsideWorker ? null : document.createElement('canvas');
 
 // Convert an Image into an ImageData using a hidden canvas
 function imageToImageData(img: HTMLImageElement): ImageData {
+  if (CONVERTER === null) {
+    throw new Error('Unexpected use of CONVERTER canvas');
+  }
+
   CONVERTER.width = img.width;
   CONVERTER.height = img.height;
   const ctx = CONVERTER.getContext('2d') as CanvasRenderingContext2D;
@@ -47,6 +51,10 @@ function imageToImageData(img: HTMLImageElement): ImageData {
 
 // Convert an ImageData into a data URL image using a hidden canvas
 function imageDataToImage(imgData: ImageData): string {
+  if (CONVERTER === null) {
+    throw new Error('Unexpected use of CONVERTER canvas');
+  }
+
   CONVERTER.width = imgData.width;
   CONVERTER.height = imgData.height;
   const ctx = CONVERTER.getContext('2d') as CanvasRenderingContext2D;
@@ -105,13 +113,8 @@ function cloneMatrix<T>(mat: T[][]): T[][] {
 /**
  * zeroValuedArray returns a zero valued array of size n
  */
-function zeroValuedArray(n: number) {
-  // todo: perf
-  const res = [];
-  for (let i = 0; i < n; i += 1) {
-    res.push(0);
-  }
-  return res;
+function zeroValuedArray(n: number): Array<number> {
+  return new Array(n).fill(0);
 }
 
 function matrixMultVector(a: number[][], v: number[]): number[] {
@@ -467,34 +470,60 @@ function distortImage(img: ImageData, srcCorners: Quadrilateral): ImageData {
   );
 }
 
-// TODO: this could probably made wayyy faster
-function rotateImage(
-  img: ImagePair,
-  direction: Direction,
-  callback: (pair: ImagePair) => void
-) {
-  // Use squared max dimension for canvas size since we will trim at the end anyway
-  ROTATER.width = img.data.height;
-  ROTATER.height = img.data.width;
+function rotateImageRaw(
+  img: Uint8ClampedArray,
+  imgSize: Size,
+  direction: Direction
+): Uint8ClampedArray {
+  /**
+   *
+   * Rotation matrix formula is:
+   *
+   *     | cos(theta)  - sin(theta) |
+   * R = |                          |
+   *     | sin(theta)    cos(theta) |
+   *
+   * In our case we either have theta = pi/2 or -pi/2
+   *
+   * But we need to adjust the coordinates to always start at the top left corner of the image.
+   * That's why we add height/width depending on the direction.
+   */
 
-  const ctx = ROTATER.getContext('2d') as CanvasRenderingContext2D;
+  const rotated = new Uint8ClampedArray(img.length);
 
-  // Determine the sign of the rotation
-  const sign = direction === Direction.Left ? -1 : 1;
+  let mapper: (src: Point) => Point;
+  if (direction === Direction.Left) {
+    mapper = ({ x, y }) => ({ x: y, y: imgSize.width - 1 - x });
+  } else {
+    mapper = ({ x, y }) => ({ x: imgSize.height - 1 - y, y: x });
+  }
 
-  ctx.translate(ROTATER.width / 2, ROTATER.height / 2);
-  ctx.rotate((sign * Math.PI) / 2);
-  ctx.drawImage(img.element, -img.data.width / 2, -img.data.height / 2);
+  for (let x = 0; x < imgSize.width; x += 1) {
+    for (let y = 0; y < imgSize.height; y += 1) {
+      const srcIndex = pixelIndex(x, y, imgSize.width);
 
-  const image = new Image();
-  image.onload = () => {
-    callback({
-      element: image,
-      // we are swapping width and height here since the image got rotated
-      data: imageToImageData(image),
-    });
-  };
-  image.src = ROTATER.toDataURL();
+      const mapped = mapper({ x, y });
+
+      // Use height as width here since the image got rotated
+      const dstIndex = pixelIndex(mapped.x, mapped.y, imgSize.height);
+
+      // Copy every channel
+      for (let c = 0; c < 4; c += 1) {
+        rotated[dstIndex + c] = img[srcIndex + c];
+      }
+    }
+  }
+
+  return rotated;
+}
+
+function rotateImage(img: ImageData, direction: Direction): ImageData {
+  // Swap height/width
+  return new ImageData(
+    rotateImageRaw(img.data, img, direction),
+    img.height,
+    img.width
+  );
 }
 
 // function simpleInterpolation(img, x, y, channels) {
@@ -522,4 +551,5 @@ export {
   inverseColor,
   colorToCSS,
   rotateImage,
+  rotateImageRaw,
 };
