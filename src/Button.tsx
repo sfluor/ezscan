@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import colors from './colors';
+import { useFullSize } from './FullScreenDiv';
 
 function Button({
   name,
@@ -8,6 +9,7 @@ function Button({
   style,
   horizontal,
   filled,
+  hideLabelWidthThreshold,
 }: {
   name: string;
   action: () => void;
@@ -15,6 +17,7 @@ function Button({
   style?: React.CSSProperties;
   horizontal?: boolean;
   filled?: boolean;
+  hideLabelWidthThreshold?: number;
 }) {
   const [pressed, setPressed] = useState<boolean>(false);
   const [hovered, setHovered] = useState<boolean>(false);
@@ -72,10 +75,17 @@ function Button({
     justifyContent: 'space-around',
     height: '100%',
     outline: 'inherit',
-    padding: '1vh 2vh',
     textAlign: 'center',
     ...style,
   };
+
+  const { width } = useFullSize() || { width: 0 };
+  let displayLabel;
+  if (hideLabelWidthThreshold !== null) {
+    displayLabel = width > hideLabelWidthThreshold;
+  } else {
+    displayLabel = true;
+  }
 
   return (
     <button
@@ -101,14 +111,16 @@ function Button({
         color: iconColor,
         fontSize: style?.fontSize,
       })}
-      <span
-        style={{
-          fontSize: style?.fontSize || '12px',
-          margin: horizontal ? '5px' : '0px',
-        }}
-      >
-        {name}
-      </span>
+      {displayLabel && (
+        <span
+          style={{
+            fontSize: style?.fontSize || '12px',
+            margin: horizontal ? '5px' : '0px',
+          }}
+        >
+          {name}
+        </span>
+      )}
     </button>
   );
 }
@@ -117,6 +129,7 @@ Button.defaultProps = {
   horizontal: false,
   style: {},
   filled: false,
+  hideLabelWidthThreshold: null,
 };
 
 export default Button;

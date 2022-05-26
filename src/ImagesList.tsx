@@ -8,7 +8,6 @@ import {
   DropResult,
 } from 'react-beautiful-dnd';
 import { ReactComponent as AddAPhoto } from '@material-design-icons/svg/round/add_a_photo.svg';
-import { ReactComponent as Remove } from '@material-design-icons/svg/round/remove_circle.svg';
 import { ReactComponent as Save } from '@material-design-icons/svg/round/save.svg';
 import { ReactComponent as Delete } from '@material-design-icons/svg/round/delete.svg';
 import { ReactComponent as Edit } from '@material-design-icons/svg/round/edit.svg';
@@ -129,7 +128,8 @@ function DraggableImageItem({
             name={typo.actions.remove}
             style={{ marginLeft: 'auto', fontSize: '18px', maxHeight: '50px' }}
             action={onDelete}
-            icon={<Remove />}
+            icon={<Delete />}
+            hideLabelWidthThreshold={500}
             horizontal
           />
         </div>
@@ -185,7 +185,11 @@ function ImagesList({
   }, []);
 
   return (
-    <>
+    <div
+      style={{
+        overflowY: 'scroll',
+      }}
+    >
       <div
         style={{
           padding: '5% 5% 1% 5%',
@@ -216,7 +220,6 @@ function ImagesList({
                 flexDirection: 'column',
                 margin: '5%',
                 justifyContent: 'space-between',
-                overflowY: 'scroll',
               }}
             >
               {images.map((image, index) => (
@@ -250,7 +253,7 @@ function ImagesList({
           icon={<Save />}
         />
       </Footer>
-    </>
+    </div>
   );
 }
 
