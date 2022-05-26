@@ -10,6 +10,7 @@ import LandingPage from './LandingPage';
 import FullScreenDiv from './FullScreenDiv';
 import colors from './colors';
 import routes from './routes';
+import { typography as typo } from './language';
 
 function App() {
   const [images, setImages] = useState<Array<NamedImage>>([]);
@@ -41,7 +42,7 @@ function App() {
               onAdd={(image) => {
                 const newImages = [
                   ...images,
-                  { ...image, name: `Scan ${count}` },
+                  { ...image, name: `${typo.scan} ${count}` },
                 ];
                 setCount(count + 1);
                 setImages(newImages);

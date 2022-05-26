@@ -17,6 +17,12 @@ svg {
   height: 1em;
 }
 
+
+@keyFrames slideDown {
+    from {transform: translateY(-200%)}
+    to {transform: translateY(0%)}
+}
+
 @keyFrames slideLeft {
     from {transform: translateX(100%)}
     to {transform: translateX(0%)}

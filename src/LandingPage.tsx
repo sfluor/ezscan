@@ -1,34 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ReactComponent as Scanner } from '@material-design-icons/svg/round/document_scanner.svg';
 import colors from './colors';
 import routes from './routes';
+import {
+  typography as typo,
+  Language,
+  languages,
+  changeLanguage,
+} from './language';
 import Button from './Button';
+
+function LanguagePicker({
+  language,
+  index,
+}: {
+  language: Language;
+  index: number;
+}) {
+  const [hovered, setHovered] = useState<boolean>(false);
+
+  const onHover = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setHovered(true);
+  };
+
+  const onHoverEnd = (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setHovered(false);
+  };
+
+  const onClick = () => changeLanguage(language);
+
+  return (
+    <span
+      role="button"
+      tabIndex={index}
+      // Hover events
+      onMouseEnter={onHover}
+      onMouseLeave={onHoverEnd}
+      onFocus={onHover}
+      onClick={onClick}
+      onKeyDown={onClick}
+      style={{
+        cursor: 'pointer',
+        margin: '5px',
+        color: hovered ? colors.secondary : colors.tertiary,
+      }}
+    >
+      {language.name} {language.flag}
+    </span>
+  );
+}
+
+function LanguagePickers() {
+  return (
+    <div
+      style={{
+        marginTop: 'auto',
+        display: 'flex',
+        justifyContent: 'right',
+        alignItems: 'center',
+        animationName: 'slideDown',
+        animationDuration: '1s',
+      }}
+    >
+      {languages.map((language, idx, arr) => (
+        <React.Fragment key={language.key}>
+          <LanguagePicker language={language} index={idx} />
+          {idx < arr.length - 1 && <span>/</span>}
+        </React.Fragment>
+      ))}
+    </div>
+  );
+}
 
 function LandingPage() {
   const entries = [
-    <span>💶 Free: scanning documents is free !</span>,
-    <span>📰 No Ads: Easy Scan does not contain any advertisements.</span>,
-    <span>🔥 Fast: takes seconds to scan and save documents as PDFs.</span>,
+    <span>{typo.infos.free}</span>,
+    <span>{typo.infos.noAds}</span>,
+    <span>{typo.infos.fast}</span>,
+    <span>{typo.infos.privacy}</span>,
+    <span>{typo.infos.lightweight}</span>,
     <span>
-      🔒 Privacy friendly: everything stays on your device, nothing is uploaded
-      to a server.
-    </span>,
-    <span>
-      🪶 Lightweight: available via your browser directly, no app download
-      required.
-    </span>,
-    <span>
-      💻 Auditable: the{' '}
+      {typo.infos.auditable.header}{' '}
       <a
         href="https://github.com/sfluor/ezscan"
         target="_blank"
         style={{ color: colors.secondary }}
         rel="noreferrer"
       >
-        project is open source
+        {typo.infos.auditable.openSource}
       </a>{' '}
-      so you can check what is really executed on your device.
+      {typo.infos.auditable.end}
     </span>,
   ];
 
@@ -38,17 +102,17 @@ function LandingPage() {
     <div
       style={{
         color: colors.tertiary,
+        height: '100%',
         padding: '5% 10%',
         overflowY: 'scroll',
+        display: 'flex',
+        flexDirection: 'column',
         animationName: 'fadeIn',
         animationDuration: '1s',
       }}
     >
-      <h1>Welcome on Easy Scan !</h1>
-      <span>
-        Easy Scan is a tool to scan and edit multiple images and save them as a
-        PDF files.
-      </span>
+      <h1>{typo.welcome}</h1>
+      <span>{typo.shortDescription}</span>
       <div
         style={{
           display: 'flex',
@@ -59,7 +123,7 @@ function LandingPage() {
       >
         <Button
           action={() => navigate(routes.editor)}
-          name="Start scanning !"
+          name={typo.startScanning}
           style={{
             maxWidth: '250px',
             fontSize: '20px',
@@ -70,7 +134,7 @@ function LandingPage() {
           icon={<Scanner />}
         />
         <span style={{ marginRight: 'auto', marginTop: '20px' }}>
-          More infos on the tool:
+          {`${typo.moreInfos}:`}
         </span>
         <ul>
           {entries.map((entry, index) => (
@@ -89,6 +153,7 @@ function LandingPage() {
           ))}
         </ul>
       </div>
+      <LanguagePickers />
     </div>
   );
 }

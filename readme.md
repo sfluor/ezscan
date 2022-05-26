@@ -34,7 +34,6 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 - tune PDF parameters (sizes / more than one image per page. etc)
 - center image
 - show loading
-- translation in french
 - fix the favicon
 - use a web worker for distorting
 - auto detect borders on submitted image

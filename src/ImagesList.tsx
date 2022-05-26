@@ -21,6 +21,7 @@ import Input from './Input';
 import colors from './colors';
 import routes from './routes';
 import reorder from './lib/arrayhelpers';
+import { typography as typo } from './language';
 
 const saveAsPDF = (images: Array<NamedImage>, file: string) => {
   // eslint-disable-next-line new-cap
@@ -115,7 +116,7 @@ function DraggableImageItem({
             {image.name}
           </span>
           <Button
-            name="Remove"
+            name={typo.actions.remove}
             style={{ marginLeft: 'auto', fontSize: '18px', maxHeight: '50px' }}
             action={onDelete}
             icon={<Remove />}
@@ -181,18 +182,15 @@ function ImagesList({
         }}
       >
         <h2>
-          📸 Scanned pages ({images.length}{' '}
-          {images.length > 1 ? 'pages' : 'page'})
+          📸 {typo.scannedPages} ({images.length} {typo.page(images.length > 1)}
+          )
         </h2>
-        <span>
-          You can re-order the scans by dragging them (you can also remove the
-          ones you do not want anymore).
-        </span>
+        <span>{typo.scanPageDescription}</span>
         <form style={{ marginTop: '20px' }}>
           <Input
             value={filename}
             onChange={setFilename}
-            label="Edit filename:"
+            label={`${typo.editFilename}:`}
             icon={<Edit />}
           />
         </form>
@@ -227,13 +225,17 @@ function ImagesList({
       <Footer>
         <FooterButton
           // TODO: this should ask for capture directly instead of going back to the capture page
-          name="Add"
+          name={typo.actions.add}
           action={() => navigate(routes.editor)}
           icon={<AddAPhoto />}
         />
-        <FooterButton name="Reset" action={onReset} icon={<Delete />} />
         <FooterButton
-          name="Save"
+          name={typo.actions.reset}
+          action={onReset}
+          icon={<Delete />}
+        />
+        <FooterButton
+          name={typo.actions.save}
           action={() => saveAsPDF(images, filename)}
           icon={<Save />}
         />

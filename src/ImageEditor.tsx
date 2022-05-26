@@ -20,6 +20,7 @@ import { Quadrilateral } from './lib/geometry';
 import Footer from './Footer';
 import FooterButton from './FooterButton';
 import routes from './routes';
+import { typography as typo } from './language';
 
 function FileInput({
   triggerUpload,
@@ -30,7 +31,11 @@ function FileInput({
 }) {
   return (
     <>
-      <FooterButton name="Load" icon={<Camera />} action={triggerUpload} />
+      <FooterButton
+        name={typo.actions.scan}
+        icon={<Camera />}
+        action={triggerUpload}
+      />
       {inputElement}
     </>
   );
@@ -152,26 +157,38 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
         {imageIsLoaded && (
           <>
             {hasMoreThanOneImage ? (
-              <FooterButton name="Undo" action={onUndo} icon={<Undo />} />
+              <FooterButton
+                name={typo.actions.undo}
+                action={onUndo}
+                icon={<Undo />}
+              />
             ) : (
               <FooterButton
-                name="Back"
+                name={typo.actions.back}
                 action={() => navigate(routes.home)}
                 icon={<ArrowBack />}
               />
             )}
             <FooterButton
-              name="Rotate left"
+              name={typo.actions.rotateLeft}
               action={() => onRotate(Direction.Left)}
               icon={<RotateLeft />}
             />
             <FooterButton
-              name="Rotate right"
+              name={typo.actions.rotateRight}
               action={() => onRotate(Direction.Right)}
               icon={<RotateRight />}
             />
-            <FooterButton name="Crop" action={onCrop} icon={<Crop />} />
-            <FooterButton name="Next" action={onNext} icon={<ArrowForward />} />
+            <FooterButton
+              name={typo.actions.crop}
+              action={onCrop}
+              icon={<Crop />}
+            />
+            <FooterButton
+              name={typo.actions.next}
+              action={onNext}
+              icon={<ArrowForward />}
+            />
           </>
         )}
       </Footer>
