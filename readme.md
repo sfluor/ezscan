@@ -24,12 +24,12 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 ## Todos
 
 
-- fix PDF save if the image is horizontal
 - fix camera input on firefox mobile
 - fix height issue on mobiles
 - figure out why we can't load big images
 - use a web worker for distorting
 - show loading
+- black and white filter
 - fix the favicon
 - center image
 - app works offline + 
@@ -39,6 +39,9 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 - manifest.json for SPA like on android
 - auto detect borders on submitted image
 - add version hash on the footer
-- tune PDF parameters (sizes / more than one image per page. etc)
+- tune PDF parameters:
+- - Portrait / Landscape
+- - Tune padding
+- - Compact mode (more than one image per document)
 - performances
 - compress images when saving PDF ?

@@ -27,18 +27,28 @@ const saveAsPDF = (images: Array<NamedImage>, file: string) => {
   // eslint-disable-next-line new-cap
   const doc = new jsPDF('p', 'pt', 'a4', true);
   const padding = 10;
-  // TODO: properly pick maxdimension
+
+  const docWidth = doc.internal.pageSize.getWidth() - 2 * padding;
+  const docHeight = doc.internal.pageSize.getHeight() - 2 * padding;
+
   images.forEach((image, index) => {
     if (index > 0) {
       doc.addPage();
     }
+
+    // Scale image to PDF size
+    const ratio: number = Math.min(
+      docWidth / image.data.width,
+      docHeight / image.data.height
+    );
+
     doc.addImage(
       image.element,
       'jpeg',
       padding,
       padding,
-      doc.internal.pageSize.getWidth() - 2 * padding,
-      doc.internal.pageSize.getHeight() - 2 * padding,
+      ratio * image.data.width,
+      ratio * image.data.height,
       '',
       'FAST'
     );
