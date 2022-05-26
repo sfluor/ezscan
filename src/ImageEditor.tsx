@@ -163,6 +163,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
           height: '90%',
           display: 'flex',
           flexDirection: 'column',
+          justifyContent: 'center',
           alignItems: 'center',
         }}
       >

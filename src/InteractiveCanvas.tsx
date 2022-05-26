@@ -104,7 +104,7 @@ function InteractiveCanvas({
   );
 
   const computeInverseColor = (p: Point) => {
-    const areaDimension = 2 * cornerRadius;
+    const areaDimension = cornerRadius;
     const halfAreaDimension = Math.round(areaDimension / 2);
     const areaSize = {
       width: areaDimension,
