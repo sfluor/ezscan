@@ -22,7 +22,7 @@ class ImageProcessor {
       } else if (message.type === MessageType.Rotate) {
         onRotate(message.content);
       } else {
-        console.error(`Unknown message type: ${message.type}`);
+        throw new Error(`Unknown message type: ${message.type}`);
       }
     };
   }
