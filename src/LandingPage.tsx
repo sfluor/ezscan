@@ -102,7 +102,7 @@ function LandingPage() {
       style={{
         color: colors.tertiary,
         height: '100%',
-        padding: '5% 10%',
+        padding: '5%',
         overflowY: 'scroll',
         display: 'flex',
         flexDirection: 'column',
