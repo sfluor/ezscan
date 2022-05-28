@@ -117,22 +117,6 @@ function zeroValuedArray(n: number): Array<number> {
   return new Array(n).fill(0);
 }
 
-function matrixMultVector(a: number[][], v: number[]): number[] {
-  const height = a.length;
-  const common = a[0].length;
-
-  const c = zeroValuedArray(height);
-
-  for (let i = 0; i < height; i += 1) {
-    // c_i,k = sum(a_i,j * b_j,k)
-    for (let j = 0; j < common; j += 1) {
-      c[i] += a[i][j] * v[j];
-    }
-  }
-
-  return c;
-}
-
 function matrixMultMatrix(a: number[][], b: number[][]): number[][] {
   const height = a.length;
   const width = b[0].length;
@@ -462,18 +446,35 @@ function distortImageRaw(
     { x: size.width, y: size.height },
     { x: 0, y: size.height },
   ];
+  const M = distortMatrix(srcCorners, dstCorners);
 
   // Keep only the 2 first rows since we only want to compute x and y
-  const M = distortMatrix(srcCorners, dstCorners).slice(0, 2);
+  const a11 = M[0][0];
+  const a12 = M[0][1];
+  const a13 = M[0][2];
+  const a14 = M[0][3];
+
+  const a21 = M[1][0];
+  const a22 = M[1][1];
+  const a23 = M[1][2];
+  const a24 = M[1][3];
 
   // Avoid recrating this array every time so we do it only once
   const channels = [0, 0, 0, 0];
   for (let i = 0; i < dst.length; i += 4) {
     const idx = i / 4;
-    const x = idx % size.width;
-    const y = Math.floor(idx / size.width);
 
-    const [xs, ys] = matrixMultVector(M, planToHomogenousCoordinates({ x, y }));
+    const coords = planToHomogenousCoordinates({
+      x: idx % size.width,
+      y: Math.floor(idx / size.width),
+    });
+
+    // This is ugly but also way faster than doing function calls to perform
+    // the vector multiplications
+    const xs =
+      a11 * coords[0] + a12 * coords[1] + a13 * coords[2] + a14 * coords[3];
+    const ys =
+      a21 * coords[0] + a22 * coords[1] + a23 * coords[2] + a24 * coords[3];
 
     // RGBA channels
     // const channels = simpleInterpolation(img, xs, ys);
