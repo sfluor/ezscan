@@ -178,8 +178,10 @@ function pixelIndex(x: number, y: number, width: number) {
 function bilinearInterpolation(
   img: Uint8ClampedArray,
   width: number,
-  { x, y }: Point,
-  channels: number[]
+  x: number,
+  y: number,
+  dst: Uint8ClampedArray,
+  startIndex: number
 ) {
   // See: https://en.wikipedia.org/wiki/Bilinear_interpolation
 
@@ -202,7 +204,7 @@ function bilinearInterpolation(
   const f22 = dx * dy;
 
   for (let c = 0; c < 4; c += 1) {
-    channels[c] =
+    dst[startIndex + c] =
       f11 * img[q11 + c] +
       f12 * img[q12 + c] +
       f21 * img[q21 + c] +
@@ -460,7 +462,6 @@ function distortImageRaw(
   const a24 = M[1][3];
 
   // Avoid recrating this array every time so we do it only once
-  const channels = [0, 0, 0, 0];
   for (let i = 0; i < dst.length; i += 4) {
     const idx = i / 4;
 
@@ -476,13 +477,7 @@ function distortImageRaw(
     const ys =
       a21 * coords[0] + a22 * coords[1] + a23 * coords[2] + a24 * coords[3];
 
-    // RGBA channels
-    // const channels = simpleInterpolation(img, xs, ys);
-    bilinearInterpolation(img, size.width, { x: xs, y: ys }, channels);
-
-    for (let j = 0; j < 4; j += 1) {
-      dst[i + j] = channels[j];
-    }
+    bilinearInterpolation(img, size.width, xs, ys, dst, i);
   }
 
   return dst;
