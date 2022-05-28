@@ -35,7 +35,6 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 - manifest.json for SPA like on android
 - auto detect borders on submitted image
 - center image
-- add version hash on the footer
 - tune PDF parameters:
 - - Portrait / Landscape
 - - Tune padding

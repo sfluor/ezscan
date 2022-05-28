@@ -11,6 +11,8 @@ import {
 } from './language';
 import Button from './Button';
 
+const VERSION = process.env.REACT_APP_VERSION.slice(0, 6);
+
 function LanguagePicker({
   language,
   index,
@@ -57,12 +59,9 @@ function LanguagePickers() {
   return (
     <div
       style={{
-        marginTop: 'auto',
         display: 'flex',
         justifyContent: 'right',
         alignItems: 'center',
-        animationName: 'slideDown',
-        animationDuration: '1s',
       }}
     >
       {languages.map((language, idx, arr) => (
@@ -153,7 +152,30 @@ function LandingPage() {
           ))}
         </ul>
       </div>
-      <LanguagePickers />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginTop: 'auto',
+          animationName: 'slideDown',
+          animationDuration: '1s',
+        }}
+      >
+        <span style={{ color: colors.tertiary }}>
+          Version:{' '}
+          <a
+            href={`https://github.com/sfluor/ezscan/tree/${VERSION}`}
+            target="_blank"
+            style={{ color: colors.secondary }}
+            rel="noreferrer"
+          >
+            {' '}
+            {VERSION}
+          </a>{' '}
+        </span>
+        <LanguagePickers />
+      </div>
     </div>
   );
 }

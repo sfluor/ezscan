@@ -478,9 +478,10 @@ function distortImageRaw(
     // RGBA channels
     // const channels = simpleInterpolation(img, xs, ys);
     bilinearInterpolation(img, size.width, { x: xs, y: ys }, channels);
-    channels.forEach((value, nb) => {
-      dst[i + nb] = value;
-    });
+
+    for (let j = 0; j < 4; j += 1) {
+      dst[i + j] = channels[j];
+    }
   }
 
   return dst;

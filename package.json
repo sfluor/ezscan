@@ -72,8 +72,8 @@
     "workbox-webpack-plugin": "^6.4.1"
   },
   "scripts": {
-    "start": "node scripts/start.js",
-    "build": "node scripts/build.js",
+    "start": "REACT_APP_VERSION=$(git rev-parse HEAD) node scripts/start.js",
+    "build": "REACT_APP_VERSION=$(git rev-parse HEAD) node scripts/build.js",
     "test": "node scripts/test.js",
     "lint": "eslint . --ext .js --ext .ts --ext .tsx",
     "typecheck": "yarn run tsc",
