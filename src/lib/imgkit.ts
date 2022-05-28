@@ -461,7 +461,8 @@ function distortImageRaw(
   const a23 = M[1][2];
   const a24 = M[1][3];
 
-  // Avoid recrating this array every time so we do it only once
+  // Iterate over each destination pixel and compute its value by mapping it
+  // to the original image and interpolating the pixels we have there.
   for (let i = 0; i < dst.length; i += 4) {
     const idx = i / 4;
 
