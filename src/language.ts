@@ -8,6 +8,7 @@ interface Typography {
     free: string;
     noAds: string;
     fast: string;
+    offline: string;
     privacy: string;
     lightweight: string;
     auditable: {
@@ -61,6 +62,8 @@ const french: Language = {
       noAds:
         '📰 Pas de publicités: Easy Scan ne contient ni publicités ni annonces.',
       fast: '🔥 Rapide: cela prend quelques secondes pour scanner et sauvegarder ses documents.',
+      offline:
+        "📶 Disponible hors-ligne: l'application est automatiquement sauvegardée sur votre appareil.",
       privacy:
         '🔒 Respectueux de la vie privée: les documents scannés restent sur votre appareil et ne sont pas envoyés à un serveur distant.',
       lightweight:
@@ -110,6 +113,8 @@ const english: Language = {
       free: '💵 Free: scanning documents is free !',
       noAds: '📰 No Ads: Easy Scan does not contain any advertisements.',
       fast: '🔥 Fast: takes seconds to scan and save documents as PDFs.',
+      offline:
+        "📶 Works offline: you don't have to be connected to internet, once you visited the website once you can keep using the app.",
       privacy:
         '🔒 Privacy friendly: everything stays on your device, nothing is uploaded to a server.',
       lightweight:

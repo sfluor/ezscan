@@ -79,6 +79,7 @@ function LandingPage() {
     <span>{typo.infos.free}</span>,
     <span>{typo.infos.noAds}</span>,
     <span>{typo.infos.fast}</span>,
+    <span>{typo.infos.offline}</span>,
     <span>{typo.infos.privacy}</span>,
     <span>{typo.infos.lightweight}</span>,
     <span>
