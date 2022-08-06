@@ -28,9 +28,8 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 - figure out why we can't load big images
 - app works offline (https://developer.chrome.com/docs/workbox/service-worker-overview/ / https://github.com/cra-template/pwa/blob/main/packages/cra-template-pwa/template/src/serviceWorkerRegistration.js)+ 
 ```jsx
-    <span> 📶 Works offline: you don't need to be connected to internet, once you visited the website once you can keep using the app.</span>
+    <span> 📶 Works offline: you don't have to be connected to internet, once you visited the website once you can keep using the app.</span>
 ```
-- manifest.json for SPA like on android
 - auto detect borders on submitted image
 - center image in image editor
 - tune PDF parameters:
