@@ -80,6 +80,7 @@ function ImageEditor({ onAdd }: { onAdd: (pair: ImagePair) => void }) {
       name="camera"
       id="camera"
       accept="image/*"
+      capture="camera"
       onChange={(event) => {
         if (event.target.files) {
           reader.readAsDataURL(event.target.files[0]);

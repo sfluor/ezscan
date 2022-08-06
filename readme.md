@@ -23,7 +23,6 @@ To find icons: https://marella.me/material-design-icons/demo/svg/
 
 ## Todos
 
-- fix camera input on firefox mobile
 - fix height issue on mobiles
 - fix touch events
 - figure out why we can't load big images
