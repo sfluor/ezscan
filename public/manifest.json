@@ -8,8 +8,17 @@
       "sizes": "any"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#FF7700",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "shortcuts": [
+    {
+      "name": "Scan",
+      "short_name": "Scan",
+      "description": "Scan a new document",
+      "url": "/editor",
+      "icons": [{ "src": "logo.svg", "sizes": "any", "type": "image/svg" }]
+    }
+  ]
 }
