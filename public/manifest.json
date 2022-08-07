@@ -3,22 +3,50 @@
   "name": "Eazy Scanner",
   "icons": [
     {
+      "src": "icons/logo-48.png",
+      "type": "image/png",
+      "sizes": "48x48",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/logo-72.png",
+      "type": "image/png",
+      "sizes": "72x72",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/logo-96.png",
+      "type": "image/png",
+      "sizes": "96x96",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/logo-128.png",
+      "type": "image/png",
+      "sizes": "128x128",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/logo-256.png",
+      "type": "image/png",
+      "sizes": "256x256",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/logo-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any"
+    },
+    {
       "src": "logo.svg",
-      "type": "image/svg",
-      "sizes": "any"
+      "type": "image/svg+xml",
+      "sizes": "513x513",
+      "purpose": "any"
     }
   ],
   "start_url": "/",
   "display": "standalone",
   "theme_color": "#FF7700",
-  "background_color": "#ffffff",
-  "shortcuts": [
-    {
-      "name": "Scan",
-      "short_name": "Scan",
-      "description": "Scan a new document",
-      "url": "/editor",
-      "icons": [{ "src": "logo.svg", "sizes": "any", "type": "image/svg" }]
-    }
-  ]
+  "background_color": "#ffffff"
 }
