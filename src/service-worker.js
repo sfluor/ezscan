@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals,no-underscore-dangle,prefer-regex-literals */
 import { ExpirationPlugin } from 'workbox-expiration';
 import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
 import { registerRoute } from 'workbox-routing';
