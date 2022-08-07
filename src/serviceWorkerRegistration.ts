@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Mostly sourced from: https://github.com/cra-template/pwa/blob/fc9613279681a06606f90514926b8078db629ec6/packages/cra-template-pwa-typescript/template/src/serviceWorkerRegistration.ts
 
 function registerValidSW(swUrl: string) {
